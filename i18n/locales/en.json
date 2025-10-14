@@ -1,0 +1,75 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "tryAgain": "Try Again",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "edit": "Edit"
+  },
+  "auth": {
+    "welcome": "Welcome!",
+    "authenticated": "Authenticated",
+    "userId": "User ID",
+    "name": "Name",
+    "phone": "Phone",
+    "accessToken": "Access Token",
+    "expires": "Expires",
+    "authenticationDemo": "Authentication Demo",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "password": "Password",
+    "repeatPassword": "Repeat password",
+    "loginButton": "Log In",
+    "registerButton": "Register",
+    "phoneNumber": "Number",
+    "forgotPassword": "Forgot password?",
+    "accountRecovery": "Account recovery",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "signUp": "Sign up",
+    "registrationSuccess": "Registration successful! Please check your phone for verification link."
+  },
+  "categories": {
+    "title": "Categories",
+    "description": "Browse all available categories and their service types",
+    "noCategories": "No Categories Found",
+    "noCategoriesDescription": "There are no categories available at the moment.",
+    "loadingCategories": "Loading categories...",
+    "companies": "Companies",
+    "services": "Services",
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+  "header": {
+    "home": "Home",
+    "categories": "Categories",
+    "language": "Language"
+  },
+  "profile": {
+    "personalInformation": "Personal information",
+    "activeTickets": "Active tickets",
+    "favorite": "Favorite",
+    "history": "History",
+    "logout": "Log out",
+    "phoneNumber": "Phone number",
+    "email": "Email",
+    "password": "Password",
+    "noActiveTickets": "No Active Tickets",
+    "noActiveTicketsDescription": "You don't have any active tickets at the moment",
+    "noFavorites": "No Favorites",
+    "noFavoritesDescription": "You haven't added any favorites yet",
+    "noHistory": "No History",
+    "noHistoryDescription": "Your booking history is empty"
+  },
+  "footer": {
+    "becomePartner": {
+      "question": "Would you like to",
+      "highlight": "become our Partner?",
+      "button": "Join us"
+    },
+    "copyright": "All rights reserved."
+  }
+}
+
