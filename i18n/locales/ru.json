@@ -1,0 +1,75 @@
+{
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "tryAgain": "Попробовать снова",
+    "logout": "Выйти",
+    "login": "Войти",
+    "register": "Регистрация",
+    "edit": "Редактировать"
+  },
+  "auth": {
+    "welcome": "Добро пожаловать!",
+    "authenticated": "Аутентифицирован",
+    "userId": "ID пользователя",
+    "name": "Имя",
+    "phone": "Телефон",
+    "accessToken": "Токен доступа",
+    "expires": "Истекает",
+    "authenticationDemo": "Демонстрация аутентификации",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "password": "Пароль",
+    "repeatPassword": "Повторите пароль",
+    "loginButton": "Войти",
+    "registerButton": "Зарегистрироваться",
+    "phoneNumber": "Номер",
+    "forgotPassword": "Забыли пароль?",
+    "accountRecovery": "Восстановление аккаунта",
+    "dontHaveAccount": "Нет аккаунта?",
+    "alreadyHaveAccount": "Уже есть аккаунт?",
+    "signUp": "Зарегистрироваться",
+    "registrationSuccess": "Регистрация успешна! Проверьте телефон для подтверждения."
+  },
+  "categories": {
+    "title": "Категории",
+    "description": "Просмотр всех доступных категорий и их типов услуг",
+    "noCategories": "Категории не найдены",
+    "noCategoriesDescription": "В данный момент нет доступных категорий.",
+    "loadingCategories": "Загрузка категорий...",
+    "companies": "Компании",
+    "services": "Услуги",
+    "enabled": "Включено",
+    "disabled": "Отключено"
+  },
+  "header": {
+    "home": "Главная",
+    "categories": "Категории",
+    "language": "Язык"
+  },
+  "profile": {
+    "personalInformation": "Личная информация",
+    "activeTickets": "Активные билеты",
+    "favorite": "Избранное",
+    "history": "История",
+    "logout": "Выйти",
+    "phoneNumber": "Номер телефона",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "noActiveTickets": "Нет активных билетов",
+    "noActiveTicketsDescription": "У вас нет активных билетов в данный момент",
+    "noFavorites": "Нет избранного",
+    "noFavoritesDescription": "Вы еще не добавили избранное",
+    "noHistory": "Нет истории",
+    "noHistoryDescription": "Ваша история бронирований пуста"
+  },
+  "footer": {
+    "becomePartner": {
+      "question": "Хотите стать нашим",
+      "highlight": "Партнером?",
+      "button": "Присоединиться"
+    },
+    "copyright": "Все права защищены."
+  }
+}
+

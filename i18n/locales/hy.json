@@ -1,0 +1,75 @@
+{
+  "common": {
+    "loading": "Բեռնվում է...",
+    "error": "Սխալ",
+    "tryAgain": "Կրկին փորձել",
+    "logout": "Դուրս գալ",
+    "login": "Մուտք",
+    "register": "Գրանցում",
+    "edit": "Խմբագրել"
+  },
+  "auth": {
+    "welcome": "Բարի գալուստ!",
+    "authenticated": "Նույնականացված է",
+    "userId": "Օգտատիրոջ ID",
+    "name": "Անուն",
+    "phone": "Հեռախոս",
+    "accessToken": "Մուտքի թոքեն",
+    "expires": "Սպառվում է",
+    "authenticationDemo": "Նույնականացման ցուցադրում",
+    "firstName": "Անուն",
+    "lastName": "Ազգանուն",
+    "password": "Գաղտնաբառ",
+    "repeatPassword": "Կրկնել գաղտնաբառը",
+    "loginButton": "Մուտք",
+    "registerButton": "Գրանցվել",
+    "phoneNumber": "Համար",
+    "forgotPassword": "Մոռացե՞լ եք գաղտնաբառը",
+    "accountRecovery": "Վերականգնում",
+    "dontHaveAccount": "Չունե՞ք հաշիվ",
+    "alreadyHaveAccount": "Արդեն ունե՞ք հաշիվ",
+    "signUp": "Գրանցվել",
+    "registrationSuccess": "Գրանցումը հաջողվեց։ Ստուգեք ձեր հեռախոսը հաստատման համար։"
+  },
+  "categories": {
+    "title": "Կատեգորիաներ",
+    "description": "Դիտել բոլոր հասանելի կատեգորիաները և ծառայությունների տեսակները",
+    "noCategories": "Կատեգորիաներ չեն գտնվել",
+    "noCategoriesDescription": "Ներկայումս հասանելի կատեգորիաներ չկան։",
+    "loadingCategories": "Կատեգորիաները բեռնվում են...",
+    "companies": "Ընկերություններ",
+    "services": "Ծառայություններ",
+    "enabled": "Միացված է",
+    "disabled": "Անջատված է"
+  },
+  "header": {
+    "home": "Գլխավոր",
+    "categories": "Կատեգորիաներ",
+    "language": "Լեզու"
+  },
+  "profile": {
+    "personalInformation": "Անձնական տեղեկություններ",
+    "activeTickets": "Ակտիվ տոմսեր",
+    "favorite": "Ընտրյալներ",
+    "history": "Պատմություն",
+    "logout": "Դուրս գալ",
+    "phoneNumber": "Հեռախոսահամար",
+    "email": "Էլեկտրոնային փոստ",
+    "password": "Գաղտնաբառ",
+    "noActiveTickets": "Ակտիվ տոմսեր չկան",
+    "noActiveTicketsDescription": "Ներկայումս դուք ակտիվ տոմսեր չունեք",
+    "noFavorites": "Ընտրյալներ չկան",
+    "noFavoritesDescription": "Դուք դեռ ընտրյալներ չեք ավելացրել",
+    "noHistory": "Պատմություն չկա",
+    "noHistoryDescription": "Ձեր ամրագրումների պատմությունը դատարկ է"
+  },
+  "footer": {
+    "becomePartner": {
+      "question": "Ցանկանու՞մ եք դառնալ մեր",
+      "highlight": "Գործընկերը?",
+      "button": "Միացեք մեզ"
+    },
+    "copyright": "Բոլոր իրավունքները պաշտպանված են։"
+  }
+}
+

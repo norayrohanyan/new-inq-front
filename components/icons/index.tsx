@@ -1,0 +1,20 @@
+export { PhoneIcon } from './phone';
+export { MailIcon } from './mail';
+export { LockIcon } from './lock';
+export { LogoutIcon } from './logout';
+export { ProfileIcon } from './profile';
+export { LocationIcon } from './location';
+export { BookmarkIcon } from './bookmark';
+export { CheckedIcon } from './checked';
+export { ClockIcon } from './clock';
+export { ClosedIcon } from './closed';
+export { FacebookIcon } from './facebook';
+export { FilterIcon } from './filter';
+export { HistoryIcon } from './history';
+export { InstagramIcon } from './instagram';
+export { LinkedinIcon } from './linkedin';
+export { OpenIcon } from './open';
+export { ShareIcon } from './share';
+export { StarIcon } from './starIcon';
+export { TelegramIcon } from './telegram';
+
