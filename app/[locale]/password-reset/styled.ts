@@ -1,104 +1,125 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { COLORS } from '@/consts/colors';
-import { flexCenterMixin, boxShadowStyles, setCommonBorderStyles } from '@/styles/mixins';
+
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
 
 export const PageContainer = styled.div`
-  min-height: 100vh;
-  padding: 2rem;
-  ${flexCenterMixin()}
-  background: linear-gradient(135deg, ${COLORS.primaryExtraLight} 0%, ${COLORS.primarySemiLight} 100%);
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 400px);
+
+  @media (max-width: 768px) {
+    padding: 40px 20px;
+  }
 `;
 
 export const ContentCard = styled.div`
-  background: ${COLORS.white};
-  border-radius: 16px;
-  padding: 3rem;
-  max-width: 450px;
+  background: ${COLORS.darkBgSemi};
+  border-radius: 24px;
+  padding: 48px 40px;
   width: 100%;
-  ${boxShadowStyles('shadow2')}
-  border: 1px solid ${COLORS.borderColor};
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: 300px;
+
+  @media (max-width: 768px) {
+    padding: 32px 24px;
+    gap: 20px;
+  }
 `;
 
-export const Title = styled.h1`
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: ${COLORS.secondaryExtraDark};
-  margin-bottom: 2rem;
-  text-align: center;
+export const LoadingSpinner = styled.div`
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid ${COLORS.brandOrangeMid};
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: ${spin} 0.8s linear infinite;
+`;
+
+export const FormContent = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 `;
 
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-`;
-
-export const Label = styled.label`
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: ${COLORS.secondaryDark};
-  margin-bottom: 0.5rem;
-`;
-
-export const Input = styled.input`
+  gap: 20px;
   width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  background: ${COLORS.white};
-  transition: all 0.2s ease;
-  ${setCommonBorderStyles()}
+`;
 
-  &:disabled {
-    background: ${COLORS.secondaryUltraLight};
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
+export const SuccessContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 20px 0;
+`;
 
-  &::placeholder {
-    color: ${COLORS.secondaryLight};
+export const ErrorContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 20px 0;
+`;
+
+export const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+
+  svg {
+    width: 100%;
+    height: 100%;
   }
 `;
 
-export const Button = styled.button`
-  width: 100%;
-  padding: 0.875rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
+export const SuccessTitle = styled.h2`
   color: ${COLORS.white};
-  background: ${COLORS.primaryDark};
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 0.5rem;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+  line-height: 1.3;
 
-  &:hover:not(:disabled) {
-    background: ${COLORS.primaryExtraDark};
-    transform: translateY(-1px);
-    box-shadow: 0px 4px 12px rgba(56, 102, 255, 0.3);
-  }
-
-  &:disabled {
-    background: ${COLORS.secondaryLight};
-    cursor: not-allowed;
-    transform: none;
+  @media (max-width: 768px) {
+    font-size: 24px;
   }
 `;
 
-export const ErrorText = styled.p`
-  font-size: 0.875rem;
-  color: ${COLORS.accentRed};
+export const ErrorTitle = styled.h2`
+  color: ${COLORS.white};
+  font-size: 28px;
+  font-weight: 600;
   margin: 0;
   text-align: center;
+  line-height: 1.3;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
-export const SuccessText = styled.p`
-  font-size: 1rem;
-  color: ${COLORS.lightGreen};
-  margin: 0;
-  text-align: center;
-  line-height: 1.6;
+export const ButtonWrapper = styled.div`
+  width: 100%;
+  max-width: 350px;
+  margin-top: 8px;
 `;
-

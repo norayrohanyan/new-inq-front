@@ -2,15 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { authSelectors, verifyLinkThunk } from '@/store';
+import { useLocale, useTranslations } from 'next-intl';
+import { useAppDispatch } from '@/lib/hooks';
+import { verifyLinkThunk } from '@/store';
+import Button from '@/components/Button';
+import { SuccessIcon, ErrorIcon } from '@/components/icons';
 import * as Styled from './styled';
 
 export default function VerifyPage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isLoading = useAppSelector(authSelectors.isLoading);
+  const locale = useLocale();
+  const t = useTranslations();
 
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('Verifying your link...');
@@ -36,20 +40,7 @@ export default function VerifyPage() {
       const result = await dispatch(verifyLinkThunk(hash));
 
       if (verifyLinkThunk.fulfilled.match(result)) {
-        const data = result.payload;
         setStatus('success');
-        setMessage('Verification successful! Redirecting...');
-
-        // Wait a moment before redirecting
-        setTimeout(() => {
-          if (data?.redirect_url) {
-            // If there's a redirect URL, use it
-            window.location.href = data.redirect_url;
-          } else {
-            // Otherwise redirect to home
-            router.push('/');
-          }
-        }, 1500);
       } else {
         setStatus('error');
         setErrorMessage(
@@ -62,11 +53,17 @@ export default function VerifyPage() {
     }
   };
 
+  const handleMakeBooking = () => {
+    router.push(`/${locale}/categories`);
+  };
+
+  const handleGoHome = () => {
+    router.push(`/${locale}`);
+  };
+
   return (
     <Styled.PageContainer>
       <Styled.ContentCard>
-        <Styled.Title>Link Verification</Styled.Title>
-
         {status === 'loading' && (
           <>
             <Styled.LoadingSpinner />
@@ -75,16 +72,46 @@ export default function VerifyPage() {
         )}
 
         {status === 'success' && (
-          <Styled.Message $success>{message}</Styled.Message>
+          <Styled.ModalContent>
+            <Styled.IconWrapper>
+              <SuccessIcon />
+            </Styled.IconWrapper>
+            <Styled.ModalTitle>{t('auth.signUpComplete')}</Styled.ModalTitle>
+            <Styled.ButtonWrapper>
+              <Button 
+                variant="primary" 
+                size="medium" 
+                rounded
+                fullWidth
+                onClick={handleMakeBooking}
+              >
+                {t('auth.makeBooking')}
+              </Button>
+            </Styled.ButtonWrapper>
+          </Styled.ModalContent>
         )}
 
         {status === 'error' && (
-          <>
-            <Styled.ErrorText>{errorMessage}</Styled.ErrorText>
-            <Styled.Message>
-              <a href="/">Return to home</a>
-            </Styled.Message>
-          </>
+          <Styled.ModalContent>
+            <Styled.IconWrapper>
+              <ErrorIcon />
+            </Styled.IconWrapper>
+            <Styled.ModalTitle>{t('auth.verificationFailed')}</Styled.ModalTitle>
+            {errorMessage && (
+              <Styled.ModalDescription>{errorMessage}</Styled.ModalDescription>
+            )}
+            <Styled.ButtonWrapper>
+              <Button 
+                variant="primary" 
+                size="medium" 
+                rounded
+                fullWidth
+                onClick={handleGoHome}
+              >
+                {t('common.returnHome')}
+              </Button>
+            </Styled.ButtonWrapper>
+          </Styled.ModalContent>
         )}
       </Styled.ContentCard>
     </Styled.PageContainer>

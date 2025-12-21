@@ -63,7 +63,9 @@ export default function LoginPage() {
           <Styled.ForgotPassword>
             <Text type="small" customColor="rgba(255, 255, 255, 0.7)">
               {t('auth.forgotPassword')}{' '}
-              <Styled.RecoveryLink href="#">{t('auth.accountRecovery')}</Styled.RecoveryLink>
+              <Styled.RecoveryLink href={`/${locale}/account-recovery`}>
+                {t('auth.accountRecovery')}
+              </Styled.RecoveryLink>
             </Text>
           </Styled.ForgotPassword>
 

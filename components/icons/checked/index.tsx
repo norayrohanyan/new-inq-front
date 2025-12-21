@@ -17,18 +17,18 @@ export const CheckedIcon = ({
       className={className}
       {...props}
     >
-<path d="M22 11.0799V11.9999C21.9988 14.1563 21.3005 16.2545 20.0093 17.9817C18.7182 19.7088 16.9033 20.9723 14.8354 21.5838C12.7674 22.1952 10.5573 22.1218 8.53447 21.3744C6.51168 20.6271 4.78465 19.246 3.61096 17.4369C2.43727 15.6279 1.87979 13.4879 2.02168 11.3362C2.16356 9.18443 2.99721 7.13619 4.39828 5.49694C5.79935 3.85768 7.69279 2.71525 9.79619 2.24001C11.8996 1.76477 14.1003 1.9822 16.07 2.85986" stroke="url(#paint0_linear_2457_743)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M22 4L12 14.01L9 11.01" stroke="url(#paint1_linear_2457_743)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M22 11.0799V11.9999C21.9988 14.1563 21.3005 16.2545 20.0093 17.9817C18.7182 19.7088 16.9033 20.9723 14.8354 21.5838C12.7674 22.1952 10.5573 22.1218 8.53447 21.3744C6.51168 20.6271 4.78465 19.246 3.61096 17.4369C2.43727 15.6279 1.87979 13.4879 2.02168 11.3362C2.16356 9.18443 2.99721 7.13619 4.39828 5.49694C5.79935 3.85768 7.69279 2.71525 9.79619 2.24001C11.8996 1.76477 14.1003 1.9822 16.07 2.85986" stroke="url(#paint0_linear_2457_743)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+<path d="M22 4L12 14.01L9 11.01" stroke="url(#paint1_linear_2457_743)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
 <defs>
 <linearGradient id="paint0_linear_2457_743" x1="22" y1="5.58389" x2="18.0513" y2="25.2217" gradientUnits="userSpaceOnUse">
-<stop stop-color="#F6572F"/>
-<stop offset="0.495" stop-color="#FE7F3B"/>
-<stop offset="1" stop-color="#FEB245"/>
+<stop stopColor="#F6572F"/>
+<stop offset="0.495" stopColor="#FE7F3B"/>
+<stop offset="1" stopColor="#FEB245"/>
 </linearGradient>
 <linearGradient id="paint1_linear_2457_743" x1="22" y1="5.79667" x2="20.4538" y2="15.7834" gradientUnits="userSpaceOnUse">
-<stop stop-color="#F6572F"/>
-<stop offset="0.495" stop-color="#FE7F3B"/>
-<stop offset="1" stop-color="#FEB245"/>
+<stop stopColor="#F6572F"/>
+<stop offset="0.495" stopColor="#FE7F3B"/>
+<stop offset="1" stopColor="#FEB245"/>
 </linearGradient>
 </defs>
 </svg>

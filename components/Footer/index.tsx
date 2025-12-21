@@ -10,6 +10,7 @@ import { TelegramIcon } from '@/components/icons/telegram';
 import { PhoneIcon } from '@/components/icons/phone';
 import { MailIcon } from '@/components/icons/mail';
 import * as Styled from './styled';
+import { Logo } from '../Logo';
 
 export default function Footer() {
   const t = useTranslations();
@@ -29,7 +30,7 @@ export default function Footer() {
             {t('footer.becomePartner.question')}{' '}
             <Styled.PartnerHighlight>{t('footer.becomePartner.highlight')}</Styled.PartnerHighlight>
           </Text>
-          <Button variant="primary" size="medium">
+          <Button variant="primary" size="medium" rounded>
             {t('footer.becomePartner.button')}
           </Button>
         </Styled.PartnerContent>
@@ -38,27 +39,25 @@ export default function Footer() {
       <Styled.MainFooter>
         <Styled.FooterContent>
           <Styled.LeftSection>
-            <Styled.Logo>
-              <Styled.LogoText>
-                in<Styled.LogoAccent>Q</Styled.LogoAccent>
-              </Styled.LogoText>
-            </Styled.Logo>
-            <Styled.ContactItem href="tel:+37412345678">
-              <Styled.ContactIcon>
-                <PhoneIcon width={20} height={20} />
-              </Styled.ContactIcon>
-              <Text type="body" color="white">
-                +374 1234567
-              </Text>
-            </Styled.ContactItem>
-            <Styled.ContactItem href="mailto:info@inqueue.com">
-              <Styled.ContactIcon>
-                <MailIcon width={20} height={20} />
-              </Styled.ContactIcon>
-              <Text type="body" color="white">
-                info@inqueue.com
-              </Text>
-            </Styled.ContactItem>
+            <Logo width={56} height={30} />
+            <Styled.ContactSection>
+                <Styled.ContactItem href="tel:+37412345678">
+                <Styled.ContactIcon>
+                    <PhoneIcon width={20} height={20} />
+                </Styled.ContactIcon>
+                <Text type="body" color="white">
+                    +374 1234567
+                </Text>
+                </Styled.ContactItem>
+                <Styled.ContactItem href="mailto:info@inqueue.com">
+                <Styled.ContactIcon>
+                    <MailIcon width={20} height={20} />
+                </Styled.ContactIcon>
+                <Text type="body" color="white">
+                    info@inqueue.com
+                </Text>
+                </Styled.ContactItem>
+            </Styled.ContactSection>
           </Styled.LeftSection>
           <Styled.RightSection>
             {socialLinks.map((social) => (

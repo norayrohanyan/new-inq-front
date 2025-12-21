@@ -64,27 +64,16 @@ export const FooterContent = styled.div`
 export const LeftSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 3rem;
+  gap: 5rem;
 
   @media (max-width: 968px) {
     justify-content: center;
   }
 `;
 
-export const Logo = styled.div``;
-
-export const LogoText = styled.span`
-  font-size: 2rem;
-  font-weight: 700;
-  color: ${COLORS.white};
-  letter-spacing: -0.5px;
-`;
-
-export const LogoAccent = styled.span`
-  background: ${COLORS.brandGradient};
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+export const ContactSection = styled.div`
+  display: flex;
+  gap: 1rem;
 `;
 
 

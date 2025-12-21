@@ -11,7 +11,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   fullWidth?: boolean;
   isLoading?: boolean;
+  rounded?: boolean;
   children: ReactNode;
+  className?: string;
 }
 
 export default function Button({
@@ -19,8 +21,10 @@ export default function Button({
   size = 'medium',
   fullWidth = false,
   isLoading = false,
+  rounded = false,
   disabled,
   children,
+  className,
   ...props
 }: ButtonProps) {
   return (
@@ -29,7 +33,9 @@ export default function Button({
       $size={size}
       $fullWidth={fullWidth}
       $isLoading={isLoading}
+      $rounded={rounded}
       disabled={disabled || isLoading}
+      className={className}
       {...props}
     >
       {isLoading ? <Styled.Spinner /> : children}

@@ -51,7 +51,7 @@ const getSizeStyles = ($size: ButtonSize) => {
   switch ($size) {
     case 'small':
       return css`
-        padding: 0.5rem 1rem;
+        padding: 0.3rem 1rem;
         font-size: 0.875rem;
         border-radius: 6px;
       `;
@@ -75,10 +75,10 @@ export const Button = styled.button<{
   $size: ButtonSize;
   $fullWidth: boolean;
   $isLoading: boolean;
+  $rounded: boolean;
 }>`
   ${({ $variant }) => getVariantStyles($variant)}
   ${({ $size }) => getSizeStyles($size)}
-
   width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
   font-weight: 600;
   cursor: pointer;
@@ -102,6 +102,10 @@ export const Button = styled.button<{
     css`
       color: transparent;
     `}
+
+    ${({ $rounded }) => $rounded && css`
+    border-radius: 50px;
+  `}
 `;
 
 export const Spinner = styled.div`

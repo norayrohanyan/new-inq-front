@@ -6,7 +6,76 @@
     "logout": "Выйти",
     "login": "Войти",
     "register": "Регистрация",
-    "edit": "Редактировать"
+    "edit": "Редактировать",
+    "notFound": "Не найдено",
+    "yes": "Да",
+    "no": "Нет",
+    "returnHome": "На главную"
+  },
+  "home": {
+    "categories": {
+      "searchNearMe": "Искать рядом →",
+      "beautySalon": {
+        "title": "САЛОНЫ КРАСОТЫ",
+        "description": "Найдите лучшие салоны красоты рядом с вами"
+      },
+      "apartments": {
+        "title": "КВАРТИРЫ",
+        "description": "Арендуйте или найдите квартиры по вашему вкусу"
+      },
+      "carRental": {
+        "title": "АРЕНДА АВТО",
+        "description": "Арендуйте автомобиль легко и удобно"
+      },
+      "explore": {
+        "title": "ПОСМОТРЕТЬ ВСЕ КАТЕГОРИИ",
+        "description": "Откройте для себя больше и найдите то, что ищете"
+      }
+    }
+  },
+  "booking": {
+    "status": {
+      "inProcess": "В процессе",
+      "pending": "Ожидание",
+      "cancelled": "Отменено",
+      "approved": "Одобрено",
+      "completed": "Завершено"
+    },
+    "steps": {
+      "company": "Компания",
+      "service": "Услуга",
+      "employee": "Сотрудник",
+      "datetime": "Дата/Время",
+      "final": "Финал"
+    },
+    "chooseService": "Выберите услугу",
+    "chooseEmployee": "Выберите сотрудника",
+    "chooseAnotherEmployee": "Выберите другого сотрудника (необязательно)",
+    "selectedEmployee": "Выбранный сотрудник",
+    "chooseDateTime": "Выберите дату и время",
+    "bookingInfo": "Информация о бронировании",
+    "additionalServices": "Дополнительные услуги",
+    "total": "Итого",
+    "date": "Дата",
+    "company": "Компания",
+    "service": "Услуга",
+    "services": "Услуги",
+    "employee": "Сотрудник",
+    "duration": "Продолжительность",
+    "minutes": "минут",
+    "mainService": "Основная услуга",
+    "price": "Цена",
+    "dram": "драм",
+    "back": "Назад",
+    "continue": "Продолжить",
+    "finish": "Завершить",
+    "thankYou": "Спасибо за ваше бронирование",
+    "confirmationMessage": "Ваше бронирование успешно принято. Мы свяжемся с вами в ближайшее время.",
+    "backToHome": "На главную",
+    "viewBooking": "Посмотреть бронирование",
+    "availableTimes": "Доступное время",
+    "noAvailableTimes": "Нет доступного времени на выбранную дату",
+    "book": "Забронировать"
   },
   "auth": {
     "welcome": "Добро пожаловать!",
@@ -29,7 +98,19 @@
     "dontHaveAccount": "Нет аккаунта?",
     "alreadyHaveAccount": "Уже есть аккаунт?",
     "signUp": "Зарегистрироваться",
-    "registrationSuccess": "Регистрация успешна! Проверьте телефон для подтверждения."
+    "registrationSuccess": "Регистрация успешна! Проверьте телефон для подтверждения.",
+    "checkYourSms": "Проверьте вашу SMS",
+    "signUpComplete": "Регистрация завершена!",
+    "makeBooking": "Сделать бронирование",
+    "verificationFailed": "Ошибка верификации",
+    "recoveryDescription": "Введите номер, который вы использовали для регистрации, чтобы получить код подтверждения.",
+    "next": "Далее",
+    "enterNewPassword": "Введите новый пароль.",
+    "changePassword": "Изменить пароль",
+    "recoveryComplete": "Восстановление аккаунта завершено!",
+    "passwordsDoNotMatch": "Пароли не совпадают",
+    "passwordTooShort": "Пароль должен содержать не менее 8 символов",
+    "passwordChangedSuccess": "Ваш пароль успешно изменен. Пожалуйста, войдите с новым паролем."
   },
   "categories": {
     "title": "Категории",
@@ -37,10 +118,31 @@
     "noCategories": "Категории не найдены",
     "noCategoriesDescription": "В данный момент нет доступных категорий.",
     "loadingCategories": "Загрузка категорий...",
+    "company": "Компания",
+    "service": "Услуга",
+    "search": "Поиск",
+    "filterAndSort": "Фильтр и сортировка",
+    "noCompanies": "Компании не найдены",
+    "noCompaniesDescription": "Для этой категории нет доступных компаний.",
+    "noServices": "Услуги не найдены",
+    "noServicesDescription": "Для этой категории нет доступных услуг.",
     "companies": "Компании",
     "services": "Услуги",
+    "apartments": "Квартиры",
+    "cars": "Автомобили",
     "enabled": "Включено",
     "disabled": "Отключено"
+  },
+  "filters": {
+    "filterAndSort": "Фильтр и сортировка",
+    "sortingOptions": "Параметры сортировки",
+    "recommended": "Рекомендуемые",
+    "newest": "Новые",
+    "aToZ": "А-Я по возрастанию",
+    "zToA": "Я-А по убыванию",
+    "subcategory": "Подкатегория",
+    "clearAll": "Очистить все",
+    "apply": "Применить"
   },
   "header": {
     "home": "Главная",
@@ -70,6 +172,62 @@
       "button": "Присоединиться"
     },
     "copyright": "Все права защищены."
+  },
+  "company": {
+    "reservation": "Бронирование",
+    "checkIn": "Заезд",
+    "checkOut": "Выезд",
+    "guests": "Гости",
+    "guest": "гость",
+    "pickUp": "Получение",
+    "return": "Возврат",
+    "comments": "Комментарии",
+    "addComment": "Добавить комментарий...",
+    "bookingForSomeoneElse": "Бронирую для кого-то другого",
+    "guestName": "Имя гостя",
+    "guestPhone": "Телефон гостя",
+    "total": "Итого",
+    "forDays": "за {count, plural, one {# день} few {# дня} other {# дней}}",
+    "reserve": "Забронировать",
+    "services": "Услуги",
+    "employees": "Сотрудники",
+    "portfolio": "Портфолио",
+    "about": "Подробнее",
+    "book": "Забронировать",
+    "showLess": "Меньше",
+    "aboutCompany": "О компании",
+    "aboutApartment": "О квартире",
+    "aboutCar": "Об автомобиле",
+    "workHours": "Часы работы",
+    "address": "Адрес",
+    "phones": "Телефоны",
+    "closed": "Закрыто",
+    "noServices": "Услуги недоступны",
+    "noEmployees": "Сотрудники недоступны",
+    "noPortfolio": "Портфолио недоступно",
+    "apartment": "Квартира",
+    "house": "Дом",
+    "totalSquare": "Общая площадь",
+    "rooms": "Комнаты",
+    "errors": {
+      "guestNameRequired": "Имя гостя обязательно",
+      "guestPhoneRequired": "Телефон гостя обязателен",
+      "guestPhoneInvalid": "Номер телефона должен содержать ровно 8 цифр",
+      "bookingFailed": "Не удалось забронировать. Пожалуйста, попробуйте еще раз."
+    },
+    "bookingSuccess": "Бронирование успешно! Ваше бронирование подтверждено."
+  },
+  "errors": {
+    "categoryNotFound": "Категория не найдена",
+    "pageNotFound": {
+      "title": "УПСС! СТРАНИЦА НЕ НАЙДЕНА",
+      "description": "Извините, страница, которую вы ищете, не существует. Если вы считаете, что что-то сломано, сообщите о проблеме"
+    },
+    "serverError": {
+      "title": "ВНУТРЕННЯЯ ОШИБКА СЕРВЕРА",
+      "description": "Сервер столкнулся с внутренней ошибкой или неправильной конфигурацией и не смог выполнить ваш запрос"
+    },
+    "returnHome": "Вернуться"
   }
 }
 
