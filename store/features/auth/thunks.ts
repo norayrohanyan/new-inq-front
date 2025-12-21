@@ -102,6 +102,7 @@ export const verifyLinkThunk = createAsyncThunk(
 
         // Check if it's login tokens (has refresh_token) or reset token
         if ('refresh_token' in tokens) {
+          // Full authentication tokens (registration verification)
           dispatch(
             authActions.setTokens({
               accessToken: tokens.access_token,
@@ -111,8 +112,15 @@ export const verifyLinkThunk = createAsyncThunk(
             })
           );
         } else {
-          // Reset password token - just set loading to false
-          dispatch(authActions.setLoading(false));
+          // Password reset token - store access token temporarily for password update
+          dispatch(
+            authActions.setTokens({
+              accessToken: tokens.access_token,
+              refreshToken: '', // No refresh token for password reset
+              accessTokenExpiresAt: tokens.access_token_expires_at,
+              refreshTokenExpiresAt: '', // No refresh token expiry
+            })
+          );
         }
 
         return response.data;
@@ -151,6 +159,56 @@ export const fetchUserProfileThunk = createAsyncThunk(
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to fetch user profile';
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+/**
+ * Send password recovery link
+ */
+export const forgotPasswordThunk = createAsyncThunk(
+  'auth/forgotPassword',
+  async ({ phone, url }: { phone: string; url: string }, { dispatch, rejectWithValue }) => {
+    try {
+      dispatch(authActions.setLoading(true));
+      const response = await apiService.forgotPassword(phone, url);
+      
+      if (response.success) {
+        dispatch(authActions.setLoading(false));
+        return response.data;
+      } else {
+        dispatch(authActions.setError(response.error || 'Failed to send recovery link'));
+        return rejectWithValue(response.error);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send recovery link';
+      dispatch(authActions.setError(errorMessage));
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+/**
+ * Update password (used after verification link)
+ */
+export const updatePasswordThunk = createAsyncThunk(
+  'auth/updatePassword',
+  async (password: string, { dispatch, rejectWithValue }) => {
+    try {
+      dispatch(authActions.setLoading(true));
+      const response = await apiService.updatePassword(password);
+      
+      if (response.success) {
+        dispatch(authActions.setLoading(false));
+        return response.data;
+      } else {
+        dispatch(authActions.setError(response.error || 'Failed to update password'));
+        return rejectWithValue(response.error);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update password';
+      dispatch(authActions.setError(errorMessage));
       return rejectWithValue(errorMessage);
     }
   }

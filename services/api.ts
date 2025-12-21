@@ -14,6 +14,8 @@ import {
   IBookingHistory,
   IPaginatedResponse,
 } from '@/types/user';
+import { ICompany } from '@/store/types/companies';
+import { IService } from '@/store/types/services';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost';
 
@@ -26,21 +28,27 @@ const api: AxiosInstance = axios.create({
   timeout: 10000, // 10 seconds
 });
 
+// Helper to get cookie value
+const getCookie = (name: string): string | null => {
+  if (typeof window === 'undefined') return null;
+  const cookies = document.cookie.split(';');
+  for (const cookie of cookies) {
+    const [cookieName, cookieValue] = cookie.split('=').map((c) => c.trim());
+    if (cookieName === name) {
+      return cookieValue;
+    }
+  }
+  return null;
+};
+
 // Request interceptor - add auth token to requests
 api.interceptors.request.use(
   (config) => {
-    // Get token from localStorage if available
+    // Get token from cookies
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('auth_tokens');
-      if (token) {
-        try {
-          const { accessToken } = JSON.parse(token);
-          if (accessToken) {
-            config.headers.Authorization = `Bearer ${accessToken}`;
-          }
-        } catch (error) {
-          console.error('Error parsing auth token:', error);
-        }
+      const accessToken = getCookie('accessToken');
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
       }
     }
     return config;
@@ -159,6 +167,80 @@ export const apiService = {
   async getCategories(): Promise<IApiResponse<ICategory[]>> {
     try {
       const { data } = await api.get<IApiResponse<ICategory[]>>('/api/categories');
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get paginated list of companies by category
+   */
+  async getCompanies(params: {
+    category: string;
+    page?: number;
+    per_page?: number;
+    search?: string;
+    sort?: string;
+    filters?: Record<string, any>;
+  }): Promise<IApiResponse<IPaginatedResponse<ICompany>>> {
+    try {
+      const { category, ...queryParams } = params;
+      const { data } = await api.get<IApiResponse<IPaginatedResponse<ICompany>>>(
+        `/api/${category}/companies`,
+        { params: queryParams }
+      );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get paginated list of services by category
+   */
+  async getServices(params: {
+    category: string;
+    page?: number;
+    per_page?: number;
+    search?: string;
+    sort?: string;
+    filters?: Record<string, any>;
+  }): Promise<IApiResponse<IPaginatedResponse<IService>>> {
+    try {
+      const { category, ...queryParams} = params;
+      const { data } = await api.get<IApiResponse<IPaginatedResponse<IService>>>(
+        `/api/${category}/services`,
+        { params: queryParams }
+      );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get filters for companies by category
+   */
+  async getCompaniesFilters(category: string): Promise<IApiResponse<Record<string, any>>> {
+    try {
+      const { data } = await api.get<IApiResponse<Record<string, any>>>(
+        `/api/${category}/companies/filters`
+      );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get filters for services by category
+   */
+  async getServicesFilters(category: string): Promise<IApiResponse<Record<string, any>>> {
+    try {
+      const { data } = await api.get<IApiResponse<Record<string, any>>>(
+        `/api/${category}/services/filters`
+      );
       return data;
     } catch (error) {
       return handleError(error);
@@ -300,6 +382,198 @@ export const apiService = {
   async updatePassword(password: string): Promise<IApiResponse<null>> {
     try {
       const { data } = await api.patch<IApiResponse<null>>('/api/password', { password });
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get company details
+   */
+  async getCompanyDetails(category: string, id: number): Promise<IApiResponse<any>> {
+    try {
+      const { data } = await api.get<IApiResponse<any>>(`/api/${category}/company/${id}`);
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get company employees
+   */
+  async getCompanyEmployees(category: string, id: number): Promise<IApiResponse<any[]>> {
+    try {
+      const { data } = await api.get<IApiResponse<any[]>>(`/api/${category}/company/${id}/employees`);
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get company portfolio
+   */
+  async getCompanyPortfolio(category: string, id: number): Promise<IApiResponse<string[]>> {
+    try {
+      const { data } = await api.get<IApiResponse<string[]>>(`/api/${category}/company/${id}/portfolio`);
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get company services
+   */
+  async getCompanyServices(category: string, id: number): Promise<IApiResponse<any[]>> {
+    try {
+      const { data } = await api.get<IApiResponse<any[]>>(`/api/${category}/company/${id}/services`);
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get apartment details with intervals
+   */
+  async getApartmentDetails(id: number): Promise<IApiResponse<any>> {
+    try {
+      const { data } = await api.get<IApiResponse<any>>(`/api/apartment`, {
+        params: { id },
+      });
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get apartment intervals
+   */
+  async getApartmentIntervals(id: number, startDate: string): Promise<IApiResponse<Record<string, any>>> {
+    try {
+      const { data } = await api.get<IApiResponse<Record<string, any>>>(`/api/apartment/intervals`, {
+        params: { id, start_date: startDate },
+      });
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Create apartment booking
+   */
+  async createApartmentBooking(booking: {
+    id: number;
+    check_in: string;
+    check_out: string;
+    guests_count: number;
+    comment: string;
+    guest: {
+      phone: string;
+      name: string;
+    };
+  }): Promise<IApiResponse<any>> {
+    try {
+      const { data } = await api.post<IApiResponse<any>>(`/api/apartment/booking`, booking);
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get car details with intervals
+   */
+  async getCarDetails(id: number): Promise<IApiResponse<any>> {
+    try {
+      const { data } = await api.get<IApiResponse<any>>(`/api/car`, {
+        params: { id },
+      });
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get car intervals
+   */
+  async getCarIntervals(id: number, startDate: string): Promise<IApiResponse<Record<string, any>>> {
+    try {
+      const { data } = await api.get<IApiResponse<Record<string, any>>>(`/api/car/intervals`, {
+        params: { id, start_date: startDate },
+      });
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Create car booking
+   */
+  async createCarBooking(booking: {
+    id: number;
+    pickup_time: string;
+    return_time: string;
+    comment: string;
+    guest: {
+      phone: string;
+      name: string;
+    };
+  }): Promise<IApiResponse<any>> {
+    try {
+      const { data } = await api.post<IApiResponse<any>>(`/api/car/booking`, booking);
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get beauty salon intervals (available time slots for a specific date)
+   */
+  async getBeautyIntervals(params: {
+    company_id: number;
+    service_ids: number[];
+    employee_id?: number;
+    day: string; // Format: YYYY-MM-DD
+  }): Promise<IApiResponse<Array<{ start: string; end: string }>>> {
+    try {
+      const { data } = await api.get<IApiResponse<Array<{ start: string; end: string }>>>(
+        `/api/beauty_salon/intervals`,
+        { params }
+      );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Create beauty salon booking
+   */
+  async createBeautyBooking(booking: {
+    company_id: number;
+    employee_id?: number;
+    service_ids: number[];
+    day: string; // Format: YYYY-MM-DD HH:mm
+    comment?: string;
+    guest?: {
+      phone: string;
+      name: string;
+    };
+  }): Promise<IApiResponse<{ id: number; category: string }>> {
+    try {
+      const { data } = await api.post<IApiResponse<{ id: number; category: string }>>(
+        `/api/beauty_salon/booking`,
+        booking
+      );
       return data;
     } catch (error) {
       return handleError(error);

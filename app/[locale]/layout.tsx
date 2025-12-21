@@ -4,10 +4,11 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n';
 import ClientProviders from '@/components/ClientProviders';
+import FaviconSwitcher from '@/components/FaviconSwitcher';
 
 export const metadata: Metadata = {
-  title: 'Next.js + Redux + Styled Components',
-  description: 'A modern Next.js app with Redux Toolkit and Styled Components',
+  title: "InQ - Smart Booking & Queue Management",
+  description: "Book services, manage appointments, and skip the queue with InQ - Your all-in-one booking platform for beauty salons, car rentals, apartments, and more.",
 };
 
 export function generateStaticParams() {
@@ -37,6 +38,7 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider messages={messages}>
+          <FaviconSwitcher />
           <ClientProviders>{children}</ClientProviders>
         </NextIntlClientProvider>
       </body>

@@ -6,7 +6,77 @@
     "logout": "Logout",
     "login": "Login",
     "register": "Register",
-    "edit": "Edit"
+    "edit": "Edit",
+    "notFound": "Not Found",
+    "yes": "Yes",
+    "no": "No",
+    "search": "Search",
+    "returnHome": "Return Home"
+  },
+  "home": {
+    "categories": {
+      "searchNearMe": "Search near me →",
+      "beautySalon": {
+        "title": "BEAUTY SALONS",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      },
+      "apartments": {
+        "title": "APARTMENTS",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      },
+      "carRental": {
+        "title": "CAR RENTAL",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      },
+      "explore": {
+        "title": "EXPLORE ALL THE CATEGORIES",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      }
+    }
+  },
+  "booking": {
+    "status": {
+      "inProcess": "In process",
+      "pending": "Pending",
+      "cancelled": "Cancelled",
+      "approved": "Approved",
+      "completed": "Completed"
+    },
+    "steps": {
+      "company": "Company",
+      "service": "Service",
+      "employee": "Employee",
+      "datetime": "Date/Time",
+      "final": "Final"
+    },
+    "chooseService": "Choose service",
+    "chooseEmployee": "Choose employee",
+    "chooseAnotherEmployee": "Choose another employee (optional)",
+    "selectedEmployee": "Selected employee",
+    "chooseDateTime": "Choose date and time",
+    "bookingInfo": "Booking info",
+    "additionalServices": "Additional services",
+    "total": "Total",
+    "date": "Date",
+    "company": "Company",
+    "service": "Service",
+    "services": "Services",
+    "employee": "Employee",
+    "duration": "Duration",
+    "minutes": "minutes",
+    "mainService": "Main Service",
+    "price": "Price",
+    "dram": "dram",
+    "back": "Back",
+    "continue": "Continue",
+    "finish": "Finish",
+    "thankYou": "Thank you for your booking",
+    "confirmationMessage": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sem leo, laoreet sed tincidunt id, dictum cursus mauris.",
+    "backToHome": "Back to Home",
+    "viewBooking": "View booking",
+    "availableTimes": "Available times",
+    "noAvailableTimes": "No available times for the selected date",
+    "book": "Book"
   },
   "auth": {
     "welcome": "Welcome!",
@@ -29,7 +99,19 @@
     "dontHaveAccount": "Don't have an account?",
     "alreadyHaveAccount": "Already have an account?",
     "signUp": "Sign up",
-    "registrationSuccess": "Registration successful! Please check your phone for verification link."
+    "registrationSuccess": "Registration successful! Please check your phone for verification link.",
+    "checkYourSms": "Check your sms",
+    "signUpComplete": "Sign up complete!",
+    "makeBooking": "Make a booking",
+    "verificationFailed": "Verification Failed",
+    "recoveryDescription": "Enter the number you used for sign up to get a verification code.",
+    "next": "Next",
+    "enterNewPassword": "Enter a new password.",
+    "changePassword": "Change password",
+    "recoveryComplete": "Account recovery complete!",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordChangedSuccess": "Your password has been changed successfully. Please login with your new password."
   },
   "categories": {
     "title": "Categories",
@@ -37,10 +119,31 @@
     "noCategories": "No Categories Found",
     "noCategoriesDescription": "There are no categories available at the moment.",
     "loadingCategories": "Loading categories...",
+    "company": "Company",
+    "service": "Service",
+    "search": "Search",
+    "filterAndSort": "Filter & Sort",
+    "noCompanies": "No Companies Found",
+    "noCompaniesDescription": "There are no companies available for this category.",
+    "noServices": "No Services Found",
+    "noServicesDescription": "There are no services available for this category.",
     "companies": "Companies",
     "services": "Services",
+    "apartments": "Apartments",
+    "cars": "Cars",
     "enabled": "Enabled",
     "disabled": "Disabled"
+  },
+  "filters": {
+    "filterAndSort": "Filter & Sort",
+    "sortingOptions": "Sorting options",
+    "recommended": "Recommended",
+    "newest": "Newest",
+    "aToZ": "A-Z ascending",
+    "zToA": "Z-A descending",
+    "subcategory": "Subcategory",
+    "clearAll": "Clear all",
+    "apply": "Apply"
   },
   "header": {
     "home": "Home",
@@ -70,6 +173,74 @@
       "button": "Join us"
     },
     "copyright": "All rights reserved."
+  },
+  "company": {
+    "reservation": "Reservation",
+    "checkIn": "Check in",
+    "checkOut": "Check out",
+    "guests": "Guests",
+    "guest": "guest",
+    "pickUp": "Pick up",
+    "return": "Return",
+    "comments": "Comments",
+    "addComment": "Add your comment...",
+    "bookingForSomeoneElse": "I'm booking for someone else",
+    "guestName": "Guest name",
+    "guestPhone": "Guest phone",
+    "total": "Total",
+    "forDays": "for {count, plural, one {# day} other {# days}}",
+    "reserve": "Reserve",
+    "services": "Services",
+    "employees": "Employees",
+    "portfolio": "Portfolio",
+    "about": "About",
+    "book": "Book",
+    "showLess": "Less",
+    "aboutCompany": "About this company",
+    "aboutApartment": "About this house",
+    "aboutCar": "About this car",
+    "workHours": "Work Hours",
+    "address": "Address",
+    "phones": "Phones",
+    "closed": "Closed",
+    "noServices": "No services available",
+    "noEmployees": "No employees available",
+    "noPortfolio": "No portfolio available",
+    "apartment": "Apartment",
+    "house": "House",
+    "totalSquare": "Total Square",
+    "area": "Area",
+    "rooms": "Rooms",
+    "perDay": "(for 1 day)",
+    "errors": {
+      "guestNameRequired": "Guest name is required",
+      "guestPhoneRequired": "Guest phone is required",
+      "guestPhoneInvalid": "Phone number must be exactly 8 digits",
+      "bookingFailed": "Booking failed. Please try again."
+    },
+    "bookingSuccess": "Booking successful! Your reservation has been confirmed."
+  },
+  "car": {
+    "body": "Body",
+    "gear": "Gear",
+    "motor": "Motor",
+    "fuel": "Fuel",
+    "expense": "Expense",
+    "seats": "Seats",
+    "leftWheel": "Left Wheel",
+    "airConditioner": "Air Conditioner"
+  },
+  "errors": {
+    "categoryNotFound": "Category not found",
+    "pageNotFound": {
+      "title": "OPPS! PAGE NOT FOUND",
+      "description": "Sorry, the page you're looking for doesn't exist. If you think something is broken, report a problem"
+    },
+    "serverError": {
+      "title": "INTERNAL SERVER ERROR",
+      "description": "The server encountered an internal error or misconfiguration and was unable to complete your request"
+    },
+    "returnHome": "Return"
   }
 }
 

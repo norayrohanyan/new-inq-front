@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import combinedReducers from './reducer';
+import { errorMiddleware } from './middleware/errorMiddleware';
 
 export const makeStore = () => {
   return configureStore({
@@ -14,7 +15,7 @@ export const makeStore = () => {
           // Ignore these paths in the state
           ignoredPaths: [],
         },
-      }),
+      }).concat(errorMiddleware),
   });
 };
 

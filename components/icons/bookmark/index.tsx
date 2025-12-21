@@ -3,7 +3,7 @@ export const BookmarkIcon = ({
   height = "12",
   className,
   fill = "url(#paint0_linear_238_2614)",
-  active = true,
+  active = false,
   ...props
 }: React.SVGProps<SVGSVGElement> & {
   fill?: string;

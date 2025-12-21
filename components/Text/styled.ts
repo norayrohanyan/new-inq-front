@@ -22,6 +22,7 @@ const getTextTypeStyles = (type: TTextType) => {
 };
 
 export const Text = styled.p<ITextProps>`
+  font-family: 'Montserrat', sans-serif;
   ${(props) => getTextTypeStyles(props.$type)}
   letter-spacing: ${(props) => props?.$letterSpacing};
   line-height: ${(props) => props?.$lineHeight};

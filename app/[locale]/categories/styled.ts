@@ -1,29 +1,37 @@
 import styled, { keyframes } from 'styled-components';
 import { COLORS } from '@/consts/colors';
-import { flexCenterMixin } from '@/styles/mixins';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 `;
 
+// Main Container
 export const PageContainer = styled.div`
   min-height: 100vh;
   background: ${COLORS.darkBg};
+  max-width: 1600px;
+  margin: 0 auto;
 `;
 
+// Banner Section
+export const BannerSection = styled.div`
+  padding: 2rem 4rem;
 
-export const BannerContent = styled.div`
-  max-width: 1400px;
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem;
+  }
+`;
+
+export const Banner = styled.div`
   height: 288px;
   background: ${COLORS.brandGradient};
   border-radius: 24px;
-  margin: 2rem auto;
-  position: relative;
-  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
 
   &::before {
     content: '';
@@ -38,78 +46,227 @@ export const BannerContent = styled.div`
       rgba(255, 255, 255, 0.1) 0%,
       transparent 70%
     );
-    pointer-events: none;
   }
 
   @media (max-width: 768px) {
-    margin: 1rem;
-    padding: 2rem 1.5rem;
+    height: 200px;
   }
 `;
 
-export const ContentSection = styled.div`
-  padding: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
+// Categories Section
+export const CategoriesSection = styled.div`
+  padding: 0 4rem 2rem 4rem;
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
+    padding: 0 1rem 1.5rem 1rem;
   }
 `;
 
-export const CategoriesChips = styled.div`
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid ${COLORS.darkBgSemi};
-  border-radius: 30px;
-  padding: 2rem;
+export const CategoriesGrid = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+  justify-content: center;
+  background: ${COLORS.darkBgSemi};
+  padding: 2rem 3rem;
+  border-radius: 30px;
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
     gap: 0.75rem;
   }
 `;
 
 export const CategoryChip = styled.button<{ $active: boolean }>`
-  padding: 0.75rem 1.75rem;
+  padding: 0.875rem 2rem;
   border-radius: 50px;
-  border: ${({ $active }) =>
-    $active ? 'none' : `1px solid ${COLORS.borderColor}`};
-  background: ${({ $active }) =>
-    $active ? COLORS.brandGradient : 'transparent'};
+  border: ${({ $active }) => ($active ? 'none' : `1px solid ${COLORS.borderColor}`)};
+  background: ${({ $active }) => ($active ? COLORS.brandGradient : 'transparent')};
   color: ${COLORS.white};
+  font-size: 0.9rem;
+  font-weight: ${({ $active }) => ($active ? '600' : '500')};
+  letter-spacing: 0.5px;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
 
   &:hover {
-    transform: translateY(-2px);
     background: ${({ $active }) =>
-      $active ? COLORS.brandGradient : 'rgba(255, 255, 255, 0.05)'};
-    border-color: ${({ $active }) =>
-      $active ? 'transparent' : COLORS.brandOrangeMid};
-  }
-
-  &:active {
-    transform: translateY(0);
+      $active ? COLORS.brandGradient : 'rgba(255, 255, 255, 0.1)'};
+    border-color: ${({ $active }) => ($active ? 'transparent' : COLORS.brandOrangeMid)};
   }
 
   @media (max-width: 768px) {
-    padding: 0.65rem 1.5rem;
+    padding: 0.75rem 1.5rem;
     font-size: 0.85rem;
   }
 `;
 
+// Combined Toggle and Search Section
+export const ToggleSearchSection = styled.div`
+  width: 100%;
+  padding: 0 4rem 1.5rem 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+
+  @media (max-width: 968px) {
+    flex-direction: column;
+    padding: 0 1rem 1rem 1rem;
+    align-items: stretch;
+  }
+`;
+
+export const SearchFilterWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  
+  @media (max-width: 968px) {
+    width: 100%;
+  }
+`;
+
+export const FilterButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  background: ${COLORS.darkBgSemi};
+  border-radius: 50px;
+  color: ${COLORS.white};
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  svg {
+    color: ${COLORS.brandOrangeMid};
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  @media (max-width: 968px) {
+    justify-content: center;
+  }
+`;
+
+// Toggle Section
+export const ToggleSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: ${COLORS.darkBgSemi};
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  flex-shrink: 0;
+`;
+
+export const ToggleLabel = styled.span<{ $active: boolean }>`
+  color: ${({ $active }) => ($active ? COLORS.white : COLORS.secondarySemiLight)};
+  font-size: 0.95rem;
+  font-weight: ${({ $active }) => ($active ? '600' : '500')};
+  transition: all 0.3s ease;
+  white-space: nowrap;
+`;
+
+export const ToggleSwitch = styled.div`
+  width: 44px;
+  height: 24px;
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid ${COLORS.borderColor};
+  flex-shrink: 0;
+`;
+
+export const ToggleKnob = styled.div<{ $active: boolean }>`
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(92.57deg, #F6572F 0%, #FE7F3B 49.5%, #FEB245 100%);
+
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: ${({ $active }) => ($active ? '2px' : '22px')};
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+`;
+
+export const SearchWrapper = styled.div`
+  position: relative;
+  flex: 1;
+  max-width: 600px;
+
+  @media (max-width: 968px) {
+    width: 100%;
+  }
+`;
+
+export const SearchIcon = styled.span`
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: ${COLORS.secondarySemiLight};
+`;
+
+export const SearchInput = styled.input`
+  width: 100%;
+  padding: 0.75rem 1.25rem 0.75rem 3.25rem;
+  border-radius: 50px;
+  border: 1px solid ${COLORS.borderColor};
+  background: transparent;
+  color: ${COLORS.white};
+  font-size: 0.95rem;
+
+  &::placeholder {
+    color: ${COLORS.secondarySemiLight};
+  }
+
+  &:focus {
+    outline: none;
+    border-color: ${COLORS.brandOrangeMid};
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  transition: all 0.3s ease;
+`;
+
+// Content Section
+export const ContentSection = styled.div`
+  padding: 0 4rem 2rem 4rem;
+
+  @media (max-width: 768px) {
+    padding: 0 1rem 1.5rem 1rem;
+  }
+`;
+
+export const CardsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  @media (max-width: 968px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+`;
+
+// Loading State
 export const LoadingContainer = styled.div`
-  ${flexCenterMixin()}
+  display: flex;
   flex-direction: column;
-  min-height: 60vh;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
   gap: 1rem;
 
   .spinner {
@@ -122,39 +279,22 @@ export const LoadingContainer = styled.div`
   }
 `;
 
-export const ErrorContainer = styled.div`
-  ${flexCenterMixin()}
-  flex-direction: column;
-  min-height: 60vh;
-  gap: 1rem;
-  text-align: center;
-  padding: 2rem;
-
-  button {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 500;
-    color: ${COLORS.white};
-    background: ${COLORS.brandGradient};
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 1rem;
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px ${COLORS.brandOrangeMid}40;
-    }
-  }
-`;
-
+// Empty State
 export const EmptyState = styled.div`
-  ${flexCenterMixin()}
+  display: flex;
   flex-direction: column;
-  min-height: 60vh;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
   text-align: center;
   gap: 1rem;
-  padding: 2rem;
 `;
 
+export const FilterIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid ${COLORS.borderColor};
+  padding: 0.4rem;
+`;

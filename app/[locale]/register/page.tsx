@@ -8,7 +8,8 @@ import Link from 'next/link';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
 import Input from '@/components/Input';
-import { PhoneIcon, LockIcon } from '@/components/icons';
+import { PhoneIcon, LockIcon, SmsIcon } from '@/components/icons';
+import ModalDialog from '@/components/Modal/ModalDialog';
 import * as Styled from './styled';
 
 export default function RegisterPage() {
@@ -23,11 +24,10 @@ export default function RegisterPage() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [showSmsModal, setShowSmsModal] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSuccess(false);
 
     if (password !== confirmPassword) {
       return;
@@ -44,7 +44,7 @@ export default function RegisterPage() {
     );
 
     if (registerThunk.fulfilled.match(result)) {
-      setSuccess(true);
+      setShowSmsModal(true);
       setFirstName('');
       setLastName('');
       setPhone('');
@@ -111,24 +111,26 @@ export default function RegisterPage() {
             </Text>
           )}
 
-          {success && (
-            <Text type="small" customColor="#10B981" align="center">
-              {t('auth.registrationSuccess')}
-            </Text>
-          )}
-
           <Button variant="primary" size="medium" fullWidth type="submit" isLoading={isLoading}>
             {t('auth.registerButton')}
           </Button>
 
-              <Text type="small" customColor="rgba(255, 255, 255, 0.7)" align="center">
-                {t('auth.alreadyHaveAccount')}{' '}
-                <Link href={`/${locale}/login`}>
-                  <Styled.LoginLink>{t('common.login')}</Styled.LoginLink>
-                </Link>
-              </Text>
+          <Text type="small" customColor="rgba(255, 255, 255, 0.7)" align="center">
+            {t('auth.alreadyHaveAccount')}{' '}
+            <Link href={`/${locale}/login`}>
+              <Styled.LoginLink>{t('common.login')}</Styled.LoginLink>
+            </Link>
+          </Text>
         </Styled.Form>
       </Styled.RegisterCard>
+
+      {/* SMS Verification Modal */}
+      <ModalDialog
+        isOpen={showSmsModal}
+        onClose={() => setShowSmsModal(false)}
+        icon={<SmsIcon />}
+        title={t('auth.checkYourSms')}
+      />
     </Styled.PageContainer>
   );
 }
