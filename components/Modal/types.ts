@@ -1,6 +1,7 @@
-import { ReactNode, HTMLAttributes } from 'react';
+import { ReactNode } from 'react';
+import { HTMLMotionProps } from 'framer-motion';
 
-export interface ModalProps extends HTMLAttributes<HTMLDivElement> {
+export interface ModalProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
   isOpen: boolean;
   onClose?: () => void;
   children: ReactNode;

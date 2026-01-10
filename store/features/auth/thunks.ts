@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiService } from '@/services/api';
-import { ILoginRequest, IRegisterRequest } from '@/types/auth';
+import { ILoginRequest, IRegisterRequest, IResetTokens } from '@/types/auth';
 import { authActions } from './slice';
 
 export const loginThunk = createAsyncThunk(
@@ -113,11 +113,12 @@ export const verifyLinkThunk = createAsyncThunk(
           );
         } else {
           // Password reset token - store access token temporarily for password update
+          const resetTokens = tokens as IResetTokens;
           dispatch(
             authActions.setTokens({
-              accessToken: tokens.access_token,
+              accessToken: resetTokens.token,
               refreshToken: '', // No refresh token for password reset
-              accessTokenExpiresAt: tokens.access_token_expires_at,
+              accessTokenExpiresAt: resetTokens.token_expires_at,
               refreshTokenExpiresAt: '', // No refresh token expiry
             })
           );
