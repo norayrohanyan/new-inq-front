@@ -8,6 +8,8 @@ export const getInitialState = (): IUserState => ({
   activeTickets: [],
   historyTickets: [],
   favorites: [],
+  currentBooking: null,
+  currentBookingLoading: false,
   isLoading: false,
   error: null,
 });

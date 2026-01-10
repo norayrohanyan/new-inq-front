@@ -37,6 +37,8 @@ export { getServicesThunk } from './features/services/thunks';
 
 // Export user thunks
 export {
+  getBookingThunk,
+  cancelBookingThunk,
   getActiveTicketsThunk,
   getHistoryTicketsThunk,
   getFavoritesThunk,

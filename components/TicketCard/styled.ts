@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { COLORS } from '@/consts/colors';
 
-export const CardContainer = styled.div`
+export const CardContainer = styled.div<{ $clickable?: boolean }>`
   background: ${COLORS.darkBgSemi};
   border-radius: 20px;
   padding: 16px;
@@ -12,6 +12,17 @@ export const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  ${({ $clickable }) =>
+    $clickable &&
+    `
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+  `}
 
   @media (max-width: 768px) {
     max-width: 100%;

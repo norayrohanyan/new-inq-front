@@ -16,9 +16,71 @@ export interface IBooking {
   category: string;
   company: ICompany;
   guest: IGuest;
+  review?: IReview;
+  can_cancel: boolean;
   // Different types of bookings have different fields
   [key: string]: any;
 }
+
+export interface IReview {
+  id: number;
+  rating: number;
+  comment: string;
+}
+
+// Car Rental Booking Detail
+export interface ICarBookingDetail extends IBooking {
+  car_id: number;
+  pickup_time: string;
+  return_time: string;
+  car: {
+    id: number;
+    name: string;
+    address: string;
+    rating: number;
+    image_urls: string[];
+  };
+}
+
+// Apartment Booking Detail
+export interface IApartmentBookingDetail extends IBooking {
+  apartment_id: number;
+  guest_count: number;
+  check_in: string;
+  check_out: string;
+  apartment: {
+    id: number;
+    name: string;
+    address: string;
+    rating: number;
+    total_square: number;
+    room_count: number;
+    is_apartment: boolean;
+    level: number;
+    image_urls: string[];
+  };
+}
+
+// Beauty Salon Booking Detail
+export interface IBeautyBookingDetail extends IBooking {
+  date: string;
+  services: IBookingService[];
+  employee?: {
+    id: number;
+    name: string;
+    rating: number;
+    image_url: string;
+  };
+}
+
+export interface IBookingService {
+  id: number;
+  name: string;
+  price?: number;
+}
+
+// Union type for all booking details
+export type IBookingDetail = ICarBookingDetail | IApartmentBookingDetail | IBeautyBookingDetail;
 
 export interface ICompany {
   id: number;

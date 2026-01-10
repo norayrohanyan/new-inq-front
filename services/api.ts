@@ -261,10 +261,11 @@ export const apiService = {
 
   /**
    * Get specific booking
+   * Note: API can return either a single booking object or an array
    */
-  async getBooking(bookingId: number, category: string): Promise<IApiResponse<IBooking[]>> {
+  async getBooking(bookingId: number, category: string): Promise<IApiResponse<IBooking | IBooking[]>> {
     try {
-      const { data } = await api.get<IApiResponse<IBooking[]>>('/api/user/booking', {
+      const { data } = await api.get<IApiResponse<IBooking | IBooking[]>>('/api/user/booking', {
         params: { booking_id: bookingId, category },
       });
       return data;
@@ -287,6 +288,38 @@ export const apiService = {
         '/api/user/booking/history',
         { params }
       );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Cancel user booking
+   */
+  async cancelBooking(bookingId: number, category: string): Promise<IApiResponse<null>> {
+    try {
+      const { data } = await api.post<IApiResponse<null>>('/api/user/booking/cancel', {
+        booking_id: bookingId,
+        category,
+      });
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Submit review for a booking
+   */
+  async submitReview(params: {
+    booking_id: number;
+    category: string;
+    rating: number;
+    comment: string;
+  }): Promise<IApiResponse<null>> {
+    try {
+      const { data } = await api.post<IApiResponse<null>>('/api/user/booking/review', params);
       return data;
     } catch (error) {
       return handleError(error);
