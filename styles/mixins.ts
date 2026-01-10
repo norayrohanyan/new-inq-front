@@ -114,18 +114,11 @@ export const disableSomeContentStyles = (opacity = 0.4) => {
 
 export const setCommonBorderStyles = (
   isError?: boolean,
-  isWarning?: boolean,
   isFocusing?: boolean
 ) => {
   if (isError) {
     return css`
       border: 1px solid ${COLORS.accentRed};
-    `;
-  }
-
-  if (isWarning) {
-    return css`
-      border: 1px solid ${COLORS.warningColor};
     `;
   }
 
@@ -148,33 +141,3 @@ export const setCommonBorderStyles = (
     }
   `;
 };
-
-export const iconButtonStyles = (disabled?: boolean) => {
-  return css`
-    width: 32px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    cursor: ${disabled ? 'not-allowed' : 'pointer'};
-    border-radius: 4px;
-    transition: 0.3s;
-    opacity: ${disabled ? 0.5 : 1};
-    pointer-events: ${disabled ? 'none' : 'auto'};
-
-    & > svg {
-      fill: ${COLORS.secondarySemiDark};
-    }
-
-    &:hover {
-      background: ${disabled ? 'none' : COLORS.primaryLight};
-
-      & > svg {
-        fill: ${disabled ? COLORS.secondarySemiDark : COLORS.secondaryDark};
-      }
-    }
-  `;
-};
-
