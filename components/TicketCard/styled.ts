@@ -47,13 +47,13 @@ export const StatusBadge = styled.div<{ $status: string }>`
       case 'primary':
         return COLORS.brandOrangeMid;
       case 'pending':
-        return COLORS.secondaryMid;
+        return COLORS.secondary;
       case 'cancelled':
         return COLORS.accentRed;
       case 'approved':
         return '#4CAF50';
       default:
-        return COLORS.secondaryMid;
+        return COLORS.secondary;
     }
   }};
   color: ${({ $status }) => ($status === 'primary' ? COLORS.black : COLORS.white)};
@@ -96,7 +96,7 @@ export const ImageContainer = styled.div`
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
-  background: ${COLORS.secondaryMid};
+  background: ${COLORS.secondary};
 
   @media (max-width: 768px) {
     width: 100%;
@@ -113,7 +113,7 @@ export const Image = styled.img`
 export const PlaceholderImage = styled.div`
   width: 100%;
   height: 100%;
-  background: ${COLORS.secondaryMid};
+  background: ${COLORS.secondary};
 `;
 
 export const InfoSection = styled.div`

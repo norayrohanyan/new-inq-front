@@ -14,13 +14,11 @@ type CompanyService = ICompany | IService;
 interface ICompanyServiceCardProps {
   data: CompanyService;
   category: string;
-  isFavorite?: boolean;
 }
 
 const CompanyServiceCard: React.FC<ICompanyServiceCardProps> = ({
   data,
   category,
-  isFavorite = false,
 }) => {
   const router = useRouter();
   const locale = useLocale();
@@ -113,7 +111,6 @@ const CompanyServiceCard: React.FC<ICompanyServiceCardProps> = ({
         <FavoriteButton
           companyId={data.id}
           category={category}
-          isFavorite={isFavorite}
           size="small"
         />
       </Styled.ActionButtons>

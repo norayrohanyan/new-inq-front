@@ -34,8 +34,9 @@ export const getCompanyServicesThunk = createAsyncThunk(
     try {
       const response = await apiService.getCompanyServices(category, id);
       if (response.success && response.data) {
-        // Check if data is paginated (has a 'data' property inside)
-        const servicesData = response.data.data || response.data;
+        // Check if data is paginated (has a 'data' property inside) or direct array
+        const responseData = response.data as any;
+        const servicesData = Array.isArray(responseData) ? responseData : (responseData.data || responseData);
         dispatch(companyDetailsActions.setServices(Array.isArray(servicesData) ? servicesData : []));
         return servicesData;
       } else {

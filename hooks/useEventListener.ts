@@ -13,7 +13,7 @@ export function useEventListener<T extends Event = Event>(
   element?: EventTarget | null,
   options?: boolean | AddEventListenerOptions
 ): void {
-  const savedHandler = useRef<(e: T) => void>();
+  const savedHandler = useRef<((e: T) => void) | undefined>(undefined);
 
   useEffect(() => {
     savedHandler.current = handler;
