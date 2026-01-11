@@ -7,7 +7,7 @@ export const FormContainer = styled.form`
   gap: 1.5rem;
   background: ${COLORS.darkBgSemi};
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1rem;
   top: 100px;
 
   @media (max-width: 968px) {
@@ -148,12 +148,28 @@ export const CheckboxGroup = styled.div`
 `;
 
 export const Checkbox = styled.input`
-  width: 24px;
-  height: 24px;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
-  accent-color: ${COLORS.brandOrangeMid};
+  background: transparent;
   border: 2px solid ${COLORS.brandOrangeMid};
-  border-radius: 4px;
+  border-radius: 6px;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: ${COLORS.white};
+    font-size: 14px;
+    font-weight: 600;
+  }
 `;
 
 export const CheckboxLabel = styled.label`

@@ -48,6 +48,8 @@
       "datetime": "Дата/Время",
       "final": "Финал"
     },
+    "chooseCompany": "Выберите компанию",
+    "companiesOfferingService": "Выберите компанию, предоставляющую эту услугу",
     "chooseService": "Выберите услугу",
     "chooseEmployee": "Выберите сотрудника",
     "chooseAnotherEmployee": "Выберите другого сотрудника (необязательно)",
@@ -55,6 +57,7 @@
     "chooseDateTime": "Выберите дату и время",
     "bookingInfo": "Информация о бронировании",
     "additionalServices": "Дополнительные услуги",
+    "noAdditionalServices": "Дополнительные услуги недоступны",
     "total": "Итого",
     "date": "Дата",
     "company": "Компания",

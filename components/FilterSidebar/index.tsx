@@ -86,7 +86,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   return (
     <>
       <Styled.Overlay $isOpen={isOpen} onClick={onClose} />
-      <Styled.SidebarContainer isOpen={isOpen}>
+      <Styled.SidebarContainer $isOpen={isOpen}>
         <Styled.Header>
           <Text type="h3" color="white">
             {t('filters.filterAndSort')}

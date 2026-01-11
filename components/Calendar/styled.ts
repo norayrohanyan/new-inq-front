@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { COLORS } from '@/consts/colors';
 
 export const CalendarContainer = styled.div`
@@ -68,16 +68,18 @@ export const DayCell = styled.div<{
   align-items: center;
   justify-content: center;
   padding: 0.4rem 0.25rem;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: ${({ $isDisabled }) => ($isDisabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ $isCurrentMonth, $isDisabled }) =>
     !$isCurrentMonth || $isDisabled ? 0.4 : 1};
-  background: ${({ $isSelected }) =>
-    $isSelected ? COLORS.brandOrangeMid : 'transparent'};
   transition: all 0.2s ease;
   position: relative;
   min-height: 50px;
   overflow: hidden;
+
+  ${({ $isSelected }) => $isSelected && css`
+    border: 1px solid ${COLORS.brandOrangeMid};
+  `}
 
   &:hover {
     background: ${({ $isDisabled, $isSelected }) =>

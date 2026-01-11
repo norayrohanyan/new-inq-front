@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiService } from '@/services/api';
-import { ICompany } from '@/store/types/companies';
+import { ICompany, ICompanyByService } from '@/store/types/companies';
 import { companiesActions } from './slice';
 
 interface IFetchCompaniesPayload {
@@ -10,6 +10,13 @@ interface IFetchCompaniesPayload {
   search?: string;
   sort?: string;
   filters?: Record<string, any>;
+}
+
+interface IFetchCompaniesByServicePayload {
+  category: string;
+  service_id: number;
+  page?: number;
+  per_page?: number;
 }
 
 export const getCompaniesThunk = createAsyncThunk(
@@ -36,6 +43,44 @@ export const getCompaniesThunk = createAsyncThunk(
       return rejectWithValue(error.message);
     } finally {
       dispatch(companiesActions.setLoading(false));
+    }
+  }
+);
+
+export const getCompaniesByServiceThunk = createAsyncThunk(
+  'companies/getCompaniesByService',
+  async (payload: IFetchCompaniesByServicePayload, { dispatch, rejectWithValue }) => {
+    try {
+      dispatch(companiesActions.setLoadingCompaniesByService(true));
+      dispatch(companiesActions.setCompaniesByServiceError(null));
+
+      const response = await apiService.getCompaniesByService(payload);
+      
+      if (response.success && response.data) {
+        let companies: ICompanyByService[] = [];
+        
+        if (Array.isArray(response.data)) {
+          companies = response.data as unknown as ICompanyByService[];
+        } else {
+          const companiesData = response.data.data;
+          if (Array.isArray(companiesData)) {
+            companies = companiesData as unknown as ICompanyByService[];
+          } else if (companiesData) {
+            companies = [companiesData as unknown as ICompanyByService];
+          }
+        }
+        
+        dispatch(companiesActions.setCompaniesByService(companies));
+        return companies;
+      } else {
+        dispatch(companiesActions.setCompaniesByServiceError(response.error || 'Failed to fetch companies'));
+        return rejectWithValue(response.error || 'Failed to fetch companies');
+      }
+    } catch (error: any) {
+      dispatch(companiesActions.setCompaniesByServiceError(error.message));
+      return rejectWithValue(error.message);
+    } finally {
+      dispatch(companiesActions.setLoadingCompaniesByService(false));
     }
   }
 );

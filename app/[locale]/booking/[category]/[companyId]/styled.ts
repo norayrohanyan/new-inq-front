@@ -301,6 +301,12 @@ export const AdditionalServiceItem = styled.div<{ $selected: boolean }>`
   }
 `;
 
+export const ServiceInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
 export const ServiceCheckbox = styled.div<{ $checked: boolean }>`
   width: 20px;
   height: 20px;
@@ -607,5 +613,86 @@ export const LoadingContainer = styled.div`
     border-radius: 50%;
     animation: ${spin} 1s linear infinite;
   }
+`;
+
+/* Company Selection */
+export const CompanySelectionGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+`;
+
+export const CompanySelectionCard = styled.div<{ $selected?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: ${({ $selected }) => $selected ? COLORS.brandOrangeMid : 'rgba(255, 255, 255, 0.05)'};
+  border: 2px solid ${({ $selected }) => $selected ? COLORS.brandOrangeMid : 'transparent'};
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: ${({ $selected }) => $selected ? COLORS.brandOrangeMid : 'rgba(255, 255, 255, 0.1)'};
+    transform: translateY(-2px);
+  }
+`;
+
+export const CompanyLogoWrapper = styled.div`
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.1);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+export const CompanyPlaceholder = styled.div`
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+`;
+
+export const CompanyInfoSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+`;
+
+export const CompanyRating = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  svg {
+    fill: ${COLORS.brandOrangeMid};
+  }
+`;
+
+export const IndividualTag = styled.div`
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  width: fit-content;
+`;
+
+export const EmptyStateMessage = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  width: 100%;
 `;
 
