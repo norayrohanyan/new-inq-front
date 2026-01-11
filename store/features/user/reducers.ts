@@ -1,7 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { reducerCreatorProducer } from '@/store/common';
 import { IUserState } from '@/store/types/user';
-import { IBookingHistory, IFavoriteCompany } from '@/types/user';
+import { IBookingHistory, IFavoriteCompany, IBookingDetail } from '@/types/user';
 
 const reducers = reducerCreatorProducer<IUserState>()({
   setUser: (
@@ -55,9 +55,25 @@ const reducers = reducerCreatorProducer<IUserState>()({
     state.favorites = state.favorites.filter((fav) => fav.id !== action.payload);
   },
 
+  setCurrentBooking: (state, action: PayloadAction<IBookingDetail | null>) => {
+    state.currentBooking = action.payload;
+    state.currentBookingLoading = false;
+    state.error = null;
+  },
+
+  setCurrentBookingLoading: (state, action: PayloadAction<boolean>) => {
+    state.currentBookingLoading = action.payload;
+  },
+
+  clearCurrentBooking: (state) => {
+    state.currentBooking = null;
+    state.currentBookingLoading = false;
+  },
+
   setError: (state, action: PayloadAction<string | null>) => {
     state.error = action.payload;
     state.isLoading = false;
+    state.currentBookingLoading = false;
   },
 
   clearError: (state) => {
@@ -68,6 +84,7 @@ const reducers = reducerCreatorProducer<IUserState>()({
     state.activeTickets = [];
     state.historyTickets = [];
     state.favorites = [];
+    state.currentBooking = null;
     state.error = null;
   },
 });

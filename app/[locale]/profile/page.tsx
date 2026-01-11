@@ -11,7 +11,7 @@ import {
   getHistoryTicketsThunk,
   getFavoritesThunk,
 } from '@/store';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ProfileTabProvider, useProfileTab } from '@/contexts/ProfileTabContext';
 import { apiService } from '@/services/api';
 import Text from '@/components/Text';
@@ -27,6 +27,7 @@ function ProfileContent() {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const user = useAppSelector(authSelectors.user);
   const isAuthenticated = useAppSelector(authSelectors.isAuthenticated);
@@ -35,6 +36,14 @@ function ProfileContent() {
   const favorites = useAppSelector(userSelectors.favorites);
   const isLoading = useAppSelector(userSelectors.isLoading);
   const { activeTab, setActiveTab } = useProfileTab();
+
+  // Read tab from URL query parameter on mount
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam && ['personal', 'tickets', 'favorite', 'history'].includes(tabParam)) {
+      setActiveTab(tabParam as 'personal' | 'tickets' | 'favorite' | 'history');
+    }
+  }, [searchParams, setActiveTab]);
 
   // Pagination state for each tab
   const [activeTicketsPage, setActiveTicketsPage] = useState(1);
@@ -71,164 +80,16 @@ function ProfileContent() {
     }
   };
 
+  const handleTabChange = (tab: 'personal' | 'tickets' | 'favorite' | 'history') => {
+    setActiveTab(tab);
+    // Update URL without full page reload
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', tab);
+    window.history.replaceState({}, '', url.toString());
+  };
+
   const menuItems = getMenuItems(t);
   const emptyStates = getEmptyStates(t);
-
-  // Temporary mock data for testing active tickets
-  const mockActiveTickets = [
-    {
-      booking_id: 101,
-      status: 'confirmed',
-      total_price: 18000,
-      category: 'beauty_salon',
-      company_name: 'Luxury Beauty Studio',
-      company_phone: '+374 91 111222',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'Manicure & Pedicure',
-      currency: 'AMD',
-      date: '2024-12-05T15:00:00',
-    },
-    {
-      booking_id: 102,
-      status: 'pending',
-      total_price: 35000,
-      category: 'restaurant',
-      company_name: 'Fine Dining Restaurant',
-      company_phone: '+374 91 222333',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'Dinner Reservation',
-      currency: 'AMD',
-      date: '2024-12-02T20:00:00',
-    },
-    {
-      booking_id: 103,
-      status: 'in_process',
-      total_price: 7000,
-      category: 'car_wash',
-      company_name: 'Express Car Wash',
-      company_phone: '+374 91 333444',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'Interior Cleaning',
-      currency: 'AMD',
-      date: '2024-12-01T11:30:00',
-    },
-    {
-      booking_id: 104,
-      status: 'confirmed',
-      total_price: 22000,
-      category: 'spa',
-      company_name: 'Wellness Spa Center',
-      company_phone: '+374 91 444555',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'Full Body Massage',
-      currency: 'AMD',
-      date: '2024-12-07T14:00:00',
-    },
-    {
-      booking_id: 105,
-      status: 'pending',
-      total_price: 12500,
-      category: 'beauty_salon',
-      company_name: 'Style Hair Salon',
-      company_phone: '+374 91 555666',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'Hair Coloring',
-      currency: 'AMD',
-      date: '2024-12-03T10:30:00',
-    },
-    {
-      booking_id: 106,
-      status: 'confirmed',
-      total_price: 9500,
-      category: 'car_wash',
-      company_name: 'Auto Clean Pro',
-      company_phone: '+374 91 666777',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'Premium Wash',
-      currency: 'AMD',
-      date: '2024-12-06T09:00:00',
-    },
-    {
-      booking_id: 107,
-      status: 'in_process',
-      total_price: 28000,
-      category: 'restaurant',
-      company_name: 'Italian Trattoria',
-      company_phone: '+374 91 777888',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'Private Dining',
-      currency: 'AMD',
-      date: '2024-12-04T19:00:00',
-    },
-  ];
-
-  // Temporary mock data for testing history items
-  const mockHistoryTickets = [
-    {
-      booking_id: 1,
-      status: 'completed',
-      total_price: 15000,
-      category: 'beauty_salon',
-      company_name: 'Elegance Beauty Salon',
-      company_phone: '+374 91 123456',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'Hair Cut & Styling',
-      currency: 'AMD',
-      date: '2024-11-20T14:30:00',
-    },
-    {
-      booking_id: 2,
-      status: 'completed',
-      total_price: 8500,
-      category: 'car_wash',
-      company_name: 'Premium Car Wash',
-      company_phone: '+374 91 234567',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'Full Car Wash',
-      currency: 'AMD',
-      date: '2024-11-18T10:00:00',
-    },
-    {
-      booking_id: 3,
-      status: 'cancelled',
-      total_price: 12000,
-      category: 'spa',
-      company_name: 'Relaxation Spa Center',
-      company_phone: '+374 91 345678',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'Massage Therapy',
-      currency: 'AMD',
-      date: '2024-11-15T16:00:00',
-    },
-    {
-      booking_id: 4,
-      status: 'completed',
-      total_price: 25000,
-      category: 'restaurant',
-      company_name: 'Gourmet Restaurant',
-      company_phone: '+374 91 456789',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'Table Reservation',
-      currency: 'AMD',
-      date: '2024-11-10T19:30:00',
-    },
-    {
-      booking_id: 5,
-      status: 'completed',
-      total_price: 5000,
-      category: 'taxi',
-      company_name: 'Quick Taxi Service',
-      company_phone: '+374 91 567890',
-      company_logo: '/images/placeholder-logo.png',
-      service_name: 'City Transfer',
-      currency: 'AMD',
-      date: '2024-11-08T08:15:00',
-    },
-  ];
-
-  // Use mock data for testing (will show mock data if real data is empty)
-  const displayActiveTickets = activeTickets.length > 0 ? activeTickets : mockActiveTickets;
-  const displayHistoryTickets = historyTickets.length > 0 ? historyTickets : mockHistoryTickets;
 
   // Pagination logic
   const getCurrentPageData = (data: any[], currentPage: number) => {
@@ -263,7 +124,7 @@ function ProfileContent() {
               <Styled.MenuItem
                 key={item.id}
                 $active={activeTab === item.id}
-                onClick={() => setActiveTab(item.id as 'personal' | 'tickets' | 'favorite' | 'history')}
+                onClick={() => handleTabChange(item.id as 'personal' | 'tickets' | 'favorite' | 'history')}
               >
                 <Styled.MenuIcon $active={activeTab === item.id}>
                   {item.icon}
@@ -345,9 +206,9 @@ function ProfileContent() {
                   {(() => {
                     // Get the full data for the current tab
                     const fullData = 
-                      activeTab === 'tickets' ? displayActiveTickets :
+                      activeTab === 'tickets' ? activeTickets :
                       activeTab === 'favorite' ? favorites :
-                      displayHistoryTickets;
+                      historyTickets;
                     
                     // Get the current page number for the active tab
                     const currentPage = 
@@ -405,6 +266,7 @@ function ProfileContent() {
                                 key={booking.booking_id}
                                 booking={booking}
                                 onMenuClick={(id) => console.log('Menu clicked for booking:', id)}
+                                source={activeTab as 'tickets' | 'history'}
                               />
                             ))}
                           </Styled.TicketsList>

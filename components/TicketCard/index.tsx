@@ -1,5 +1,6 @@
 import React from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import Text from '@/components/Text';
 import { ClockIcon } from '@/components/icons/clock';
 import { PhoneIcon } from '@/components/icons/phone';
@@ -9,10 +10,23 @@ import { IBookingHistory } from '@/types/user';
 interface ITicketCardProps {
   booking: IBookingHistory;
   onMenuClick?: (bookingId: number) => void;
+  onClick?: (bookingId: number, category: string) => void;
+  source?: 'tickets' | 'history'; // Which tab this card is from
 }
 
-const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick }) => {
+const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick, onClick, source = 'tickets' }) => {
   const t = useTranslations();
+  const locale = useLocale();
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    if (onClick) {
+      onClick(booking.booking_id, booking.category);
+    } else {
+      // Navigate to ticket detail page with source tab
+      router.push(`/${locale}/profile/ticket/${booking.category}/${booking.booking_id}?tab=${source}`);
+    }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -65,17 +79,19 @@ const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick }) => {
     });
   };
 
+  const handleMenuClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click when clicking menu
+    onMenuClick?.(booking.booking_id);
+  };
+
   return (
-    <Styled.CardContainer>
+    <Styled.CardContainer onClick={handleCardClick} $clickable>
       <Styled.StatusSection>
         <Styled.StatusBadge $status={getStatusColor(booking.status)}>
           <Text type="caption" color="white" fontWeight="500">
             {getStatusText(booking.status)}
           </Text>
         </Styled.StatusBadge>
-        <Styled.MenuButton onClick={() => onMenuClick?.(booking.booking_id)}>
-          <Styled.MenuDots>⋮</Styled.MenuDots>
-        </Styled.MenuButton>
       </Styled.StatusSection>
 
       <Styled.ContentWrapper>

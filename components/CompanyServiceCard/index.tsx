@@ -47,7 +47,7 @@ const CompanyServiceCard: React.FC<ICompanyServiceCardProps> = ({
         router.push(`/${locale}/detail/${category}/${data.id}`);
       } else {
         // For services, navigate to booking page with company selection
-        router.push(`/${locale}/booking/${category}/0?serviceId=${data.id}`);
+        router.push(`/${locale}/booking/${category}/0?serviceId=${data.id}`);  
       }
     }
   };

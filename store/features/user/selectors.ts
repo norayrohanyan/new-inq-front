@@ -26,6 +26,13 @@ const historyTickets = createSelector(selector, (state) => state.historyTickets)
 
 const favorites = createSelector(selector, (state) => state.favorites);
 
+const currentBooking = createSelector(selector, (state) => state.currentBooking);
+
+const currentBookingLoading = createSelector(
+  selector,
+  (state) => state.currentBookingLoading
+);
+
 const isLoading = createSelector(selector, (state) => state.isLoading);
 
 const error = createSelector(selector, (state) => state.error);
@@ -39,6 +46,8 @@ export default {
   activeTickets,
   historyTickets,
   favorites,
+  currentBooking,
+  currentBookingLoading,
   isLoading,
   error,
 };

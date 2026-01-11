@@ -1,4 +1,4 @@
-import { IBookingHistory, IFavoriteCompany } from '@/types/user';
+import { IBookingHistory, IFavoriteCompany, IBookingDetail } from '@/types/user';
 
 export interface IUserState {
   id: string | null;
@@ -8,6 +8,8 @@ export interface IUserState {
   activeTickets: IBookingHistory[];
   historyTickets: IBookingHistory[];
   favorites: IFavoriteCompany[];
+  currentBooking: IBookingDetail | null;
+  currentBookingLoading: boolean;
   isLoading: boolean;
   error: string | null;
 }

@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { COLORS } from '@/consts/colors';
 import Text from '@/components/Text';
-import Button from '@/components/Button';
 
 export const PageContainer = styled.div`
   width: 100%;
