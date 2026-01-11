@@ -16,15 +16,18 @@ interface ICalendarProps {
   currency?: string;
   minDate?: Date;
   maxDate?: Date;
+  onMonthChange?: (startDate: string) => void;
+  isLoading?: boolean;
 }
 
 const Calendar: React.FC<ICalendarProps> = ({
   selectedDate,
   onSelectDate,
   intervals = {},
-  currency = 'AMD',
   minDate,
   maxDate,
+  onMonthChange,
+  isLoading = false,
 }) => {
   const t = useTranslations();
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -139,11 +142,25 @@ const Calendar: React.FC<ICalendarProps> = ({
   }, [currentMonth, intervals, selectedDate, minDate, maxDate]);
 
   const handlePrevMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
+    const newMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1);
+    setCurrentMonth(newMonth);
+    
+    // Notify parent about month change
+    if (onMonthChange) {
+      const startDate = `${newMonth.getFullYear()}-${String(newMonth.getMonth() + 1).padStart(2, '0')}-01`;
+      onMonthChange(startDate);
+    }
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
+    const newMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1);
+    setCurrentMonth(newMonth);
+    
+    // Notify parent about month change
+    if (onMonthChange) {
+      const startDate = `${newMonth.getFullYear()}-${String(newMonth.getMonth() + 1).padStart(2, '0')}-01`;
+      onMonthChange(startDate);
+    }
   };
 
   const handleDateClick = (day: typeof calendarDays[0]) => {
@@ -165,13 +182,13 @@ const Calendar: React.FC<ICalendarProps> = ({
     <Styled.CalendarContainer>
       {/* Header */}
       <Styled.CalendarHeader>
-        <Styled.MonthNavButton type="button" onClick={handlePrevMonth}>
+        <Styled.MonthNavButton type="button" onClick={handlePrevMonth} disabled={isLoading}>
           ‹
         </Styled.MonthNavButton>
         <Text type="h5" color="white" fontWeight="600">
-          {monthYearText}
+          {monthYearText} {isLoading && '...'}
         </Text>
-        <Styled.MonthNavButton type="button" onClick={handleNextMonth}>
+        <Styled.MonthNavButton type="button" onClick={handleNextMonth} disabled={isLoading}>
           ›
         </Styled.MonthNavButton>
       </Styled.CalendarHeader>

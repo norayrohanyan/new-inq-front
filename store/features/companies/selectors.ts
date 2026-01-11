@@ -17,6 +17,13 @@ const totalCompanies = createSelector(selectCompaniesState, (state) => state.tot
 
 const filters = createSelector(selectCompaniesState, (state) => state.filters);
 
+// Companies by service selectors
+const companiesByService = createSelector(selectCompaniesState, (state) => state.companiesByService);
+
+const isLoadingCompaniesByService = createSelector(selectCompaniesState, (state) => state.isLoadingCompaniesByService);
+
+const companiesByServiceError = createSelector(selectCompaniesState, (state) => state.companiesByServiceError);
+
 export default {
   companies,
   isLoading,
@@ -25,4 +32,7 @@ export default {
   totalPages,
   totalCompanies,
   filters,
+  companiesByService,
+  isLoadingCompaniesByService,
+  companiesByServiceError,
 };

@@ -18,6 +18,7 @@ interface IReservationFormProps {
   price: number;
   currency?: string;
   companyName?: string;
+  companyPhone?: string;
   intervals?: Record<string, {
     date: string;
     total_price: number;
@@ -26,6 +27,8 @@ interface IReservationFormProps {
     discounted: boolean;
   }>;
   onSuccess?: () => void;
+  onMonthChange?: (startDate: string) => void;
+  isLoadingIntervals?: boolean;
 }
 
 const ReservationForm: React.FC<IReservationFormProps> = ({
@@ -34,8 +37,11 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
   price,
   currency = 'AMD',
   companyName,
+  companyPhone,
   intervals = {},
   onSuccess,
+  onMonthChange,
+  isLoadingIntervals = false,
 }) => {
   const t = useTranslations();
   const locale = useLocale();
@@ -186,7 +192,7 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
       : 1;
 
   return (
-    <Styled.FormContainer onSubmit={handleSubmit}>
+    <>
       {/* Host Info */}
       {companyName && (
         <Styled.HostSection>
@@ -199,14 +205,17 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
             <Text type="body" color="white" fontWeight="600">
               {companyName}
             </Text>
-            <Text type="caption" color="secondarySemiLight">
-              +374 99 123456
-            </Text>
+            {companyPhone && (
+              <Text type="caption" color="secondarySemiLight">
+                {companyPhone}
+              </Text>
+            )}
           </div>
         </Styled.HostSection>
       )}
+    <Styled.FormContainer onSubmit={handleSubmit}>
 
-      <Text type="h4" color="white" fontWeight="600">
+      <Text type="h4" color="white" fontWeight="500">
         {t('company.reservation')}
       </Text>
 
@@ -221,7 +230,7 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
               }}
             >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <Text type="caption" color="secondarySemiLight">
+                <Text type="p" color="white" style={{ marginBottom: '0.5rem' }}>
                   {t('company.checkIn')}
                 </Text>
                 {checkIn && (
@@ -246,6 +255,8 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
                   intervals={intervals}
                   currency={currency}
                   minDate={new Date()}
+                  onMonthChange={onMonthChange}
+                  isLoading={isLoadingIntervals}
                 />
               </Styled.CalendarPopover>
             )}
@@ -260,7 +271,7 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
               }}
             >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <Text type="caption" color="secondarySemiLight">
+                <Text type="p" color="white" style={{ marginBottom: '0.5rem' }}>
                   {t('company.checkOut')}
                 </Text>
                 {checkOut && (
@@ -285,6 +296,8 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
                   intervals={intervals}
                   currency={currency}
                   minDate={checkIn ? new Date(checkIn) : new Date()}
+                  onMonthChange={onMonthChange}
+                  isLoading={isLoadingIntervals}
                 />
               </Styled.CalendarPopover>
             )}
@@ -303,7 +316,7 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
               }}
             >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <Text type="caption" color="secondarySemiLight">
+                <Text type="p" color="white" style={{ marginBottom: '0.5rem' }}>
                   {t('company.pickUp')}
                 </Text>
                 {pickupTime && (
@@ -328,6 +341,8 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
                   intervals={intervals}
                   currency={currency}
                   minDate={new Date()}
+                  onMonthChange={onMonthChange}
+                  isLoading={isLoadingIntervals}
                 />
               </Styled.CalendarPopover>
             )}
@@ -342,7 +357,7 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
               }}
             >
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <Text type="caption" color="secondarySemiLight">
+                <Text type="p" color="white" style={{ marginBottom: '0.5rem' }}>
                   {t('company.return')}
                 </Text>
                 {returnTime && (
@@ -367,6 +382,8 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
                   intervals={intervals}
                   currency={currency}
                   minDate={pickupTime ? new Date(pickupTime) : new Date()}
+                  onMonthChange={onMonthChange}
+                  isLoading={isLoadingIntervals}
                 />
               </Styled.CalendarPopover>
             )}
@@ -475,6 +492,7 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
         {t('company.reserve')}
       </Button>
     </Styled.FormContainer>
+    </>
   );
 };
 

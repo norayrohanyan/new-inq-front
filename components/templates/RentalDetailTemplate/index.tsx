@@ -22,6 +22,7 @@ export interface RentalDetailData {
   longitude?: number;
   companyId?: number;
   companyName?: string;
+  companyPhone?: string;
   
   // Specifications (flexible for different rental types)
   specifications?: Array<{
@@ -43,6 +44,8 @@ interface RentalDetailTemplateProps {
   category: string;
   type: 'car' | 'apartment';
   onShare?: () => void;
+  onMonthChange?: (startDate: string) => void;
+  isLoadingIntervals?: boolean;
 }
 
 export default function RentalDetailTemplate({
@@ -50,6 +53,8 @@ export default function RentalDetailTemplate({
   category,
   type,
   onShare,
+  onMonthChange,
+  isLoadingIntervals,
 }: RentalDetailTemplateProps) {
   const t = useTranslations();
 
@@ -112,7 +117,7 @@ export default function RentalDetailTemplate({
 
                 {/* Price Display */}
                 <Styled.PriceRow>
-                <Text type="h2" customColor="#FF8A65" fontWeight="700">
+                <Text type="h4" color='white' fontWeight='400'>
                     {data.currency} {data.price.toLocaleString()}
                 </Text>
                 <Text type="body" color="secondarySemiLight">
@@ -164,7 +169,10 @@ export default function RentalDetailTemplate({
             price={data.price}
             currency={data.currency}
             companyName={data.companyName}
+            companyPhone={data.companyPhone}
             intervals={data.intervals}
+            onMonthChange={onMonthChange}
+            isLoadingIntervals={isLoadingIntervals}
           />
 
           {/* Map (if applicable) */}

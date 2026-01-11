@@ -49,6 +49,8 @@
       "datetime": "Date/Time",
       "final": "Final"
     },
+    "chooseCompany": "Choose a company",
+    "companiesOfferingService": "Select a company that offers this service",
     "chooseService": "Choose service",
     "chooseEmployee": "Choose employee",
     "chooseAnotherEmployee": "Choose another employee (optional)",
@@ -56,6 +58,7 @@
     "chooseDateTime": "Choose date and time",
     "bookingInfo": "Booking info",
     "additionalServices": "Additional services",
+    "noAdditionalServices": "No additional services available",
     "total": "Total",
     "date": "Date",
     "company": "Company",

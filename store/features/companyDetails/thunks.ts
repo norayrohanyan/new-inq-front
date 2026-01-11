@@ -50,6 +50,69 @@ export const getCompanyServicesThunk = createAsyncThunk(
   }
 );
 
+export const getEmployeeServicesThunk = createAsyncThunk(
+  'companyDetails/getEmployeeServices',
+  async (
+    { category, company_id, employee_id }: { category: string; company_id: number; employee_id?: number },
+    { dispatch, rejectWithValue }
+  ) => {
+    try {
+      const response = await apiService.getEmployeeServices({ category, company_id, employee_id });
+      if (response.success && response.data) {
+        const servicesData = Array.isArray(response.data) ? response.data : [];
+        dispatch(companyDetailsActions.setServices(servicesData));
+        return servicesData;
+      } else {
+        dispatch(companyDetailsActions.setError(response.error || 'Failed to fetch employee services'));
+        return rejectWithValue(response.error || 'Failed to fetch employee services');
+      }
+    } catch (error: any) {
+      dispatch(companyDetailsActions.setError(error.message));
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getEmployeesByServiceThunk = createAsyncThunk(
+  'companyDetails/getEmployeesByService',
+  async (
+    { category, company_id, service_id }: { category: string; company_id: number; service_id: number },
+    { dispatch, rejectWithValue }
+  ) => {
+    try {
+      const response = await apiService.getEmployeesByService({ category, company_id, service_id });
+      if (response.success && response.data) {
+        // Transform the response to match the employees format
+        const employeesData = Array.isArray(response.data) ? response.data.map((emp: any) => ({
+          id: emp.id,
+          name: emp.name,
+          image_url: emp.image_url,
+          imageUrl: emp.image_url,
+          rating: emp.rating,
+          services: emp.services
+        })) : [];
+        dispatch(companyDetailsActions.setEmployees(employeesData));
+        
+        // Also extract and set the service info from the first employee's data
+        if (employeesData.length > 0 && employeesData[0].services && employeesData[0].services.length > 0) {
+          const serviceFromEmployee = employeesData[0].services.find((s: any) => s.id === service_id);
+          if (serviceFromEmployee) {
+            dispatch(companyDetailsActions.setServices([serviceFromEmployee]));
+          }
+        }
+        
+        return { employees: employeesData, service_id };
+      } else {
+        dispatch(companyDetailsActions.setError(response.error || 'Failed to fetch employees by service'));
+        return rejectWithValue(response.error || 'Failed to fetch employees by service');
+      }
+    } catch (error: any) {
+      dispatch(companyDetailsActions.setError(error.message));
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const getCompanyEmployeesThunk = createAsyncThunk(
   'companyDetails/getCompanyEmployees',
   async ({ category, id }: { category: string; id: number }, { dispatch, rejectWithValue }) => {
@@ -148,11 +211,19 @@ export const getCarDetailsThunk = createAsyncThunk(
 
 export const getApartmentIntervalsThunk = createAsyncThunk(
   'companyDetails/getApartmentIntervals',
-  async ({ id, startDate }: { id: number; startDate: string }, { dispatch, rejectWithValue }) => {
+  async (
+    { id, startDate, append = false }: { id: number; startDate: string; append?: boolean },
+    { dispatch, rejectWithValue }
+  ) => {
     try {
+      dispatch(companyDetailsActions.setLoadingTimeSlots(true));
       const response = await apiService.getApartmentIntervals(id, startDate);
       if (response.success && response.data) {
-        dispatch(companyDetailsActions.setIntervals(response.data));
+        if (append) {
+          dispatch(companyDetailsActions.appendIntervals(response.data));
+        } else {
+          dispatch(companyDetailsActions.setIntervals(response.data));
+        }
         return response.data;
       } else {
         dispatch(companyDetailsActions.setError(response.error || 'Failed to fetch intervals'));
@@ -161,17 +232,27 @@ export const getApartmentIntervalsThunk = createAsyncThunk(
     } catch (error: any) {
       dispatch(companyDetailsActions.setError(error.message));
       return rejectWithValue(error.message);
+    } finally {
+      dispatch(companyDetailsActions.setLoadingTimeSlots(false));
     }
   }
 );
 
 export const getCarIntervalsThunk = createAsyncThunk(
   'companyDetails/getCarIntervals',
-  async ({ id, startDate }: { id: number; startDate: string }, { dispatch, rejectWithValue }) => {
+  async (
+    { id, startDate, append = false }: { id: number; startDate: string; append?: boolean },
+    { dispatch, rejectWithValue }
+  ) => {
     try {
+      dispatch(companyDetailsActions.setLoadingTimeSlots(true));
       const response = await apiService.getCarIntervals(id, startDate);
       if (response.success && response.data) {
-        dispatch(companyDetailsActions.setIntervals(response.data));
+        if (append) {
+          dispatch(companyDetailsActions.appendIntervals(response.data));
+        } else {
+          dispatch(companyDetailsActions.setIntervals(response.data));
+        }
         return response.data;
       } else {
         dispatch(companyDetailsActions.setError(response.error || 'Failed to fetch intervals'));
@@ -180,6 +261,8 @@ export const getCarIntervalsThunk = createAsyncThunk(
     } catch (error: any) {
       dispatch(companyDetailsActions.setError(error.message));
       return rejectWithValue(error.message);
+    } finally {
+      dispatch(companyDetailsActions.setLoadingTimeSlots(false));
     }
   }
 );
