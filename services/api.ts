@@ -16,6 +16,9 @@ import {
 } from '@/types/user';
 import { ICompany } from '@/store/types/companies';
 import { IService } from '@/store/types/services';
+import { clearAuthCookies } from '@/utils/cookies';
+import { getStoreInstance } from './apiWithStore';
+import { authActions } from '@/store';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost';
 
@@ -62,14 +65,26 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
-    // Handle common errors
+    // Handle 401 - Token expired or unauthorized
     if (error.response?.status === 401) {
-      // Token expired or unauthorized
       if (typeof window !== 'undefined') {
-        // Clear auth data
+        // Clear auth cookies
+        clearAuthCookies();
+        
+        // Clear localStorage
         localStorage.removeItem('auth_tokens');
-        // Optionally redirect to login
-        // window.location.href = '/';
+        
+        // Dispatch logout action to Redux
+        const store = getStoreInstance();
+        if (store) {
+          store.dispatch(authActions.logout());
+        }
+        
+        // Redirect to login page
+        // Get current locale from URL or default to 'en'
+        const pathParts = window.location.pathname.split('/');
+        const locale = pathParts[1] || 'en';
+        window.location.href = `/${locale}/login`;
       }
     }
     return Promise.reject(error);

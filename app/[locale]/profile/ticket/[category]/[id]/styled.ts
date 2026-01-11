@@ -224,7 +224,7 @@ export const OrangeDot = styled.div`
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: ${COLORS.brandOrangeMid};
+  background: ${COLORS.brandGradient};
 `;
 
 export const GuestInfo = styled.div`
@@ -400,20 +400,13 @@ export const StarRating = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-bottom: 16px;
 `;
 
 export const StarButton = styled.button<{ $active?: boolean; $clickable?: boolean }>`
   background: none;
   border: none;
-  padding: 2px;
   cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
   transition: transform 0.15s ease;
-
-  svg {
-    fill: ${({ $active }) => ($active ? '#FE7F3B' : 'transparent')};
-    stroke: ${({ $active }) => ($active ? '#FE7F3B' : 'rgba(255, 255, 255, 0.4)')};
-  }
 
   ${({ $clickable }) =>
     $clickable &&
@@ -432,9 +425,9 @@ export const CommentTextarea = styled.textarea`
   width: 100%;
   min-height: 100px;
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  background: transparent;
+  border: 1px solid #D2D2D2;
+  border-radius: 20px;
   color: white;
   font-size: 14px;
   font-family: inherit;
@@ -443,11 +436,6 @@ export const CommentTextarea = styled.textarea`
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.4);
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #fe7f3b;
   }
 `;
 
@@ -498,3 +486,9 @@ export const ErrorContainer = styled.div`
   text-align: center;
 `;
 
+export const StartSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+`;

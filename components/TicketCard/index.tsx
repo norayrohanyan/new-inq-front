@@ -92,9 +92,6 @@ const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick, onClick,
             {getStatusText(booking.status)}
           </Text>
         </Styled.StatusBadge>
-        <Styled.MenuButton onClick={handleMenuClick}>
-          <Styled.MenuDots>⋮</Styled.MenuDots>
-        </Styled.MenuButton>
       </Styled.StatusSection>
 
       <Styled.ContentWrapper>
