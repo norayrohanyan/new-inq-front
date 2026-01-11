@@ -8,6 +8,7 @@ import { ICompany } from '@/store/types/companies';
 import { IService } from '@/store/types/services';
 import { ShareIcon, LocationIcon, ClockIcon, StarIcon } from '@/components/icons';
 import { COLORS } from '@/consts/colors';
+import { isRentalCategory } from '@/consts/categoryTemplates';
 
 type CompanyService = ICompany | IService;
 
@@ -29,16 +30,25 @@ const CompanyServiceCard: React.FC<ICompanyServiceCardProps> = ({
     : (data as IService).image_urls?.[0];
 
   const handleCardClick = () => {
-    // For companies in rental categories (car_rental, apartment_rental), 
-    // navigate to company inventory page that lists their items
-    const isCompanyInRentalCategory = isCompany && (category === 'car_rental' || category === 'apartment_rental');
+    const isRental = isRentalCategory(category);
     
-    if (isCompanyInRentalCategory) {
-      // Navigate to company's inventory list page
-      router.push(`/${locale}/categories/${category}/company/${data.id}`);
+    if (isCompany) {
+      // For companies in rental categories, navigate to company inventory page
+      if (isRental) {
+        router.push(`/${locale}/categories/${category}/company/${data.id}`);
+      } else {
+        // Navigate to unified detail page (service company)
+        router.push(`/${locale}/detail/${category}/${data.id}`);
+      }
     } else {
-      // Navigate to unified detail page (single item or service company)
-      router.push(`/${locale}/detail/${category}/${data.id}`);
+      // Non-company items (services, apartments, cars)
+      if (isRental) {
+        // For apartments/cars, navigate to detail page
+        router.push(`/${locale}/detail/${category}/${data.id}`);
+      } else {
+        // For services, navigate to booking page with company selection
+        router.push(`/${locale}/booking/${category}/0?serviceId=${data.id}`);
+      }
     }
   };
 

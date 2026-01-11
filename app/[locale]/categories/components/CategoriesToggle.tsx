@@ -32,12 +32,15 @@ export const CategoriesToggle: React.FC<ICategoriesToggleProps> = ({
   }
 
   // Get the option names
-  const trueOption = trueValues[0][0];
-  const falseOption = falseValues[0][0];
+  const allOptions = [...trueValues, ...falseValues].map(([key]) => key);
   
-  // The true value should be on the left (default active position)
-  const firstOption = trueOption;
-  const secondOption = falseOption;
+  // Always put "Companies" on the left side for consistency
+  // The other option (Services, Apartments, Cars) goes on the right
+  const companiesKey = allOptions.find(key => key === 'Companies');
+  const otherKey = allOptions.find(key => key !== 'Companies');
+  
+  const leftOption = companiesKey || allOptions[0];
+  const rightOption = otherKey || allOptions[1];
 
   // Determine the labels based on the switch data
   const getLabel = (key: string) => {
@@ -55,18 +58,23 @@ export const CategoriesToggle: React.FC<ICategoriesToggleProps> = ({
     }
   };
 
-  const leftLabel = getLabel(firstOption);
-  const rightLabel = getLabel(secondOption);
+  const leftLabel = getLabel(leftOption);
+  const rightLabel = getLabel(rightOption);
+
+  // When showCompanies is true, the left side (Companies) should be active
+  // When showCompanies is false, the right side (Services/Apartments/Cars) should be active
+  const isLeftActive = showCompanies;
+  const isRightActive = !showCompanies;
 
   return (
     <Styled.ToggleSection>
-      <Styled.ToggleLabel $active={showCompanies}>
+      <Styled.ToggleLabel $active={isLeftActive}>
         {leftLabel}
       </Styled.ToggleLabel>
       <Styled.ToggleSwitch onClick={onToggleChange}>
-        <Styled.ToggleKnob $active={showCompanies} />
+        <Styled.ToggleKnob $active={isLeftActive} />
       </Styled.ToggleSwitch>
-      <Styled.ToggleLabel $active={!showCompanies}>
+      <Styled.ToggleLabel $active={isRightActive}>
         {rightLabel}
       </Styled.ToggleLabel>
     </Styled.ToggleSection>

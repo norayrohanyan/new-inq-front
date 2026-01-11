@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { useCallback } from 'react';
 import {
   getCompanyDetailsThunk,
   getCompanyServicesThunk,
@@ -11,6 +12,8 @@ import {
   getCompanyPortfolioThunk,
   getCarDetailsThunk,
   getApartmentDetailsThunk,
+  getCarIntervalsThunk,
+  getApartmentIntervalsThunk,
   companyDetailsSelectors,
   authSelectors,
 } from '@/store';
@@ -45,8 +48,24 @@ export default function UnifiedDetailPage() {
   const services = useAppSelector(companyDetailsSelectors.services);
   const employees = useAppSelector(companyDetailsSelectors.employees);
   const portfolio = useAppSelector(companyDetailsSelectors.portfolio);
+  const intervals = useAppSelector(companyDetailsSelectors.intervals);
   const isLoading = useAppSelector(companyDetailsSelectors.isLoading);
+  const isLoadingTimeSlots = useAppSelector(companyDetailsSelectors.isLoadingTimeSlots);
   const isAuthenticated = useAppSelector(authSelectors.isAuthenticated);
+
+  // Interval thunks mapping
+  const intervalThunks: Record<string, typeof getCarIntervalsThunk | typeof getApartmentIntervalsThunk> = {
+    car_rental: getCarIntervalsThunk,
+    apartment_rental: getApartmentIntervalsThunk,
+  };
+
+  // Handle month change for interval loading
+  const handleMonthChange = useCallback((startDate: string) => {
+    const thunk = intervalThunks[category];
+    if (thunk) {
+      dispatch(thunk({ id: itemId, startDate, append: true }));
+    }
+  }, [category, itemId, dispatch]);
 
   // Fetch data based on template type
   useEffect(() => {
@@ -206,7 +225,7 @@ export default function UnifiedDetailPage() {
       price: carDetails.price,
       currency: carDetails.currency,
       imageUrls: carDetails.image_urls || [],
-      intervals: carDetails.intervals || {},
+      intervals: intervals || carDetails.intervals || {},
       specifications,
     };
 
@@ -215,6 +234,8 @@ export default function UnifiedDetailPage() {
         data={rentalData}
         category={category}
         type="car"
+        onMonthChange={handleMonthChange}
+        isLoadingIntervals={isLoadingTimeSlots}
       />
     );
   }
@@ -262,7 +283,7 @@ export default function UnifiedDetailPage() {
       price: apartmentDetails.price,
       currency: apartmentDetails.currency,
       imageUrls: apartmentDetails.image_urls || [],
-      intervals: apartmentDetails.intervals || {},
+      intervals: intervals || apartmentDetails.intervals || {},
       address: apartmentDetails.address,
       latitude: apartmentDetails.latitude,
       longitude: apartmentDetails.longitude,
@@ -276,6 +297,8 @@ export default function UnifiedDetailPage() {
         data={rentalData}
         category={category}
         type="apartment"
+        onMonthChange={handleMonthChange}
+        isLoadingIntervals={isLoadingTimeSlots}
       />
     );
   }
