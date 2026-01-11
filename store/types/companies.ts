@@ -8,6 +8,15 @@ export interface ICompany {
   image_url: string | null;
 }
 
+export interface ICompanyByService {
+  id: number;
+  name: string;
+  logo?: string;
+  image_url?: string;
+  rating?: number | string;
+  is_individual?: boolean;
+}
+
 export interface ICompaniesState {
   companies: ICompany[];
   isLoading: boolean;
@@ -16,4 +25,8 @@ export interface ICompaniesState {
   totalPages: number;
   totalCompanies: number;
   filters: Record<string, any>;
+  // Companies by service
+  companiesByService: ICompanyByService[];
+  isLoadingCompaniesByService: boolean;
+  companiesByServiceError: string | null;
 }

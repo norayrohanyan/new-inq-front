@@ -14,7 +14,7 @@ export const Overlay = styled.div<{ $isOpen: boolean }>`
   transition: opacity 0.3s ease, visibility 0.3s ease;
 `;
 
-export const SidebarContainer = styled.div<{ isOpen: boolean }>`
+export const SidebarContainer = styled.div<{ $isOpen: boolean }>`
   position: fixed;
   top: 0;
   right: 0;
@@ -23,7 +23,7 @@ export const SidebarContainer = styled.div<{ isOpen: boolean }>`
   max-width: 400px;
   background: ${COLORS.darkBg};
   z-index: 9999;
-  transform: translateX(${({ isOpen }) => (isOpen ? '0' : '100%')});
+  transform: translateX(${({ $isOpen }) => ($isOpen ? '0' : '100%')});
   transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;

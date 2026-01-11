@@ -235,6 +235,27 @@ export const apiService = {
   },
 
   /**
+   * Get paginated list of companies by service
+   */
+  async getCompaniesByService(params: {
+    category: string;
+    service_id: number;
+    page?: number;
+    per_page?: number;
+  }): Promise<IApiResponse<IPaginatedResponse<ICompany>>> {
+    try {
+      const { category, ...queryParams } = params;
+      const { data } = await api.get<IApiResponse<IPaginatedResponse<ICompany>>>(
+        `/api/${category}/companies/by-service`,
+        { params: queryParams }
+      );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
    * Get filters for companies by category
    */
   async getCompaniesFilters(category: string): Promise<IApiResponse<Record<string, any>>> {
@@ -478,6 +499,52 @@ export const apiService = {
   async getCompanyServices(category: string, id: number): Promise<IApiResponse<any[]>> {
     try {
       const { data } = await api.get<IApiResponse<any[]>>(`/api/${category}/company/${id}/services`);
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get employee services (or company services if company is individual)
+   */
+  async getEmployeeServices(params: {
+    category: string;
+    company_id: number;
+    employee_id?: number;
+  }): Promise<IApiResponse<Array<{ id: number; name: string; price: number; duration: number; employee_id: number }>>> {
+    try {
+      const { category, ...queryParams } = params;
+      const { data } = await api.get<IApiResponse<Array<{ id: number; name: string; price: number; duration: number; employee_id: number }>>>(
+        `/api/${category}/employee/services`,
+        { params: queryParams }
+      );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get employees by service (employees that offer a specific service)
+   */
+  async getEmployeesByService(params: {
+    category: string;
+    company_id: number;
+    service_id: number;
+  }): Promise<IApiResponse<Array<{
+    id: number;
+    name: string;
+    image_url: string;
+    rating: number;
+    data: Array<{ id: number; name: string; price: number; duration: number; employee_id: number }>;
+  }>>> {
+    try {
+      const { category, ...queryParams } = params;
+      const { data } = await api.get(
+        `/api/${category}/employees/by-service`,
+        { params: queryParams }
+      );
       return data;
     } catch (error) {
       return handleError(error);

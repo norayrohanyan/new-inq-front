@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ICompaniesState, ICompany } from '@/store/types/companies';
+import { ICompaniesState, ICompany, ICompanyByService } from '@/store/types/companies';
 
 const reducers = {
   setLoading: (state: ICompaniesState, action: PayloadAction<boolean>) => {
@@ -37,6 +37,21 @@ const reducers = {
     state.totalPages = 1;
     state.totalCompanies = 0;
     state.filters = {};
+  },
+  // Companies by service reducers
+  setCompaniesByService: (state: ICompaniesState, action: PayloadAction<ICompanyByService[]>) => {
+    state.companiesByService = action.payload;
+  },
+  setLoadingCompaniesByService: (state: ICompaniesState, action: PayloadAction<boolean>) => {
+    state.isLoadingCompaniesByService = action.payload;
+  },
+  setCompaniesByServiceError: (state: ICompaniesState, action: PayloadAction<string | null>) => {
+    state.companiesByServiceError = action.payload;
+  },
+  clearCompaniesByService: (state: ICompaniesState) => {
+    state.companiesByService = [];
+    state.isLoadingCompaniesByService = false;
+    state.companiesByServiceError = null;
   },
 };
 

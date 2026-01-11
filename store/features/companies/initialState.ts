@@ -8,4 +8,8 @@ export const getInitialState = (): ICompaniesState => ({
   totalPages: 1,
   totalCompanies: 0,
   filters: {},
+  // Companies by service
+  companiesByService: [],
+  isLoadingCompaniesByService: false,
+  companiesByServiceError: null,
 });

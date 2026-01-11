@@ -30,7 +30,7 @@ export {
 export { getCategoriesThunk } from './features/categories/thunks';
 
 // Export companies thunks
-export { getCompaniesThunk } from './features/companies/thunks';
+export { getCompaniesThunk, getCompaniesByServiceThunk } from './features/companies/thunks';
 
 // Export services thunks
 export { getServicesThunk } from './features/services/thunks';
@@ -50,6 +50,8 @@ export {
 export {
   getCompanyDetailsThunk,
   getCompanyServicesThunk,
+  getEmployeeServicesThunk,
+  getEmployeesByServiceThunk,
   getCompanyEmployeesThunk,
   getCompanyPortfolioThunk,
   getApartmentDetailsThunk,

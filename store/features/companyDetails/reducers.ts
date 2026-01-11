@@ -45,6 +45,11 @@ export const companyDetailsReducers = {
     state.intervals = action.payload;
   },
 
+  appendIntervals(state: ICompanyDetailsState, action: { payload: Record<string, any> }) {
+    // Merge new intervals with existing ones
+    state.intervals = { ...state.intervals, ...action.payload };
+  },
+
   setBeautyTimeSlots(state: ICompanyDetailsState, action: { payload: any[] }) {
     state.beautyTimeSlots = action.payload;
   },
