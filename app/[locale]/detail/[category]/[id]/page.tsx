@@ -149,7 +149,9 @@ export default function UnifiedDetailPage() {
     const handleServiceBook = (serviceId: number) => {
       // Check authentication first
       if (!isAuthenticated) {
-        router.push(`/${locale}/login`);
+        // Save intended booking destination so user is redirected back after login
+        const intendedUrl = encodeURIComponent(`/${locale}/booking/${category}/${itemId}?serviceId=${serviceId}`);
+        router.push(`/${locale}/login?returnUrl=${intendedUrl}`);
         return;
       }
 
@@ -164,7 +166,9 @@ export default function UnifiedDetailPage() {
     const handleEmployeeBook = (employeeId: number) => {
       // Check authentication first
       if (!isAuthenticated) {
-        router.push(`/${locale}/login`);
+        // Save intended booking destination so user is redirected back after login
+        const intendedUrl = encodeURIComponent(`/${locale}/booking/${category}/${itemId}?employeeId=${employeeId}`);
+        router.push(`/${locale}/login?returnUrl=${intendedUrl}`);
         return;
       }
 

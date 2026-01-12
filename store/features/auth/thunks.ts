@@ -1,6 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { apiService } from '@/services/api';
-import { ILoginRequest, IRegisterRequest, IResetTokens } from '@/types/auth';
+import { 
+  ILoginRequest, 
+  IRegisterRequest, 
+  IResetTokens,
+  IEditProfileRequest,
+  IUpdatePhoneRequest,
+  IUpdatePasswordRequest
+} from '@/types/auth';
 import { authActions } from './slice';
 
 export const loginThunk = createAsyncThunk(
@@ -166,6 +173,30 @@ export const fetchUserProfileThunk = createAsyncThunk(
 );
 
 /**
+ * Get current authenticated user information
+ * Returns user's id, first_name, last_name, and phone
+ */
+export const getCurrentUserThunk = createAsyncThunk(
+  'auth/getCurrentUser',
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await apiService.getCurrentUser();
+
+      if (response.success && response.data) {
+        dispatch(authActions.setUser(response.data));
+        return response.data;
+      } else {
+        return rejectWithValue(response.error || 'Failed to fetch user information');
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to fetch user information';
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+/**
  * Send password recovery link
  */
 export const forgotPasswordThunk = createAsyncThunk(
@@ -199,6 +230,87 @@ export const updatePasswordThunk = createAsyncThunk(
     try {
       dispatch(authActions.setLoading(true));
       const response = await apiService.updatePassword(password);
+      
+      if (response.success) {
+        dispatch(authActions.setLoading(false));
+        return response.data;
+      } else {
+        dispatch(authActions.setError(response.error || 'Failed to update password'));
+        return rejectWithValue(response.error);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update password';
+      dispatch(authActions.setError(errorMessage));
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+/**
+ * Edit user profile (first name and last name)
+ */
+export const editUserProfileThunk = createAsyncThunk(
+  'auth/editUserProfile',
+  async (profileData: IEditProfileRequest, { dispatch, rejectWithValue }) => {
+    try {
+      dispatch(authActions.setLoading(true));
+      const response = await apiService.editProfile(profileData);
+      
+      if (response.success && response.data) {
+        // Update user in state with new first_name and last_name
+        dispatch(authActions.setUser({
+          ...(await dispatch(getCurrentUserThunk()).unwrap())
+        }));
+        dispatch(authActions.setLoading(false));
+        return response.data;
+      } else {
+        dispatch(authActions.setError(response.error || 'Failed to update profile'));
+        return rejectWithValue(response.error);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update profile';
+      dispatch(authActions.setError(errorMessage));
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+/**
+ * Update user phone number
+ */
+export const updateUserPhoneThunk = createAsyncThunk(
+  'auth/updateUserPhone',
+  async (phoneData: IUpdatePhoneRequest, { dispatch, rejectWithValue }) => {
+    try {
+      dispatch(authActions.setLoading(true));
+      const response = await apiService.updatePhone(phoneData.phone);
+      
+      if (response.success) {
+        // Refresh user data to get updated phone
+        await dispatch(getCurrentUserThunk());
+        dispatch(authActions.setLoading(false));
+        return response.data;
+      } else {
+        dispatch(authActions.setError(response.error || 'Failed to update phone'));
+        return rejectWithValue(response.error);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update phone';
+      dispatch(authActions.setError(errorMessage));
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+/**
+ * Update user password (requires current password)
+ */
+export const updateUserPasswordThunk = createAsyncThunk(
+  'auth/updateUserPassword',
+  async (passwordData: IUpdatePasswordRequest, { dispatch, rejectWithValue }) => {
+    try {
+      dispatch(authActions.setLoading(true));
+      const response = await apiService.updateUserPassword(passwordData);
       
       if (response.success) {
         dispatch(authActions.setLoading(false));

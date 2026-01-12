@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { authSelectors, loginThunk } from '@/store';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
@@ -16,6 +16,7 @@ export default function LoginPage() {
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(authSelectors.isAuthenticated);
   const isLoading = useAppSelector(authSelectors.isLoading);
@@ -24,13 +25,21 @@ export default function LoginPage() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
 
+  // Get the return URL from query params (where user wanted to go before login)
+  const returnUrl = searchParams.get('returnUrl');
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = await dispatch(loginThunk({ phone, password }));
     
-    // Redirect to profile after successful login
+    // Redirect to the return URL if provided, otherwise to profile
     if (loginThunk.fulfilled.match(result)) {
-      router.push(`/${locale}/profile`);
+      if (returnUrl) {
+        // Decode and redirect to the original destination
+        router.push(decodeURIComponent(returnUrl));
+      } else {
+        router.push(`/${locale}/profile`);
+      }
     }
   };
 

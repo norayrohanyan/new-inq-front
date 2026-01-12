@@ -177,6 +177,31 @@ export const apiService = {
   },
 
   /**
+   * Get current user information
+   * Returns authenticated user's id, first_name, last_name, and phone
+   */
+  async getCurrentUser(): Promise<IApiResponse<IUserProfile>> {
+    try {
+      const { data } = await api.get<IApiResponse<IUserProfile>>('/api/user');
+      return data;
+    } catch (error) {
+      // Log detailed error information for debugging
+      if (axios.isAxiosError(error)) {
+        console.error('getCurrentUser API Error:', {
+          message: error.message,
+          status: error.response?.status,
+          statusText: error.response?.statusText,
+          data: error.response?.data,
+          url: error.config?.url,
+          baseURL: error.config?.baseURL,
+          headers: error.config?.headers,
+        });
+      }
+      return handleError(error);
+    }
+  },
+
+  /**
    * Get all categories
    */
   async getCategories(): Promise<IApiResponse<ICategory[]>> {
@@ -404,14 +429,14 @@ export const apiService = {
   },
 
   /**
-   * Edit user profile
+   * Edit user profile (first_name and last_name)
    */
   async editProfile(userData: {
     first_name: string;
     last_name: string;
-  }): Promise<IApiResponse<IUserProfile>> {
+  }): Promise<IApiResponse<{ first_name: string; last_name: string }>> {
     try {
-      const { data } = await api.put<IApiResponse<IUserProfile>>('/api/user/edit', userData);
+      const { data } = await api.put<IApiResponse<{ first_name: string; last_name: string }>>('/api/user/edit', userData);
       return data;
     } catch (error) {
       return handleError(error);
@@ -424,6 +449,23 @@ export const apiService = {
   async updatePhone(phone: string): Promise<IApiResponse<null>> {
     try {
       const { data } = await api.patch<IApiResponse<null>>('/api/user/phone', { phone });
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Update user password
+   * Requires current password, new password, and password confirmation
+   */
+  async updateUserPassword(passwordData: {
+    password: string;
+    new_password: string;
+    confirm_password: string;
+  }): Promise<IApiResponse<null>> {
+    try {
+      const { data } = await api.put<IApiResponse<null>>('/api/user/password', passwordData);
       return data;
     } catch (error) {
       return handleError(error);

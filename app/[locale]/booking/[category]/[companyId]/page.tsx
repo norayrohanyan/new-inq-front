@@ -50,7 +50,9 @@ export default function BookingPage() {
   
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push(`/${locale}/login`);
+      // Save current URL as returnUrl so user is redirected back after login
+      const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
+      router.push(`/${locale}/login?returnUrl=${currentUrl}`);
     }
   }, [isAuthenticated, locale, router]);
 

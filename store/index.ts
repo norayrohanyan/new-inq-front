@@ -22,8 +22,12 @@ export {
   refreshTokensThunk,
   verifyLinkThunk,
   fetchUserProfileThunk,
+  getCurrentUserThunk,
   forgotPasswordThunk,
   updatePasswordThunk,
+  editUserProfileThunk,
+  updateUserPhoneThunk,
+  updateUserPasswordThunk,
 } from './features/auth/thunks';
 
 // Export categories thunks

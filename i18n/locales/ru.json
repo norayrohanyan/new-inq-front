@@ -10,6 +10,7 @@
     "notFound": "Не найдено",
     "yes": "Да",
     "no": "Нет",
+    "ok": "ОК",
     "returnHome": "На главную"
   },
   "home": {
@@ -166,7 +167,24 @@
     "noFavorites": "Нет избранного",
     "noFavoritesDescription": "Вы еще не добавили избранное",
     "noHistory": "Нет истории",
-    "noHistoryDescription": "Ваша история бронирований пуста"
+    "noHistoryDescription": "Ваша история бронирований пуста",
+    "edit": {
+      "editProfile": "Редактировать профиль",
+      "editPhone": "Редактировать телефон",
+      "editPassword": "Редактировать пароль",
+      "name": "Имя",
+      "surname": "Фамилия",
+      "email": "Электронная почта",
+      "phonePlaceholder": "Номер (пр. 091234567)",
+      "currentPassword": "Текущий пароль",
+      "newPassword": "Новый пароль",
+      "confirmPassword": "Подтвердите пароль",
+      "profileUpdated": "Профиль успешно обновлен",
+      "phoneUpdated": "Номер телефона успешно обновлен",
+      "passwordUpdated": "Пароль успешно обновлен",
+      "passwordsDoNotMatch": "Пароли не совпадают",
+      "passwordTooShort": "Пароль должен быть не менее 6 символов"
+    }
   },
   "footer": {
     "becomePartner": {

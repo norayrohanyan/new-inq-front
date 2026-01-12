@@ -45,10 +45,25 @@ export interface ILinkVerifyResponse {
 }
 
 export interface IUser {
-  id: string;
+  id: number;
   first_name: string;
   last_name: string;
   phone: string;
   email?: string;
+}
+
+export interface IEditProfileRequest {
+  first_name: string;
+  last_name: string;
+}
+
+export interface IUpdatePhoneRequest {
+  phone: string;
+}
+
+export interface IUpdatePasswordRequest {
+  password: string;
+  new_password: string;
+  confirm_password: string;
 }
 
