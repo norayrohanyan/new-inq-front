@@ -52,7 +52,9 @@ export default function middleware(request: NextRequest) {
   // Redirect unauthenticated users away from protected routes
   if (isProtectedRoute && !isAuthenticated) {
     const locale = pathname.split('/')[1] || 'en';
-    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
+    // Save the intended destination so user is redirected back after login
+    const returnUrl = encodeURIComponent(pathname + request.nextUrl.search);
+    return NextResponse.redirect(new URL(`/${locale}/login?returnUrl=${returnUrl}`, request.url));
   }
   
   // Redirect authenticated users away from auth routes (login/register)

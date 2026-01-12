@@ -1,0 +1,291 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { useAppSelector, useAppDispatch } from '@/lib/hooks';
+import { authSelectors, authActions } from '@/store';
+import { apiService } from '@/services/api';
+import Button from '@/components/Button';
+import Input from '@/components/Input';
+import Text from '@/components/Text';
+import ModalDialog from '@/components/Modal/ModalDialog';
+import {
+  PhoneIcon,
+  LockIcon,
+  SuccessIcon,
+  ErrorIcon,
+} from '@/components/icons';
+import { ProfileLayout } from '../components';
+import * as Styled from './styled';
+
+export default function ProfileEditPage() {
+  const t = useTranslations();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(authSelectors.user);
+
+  // Profile form state
+  const [firstName, setFirstName] = useState(user?.first_name || '');
+  const [lastName, setLastName] = useState(user?.last_name || '');
+  const [profileLoading, setProfileLoading] = useState(false);
+
+  // Phone form state
+  const [phone, setPhone] = useState(user?.phone || '');
+  const [phoneLoading, setPhoneLoading] = useState(false);
+
+  // Password form state
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordLoading, setPasswordLoading] = useState(false);
+
+  // Modal state
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Update form fields when user data changes
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.first_name || '');
+      setLastName(user.last_name || '');
+      setPhone(user.phone || '');
+    }
+  }, [user]);
+
+  const handleProfileSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setProfileLoading(true);
+
+    try {
+      const response = await apiService.editProfile({
+        first_name: firstName,
+        last_name: lastName,
+      });
+
+      if (response.success) {
+        dispatch(authActions.updateUser({ first_name: firstName, last_name: lastName }));
+        setSuccessMessage(t('profile.edit.profileUpdated'));
+        setShowSuccessModal(true);
+      } else {
+        setErrorMessage(response.error || t('common.error'));
+        setShowErrorModal(true);
+      }
+    } catch (error) {
+      setErrorMessage(t('common.error'));
+      setShowErrorModal(true);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const handlePhoneSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPhoneLoading(true);
+
+    try {
+      const response = await apiService.updatePhone(phone);
+
+      if (response.success) {
+        dispatch(authActions.updateUser({ phone }));
+        setSuccessMessage(t('profile.edit.phoneUpdated'));
+        setShowSuccessModal(true);
+      } else {
+        setErrorMessage(response.error || t('common.error'));
+        setShowErrorModal(true);
+      }
+    } catch (error) {
+      setErrorMessage(t('common.error'));
+      setShowErrorModal(true);
+    } finally {
+      setPhoneLoading(false);
+    }
+  };
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordLoading(true);
+
+    if (newPassword !== confirmPassword) {
+      setErrorMessage(t('profile.edit.passwordsDoNotMatch'));
+      setShowErrorModal(true);
+      setPasswordLoading(false);
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setErrorMessage(t('profile.edit.passwordTooShort'));
+      setShowErrorModal(true);
+      setPasswordLoading(false);
+      return;
+    }
+
+    try {
+      const response = await apiService.updateUserPassword({
+        password: currentPassword,
+        new_password: newPassword,
+        confirm_password: confirmPassword,
+      });
+
+      if (response.success) {
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setSuccessMessage(t('profile.edit.passwordUpdated'));
+        setShowSuccessModal(true);
+      } else {
+        setErrorMessage(response.error || t('common.error'));
+        setShowErrorModal(true);
+      }
+    } catch (error) {
+      setErrorMessage(t('common.error'));
+      setShowErrorModal(true);
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
+
+  return (
+    <ProfileLayout>
+      <Styled.CardsContainer>
+        {/* Edit Profile Card */}
+        <Styled.EditCard>
+          <Text type="h2" color="white" align="center">
+            {t('profile.edit.editProfile')}
+          </Text>
+          <Styled.EditForm onSubmit={handleProfileSubmit}>
+            <Styled.InputRow>
+              <Input
+                type="text"
+                placeholder={t('profile.edit.name')}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+              />
+              <Input
+                type="text"
+                placeholder={t('profile.edit.surname')}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+              />
+            </Styled.InputRow>
+            <Button
+              variant="primary"
+              size="medium"
+              fullWidth
+              type="submit"
+              isLoading={profileLoading}
+            >
+              {t('common.submit')}
+            </Button>
+          </Styled.EditForm>
+        </Styled.EditCard>
+
+        {/* Edit Phone Card */}
+        <Styled.EditCard>
+          <Text type="h2" color="white" align="center">
+            {t('profile.edit.editPhone')}
+          </Text>
+          <Styled.EditForm onSubmit={handlePhoneSubmit}>
+            <Input
+              type="tel"
+              placeholder={t('profile.edit.phonePlaceholder')}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              icon={<PhoneIcon width="20" height="20" />}
+              required
+            />
+            <Button
+              variant="primary"
+              size="medium"
+              fullWidth
+              type="submit"
+              isLoading={phoneLoading}
+            >
+              {t('common.submit')}
+            </Button>
+          </Styled.EditForm>
+        </Styled.EditCard>
+
+        {/* Edit Password Card */}
+        <Styled.EditCard>
+          <Text type="h2" color="white" align="center">
+            {t('profile.edit.editPassword')}
+          </Text>
+          <Styled.EditForm onSubmit={handlePasswordSubmit}>
+            <Input
+              type="password"
+              placeholder={t('profile.edit.currentPassword')}
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              icon={<LockIcon width="20" height="20" />}
+              required
+            />
+            <Input
+              type="password"
+              placeholder={t('profile.edit.newPassword')}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              icon={<LockIcon width="20" height="20" />}
+              required
+            />
+            <Input
+              type="password"
+              placeholder={t('profile.edit.confirmPassword')}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              icon={<LockIcon width="20" height="20" />}
+              required
+            />
+            <Button
+              variant="primary"
+              size="medium"
+              fullWidth
+              type="submit"
+              isLoading={passwordLoading}
+            >
+              {t('common.submit')}
+            </Button>
+          </Styled.EditForm>
+        </Styled.EditCard>
+      </Styled.CardsContainer>
+
+      {/* Success Modal */}
+      <ModalDialog
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        icon={<SuccessIcon width={80} height={80} />}
+        title={successMessage}
+        type="success"
+        buttons={
+          <Button
+            variant="primary"
+            onClick={() => setShowSuccessModal(false)}
+            fullWidth
+          >
+            {t('common.ok') || 'OK'}
+          </Button>
+        }
+      />
+
+      {/* Error Modal */}
+      <ModalDialog
+        isOpen={showErrorModal}
+        onClose={() => setShowErrorModal(false)}
+        icon={<ErrorIcon width={80} height={80} />}
+        title={errorMessage}
+        type="error"
+        buttons={
+          <Button
+            variant="primary"
+            onClick={() => setShowErrorModal(false)}
+            fullWidth
+          >
+            {t('common.ok') || 'OK'}
+          </Button>
+        }
+      />
+    </ProfileLayout>
+  );
+}

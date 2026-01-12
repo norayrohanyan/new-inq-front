@@ -23,7 +23,6 @@ export default function PasswordResetPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [isVerified, setIsVerified] = useState(false);
 
   useEffect(() => {
     const hash = searchParams.get('hash');
@@ -44,7 +43,6 @@ export default function PasswordResetPage() {
 
       if (verifyLinkThunk.fulfilled.match(result)) {
         setStatus('form');
-        setIsVerified(true);
       } else {
         setStatus('error');
         setError(result.payload as string || 'Verification failed');

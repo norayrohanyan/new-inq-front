@@ -39,6 +39,12 @@ const reducers = reducerCreatorProducer<IAuthState>()({
     state.user = action.payload;
   },
 
+  updateUser: (state, action: PayloadAction<Partial<IUser>>) => {
+    if (state.user) {
+      state.user = { ...state.user, ...action.payload };
+    }
+  },
+
   hydrateAuth: (state, action: PayloadAction<ISetTokensPayload>) => {
     const { accessToken, refreshToken, accessTokenExpiresAt, refreshTokenExpiresAt } =
       action.payload;
