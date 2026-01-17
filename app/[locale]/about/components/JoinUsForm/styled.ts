@@ -153,6 +153,11 @@ export const ButtonWrapper = styled.div`
   padding-top: 16px;
 `;
 
+export const ButtonTooltipWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
 export const SubmitButton = styled.button<{ $isDisabled: boolean }>`
   background: ${COLORS.brandGradient};
   color: ${COLORS.white};
@@ -170,5 +175,34 @@ export const SubmitButton = styled.button<{ $isDisabled: boolean }>`
 
   &:hover {
     opacity: ${({ $isDisabled }) => ($isDisabled ? 0.5 : 0.9)};
+  }
+`;
+
+export const Tooltip = styled.div`
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: ${COLORS.darkBg};
+  color: ${COLORS.white};
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 140%;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: ${COLORS.darkBg};
   }
 `;

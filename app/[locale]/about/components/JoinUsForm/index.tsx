@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 import CustomDropdown from '@/components/CustomDropdown';
 import { CheckedIcon } from '@/components/icons/CheckedIcon';
 import * as Styled from './styled';
@@ -20,7 +20,11 @@ interface FieldErrors {
   general?: string;
 }
 
-export default function JoinUsForm() {
+interface JoinUsFormProps {
+  selectedTariff?: string;
+}
+
+const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff }, ref) => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
     phone: '',
@@ -28,6 +32,13 @@ export default function JoinUsForm() {
     referral_code: '',
     tariff: '',
   });
+
+  // Update tariff when selectedTariff prop changes
+  useEffect(() => {
+    if (selectedTariff) {
+      setFormData((prev) => ({ ...prev, tariff: selectedTariff }));
+    }
+  }, [selectedTariff]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -177,8 +188,21 @@ export default function JoinUsForm() {
     formData.phone.trim() &&
     isPhoneValid(formData.phone);
 
+  // Determine why button is disabled
+  const getDisabledReason = (): string | null => {
+    if (isSubmitting) return 'Submitting form...';
+    if (!formData.name.trim()) return 'Company name is required';
+    if (!formData.category) return 'Please select a category';
+    if (!formData.phone.trim()) return 'Phone number is required';
+    if (!isPhoneValid(formData.phone)) return 'Phone number must be 8 digits starting with 1-9';
+    return null;
+  };
+
+  const disabledReason = getDisabledReason();
+  const [showTooltip, setShowTooltip] = useState(false);
+
   return (
-    <Styled.FormContainer>
+    <Styled.FormContainer ref={ref} id="join-us">
       <Styled.FormTitle>Join us</Styled.FormTitle>
       <Styled.FormDescription>
         InQ – Your trusted partner for service booking and business management.
@@ -287,15 +311,29 @@ export default function JoinUsForm() {
 
         {/* Submit Button */}
         <Styled.ButtonWrapper>
-          <Styled.SubmitButton
-            type="submit"
-            disabled={!isFormValid || isSubmitting}
-            $isDisabled={!isFormValid || isSubmitting}
+          <Styled.ButtonTooltipWrapper
+            onMouseEnter={() => !isFormValid && !isSubmitting && setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
           >
-            {isSubmitting ? 'Submitting...' : 'Submit'}
-          </Styled.SubmitButton>
+            <Styled.SubmitButton
+              type="submit"
+              disabled={!isFormValid || isSubmitting}
+              $isDisabled={!isFormValid || isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit'}
+            </Styled.SubmitButton>
+            {showTooltip && disabledReason && (
+              <Styled.Tooltip>
+                {disabledReason}
+              </Styled.Tooltip>
+            )}
+          </Styled.ButtonTooltipWrapper>
         </Styled.ButtonWrapper>
       </Styled.Form>
     </Styled.FormContainer>
   );
-}
+});
+
+JoinUsForm.displayName = 'JoinUsForm';
+
+export default JoinUsForm;

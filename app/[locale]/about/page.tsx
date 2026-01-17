@@ -1,11 +1,39 @@
 'use client';
 
+import { useRef, useState, useCallback, useEffect } from 'react';
 import Text from '@/components/Text';
 import TariffsSection from './components/TariffsSection';
 import JoinUsForm from './components/JoinUsForm';
 import * as Styled from './styled';
 
 export default function AboutPage() {
+  const joinUsFormRef = useRef<HTMLDivElement>(null);
+  const [selectedTariff, setSelectedTariff] = useState<string>('');
+
+  // Scroll to join us form if hash is present (from footer link)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash === '#join-us') {
+      setTimeout(() => {
+        joinUsFormRef.current?.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+    }
+  }, []);
+
+  const handleTariffSelect = useCallback((tariff: string) => {
+    setSelectedTariff(tariff);
+    
+    // Scroll to join us form with smooth behavior
+    setTimeout(() => {
+      joinUsFormRef.current?.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }, 100);
+  }, []);
+
   return (
     <Styled.PageContainer>
       <Styled.ContentWrapper>
@@ -18,9 +46,9 @@ export default function AboutPage() {
           </Text>
         </Styled.HeroSection>
 
-        <TariffsSection />
+        <TariffsSection onTariffSelect={handleTariffSelect} />
 
-        <JoinUsForm />
+        <JoinUsForm ref={joinUsFormRef} selectedTariff={selectedTariff} />
       </Styled.ContentWrapper>
     </Styled.PageContainer>
   );

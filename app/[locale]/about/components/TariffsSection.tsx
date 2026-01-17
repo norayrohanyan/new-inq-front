@@ -10,7 +10,11 @@ import { BoxIcon } from '@/components/icons/box';
 
 type TariffPlan = 'monthly' | '3months' | '6months' | '1year';
 
-export default function TariffsSection() {
+interface TariffsSectionProps {
+  onTariffSelect?: (tariff: string) => void;
+}
+
+export default function TariffsSection({ onTariffSelect }: TariffsSectionProps) {
   const [activePlan, setActivePlan] = useState<TariffPlan>('1year');
 
   const _pricingData = {
@@ -201,7 +205,7 @@ export default function TariffsSection() {
             features={card.features}
             buttonText="Try for 14 days"
             highlighted={activePlan === '3months' && index === 1}
-            onButtonClick={() => console.log(`Selected: ${card.title}`)}
+            onButtonClick={() => onTariffSelect?.(card.title)}
           />
         ))}
       </Styled.PricingCardsGrid>

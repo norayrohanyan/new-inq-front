@@ -125,10 +125,6 @@ export default function PricingCard({
         <Styled.CardSubHeader>
         <Styled.IconWrapper
           variants={iconVariants}
-          whileHover={{
-            rotate: 360,
-            transition: { duration: 0.6, ease: 'easeInOut' as any }
-          }}
         >
           {icon}
         </Styled.IconWrapper>
