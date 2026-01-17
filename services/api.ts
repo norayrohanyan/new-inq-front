@@ -548,6 +548,26 @@ export const apiService = {
   },
 
   /**
+   * Get company reviews (paginated)
+   */
+  async getCompanyReviews(
+    category: string,
+    id: number,
+    page: number = 1,
+    perPage: number = 10
+  ): Promise<IApiResponse<any>> {
+    try {
+      const { data } = await api.get<IApiResponse<any>>(
+        `/api/${category}/company/${id}/reviews`,
+        { params: { page, per_page: perPage } }
+      );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
    * Get employee services (or company services if company is individual)
    */
   async getEmployeeServices(params: {

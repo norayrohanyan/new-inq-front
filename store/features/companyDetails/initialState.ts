@@ -9,8 +9,11 @@ export const initialState: ICompanyDetailsState = {
   portfolio: [],
   intervals: {},
   beautyTimeSlots: [],
+  reviews: [],
+  reviewsPagination: null,
   isLoadingIntervals: false,
   isLoadingTimeSlots: false,
+  isLoadingReviews: false,
   isLoading: false,
   error: null,
 };

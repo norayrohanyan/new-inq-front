@@ -54,6 +54,18 @@ export const companyDetailsReducers = {
     state.beautyTimeSlots = action.payload;
   },
 
+  setLoadingReviews(state: ICompanyDetailsState, action: { payload: boolean }) {
+    state.isLoadingReviews = action.payload;
+  },
+
+  setReviews(state: ICompanyDetailsState, action: { payload: any[] }) {
+    state.reviews = action.payload;
+  },
+
+  setReviewsPagination(state: ICompanyDetailsState, action: { payload: any }) {
+    state.reviewsPagination = action.payload;
+  },
+
   clearCompanyDetails(state: ICompanyDetailsState) {
     state.companyDetails = null;
     state.apartmentDetails = null;
@@ -63,6 +75,8 @@ export const companyDetailsReducers = {
     state.portfolio = [];
     state.intervals = {};
     state.beautyTimeSlots = [];
+    state.reviews = [];
+    state.reviewsPagination = null;
     state.error = null;
   },
 };

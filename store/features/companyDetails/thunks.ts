@@ -389,3 +389,43 @@ export const createBeautyBookingThunk = createAsyncThunk(
   }
 );
 
+export const getCompanyReviewsThunk = createAsyncThunk(
+  'companyDetails/getCompanyReviews',
+  async (
+    { category, id, page, perPage }: { category: string; id: number; page?: number; perPage?: number },
+    { dispatch, rejectWithValue }
+  ) => {
+    try {
+      dispatch(companyDetailsActions.setLoadingReviews(true));
+      const response = await apiService.getCompanyReviews(category, id, page, perPage);
+      if (response.success && response.data) {
+        const reviewsData = response.data.data || [];
+        dispatch(companyDetailsActions.setReviews(reviewsData));
+        
+        // Set pagination data
+        const pagination = {
+          current_page: response.data.current_page,
+          last_page: response.data.last_page,
+          per_page: response.data.per_page,
+          total: response.data.total,
+          first_page_url: response.data.first_page_url,
+          last_page_url: response.data.last_page_url,
+          next_page_url: response.data.next_page_url,
+          prev_page_url: response.data.prev_page_url,
+        };
+        dispatch(companyDetailsActions.setReviewsPagination(pagination));
+        
+        return { reviews: reviewsData, pagination };
+      } else {
+        dispatch(companyDetailsActions.setError(response.error || 'Failed to fetch reviews'));
+        return rejectWithValue(response.error || 'Failed to fetch reviews');
+      }
+    } catch (error: any) {
+      dispatch(companyDetailsActions.setError(error.message));
+      return rejectWithValue(error.message);
+    } finally {
+      dispatch(companyDetailsActions.setLoadingReviews(false));
+    }
+  }
+);
+

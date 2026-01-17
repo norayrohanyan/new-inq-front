@@ -96,11 +96,13 @@ export const ServiceBookingDetail = ({
           {booking.services.map((service) => (
             <Styled.ServiceItem key={service.id}>
               <Text type="body" color="white">
-                {service.name}:
+                {service.name}{service.price != null ? ':' : ''}
               </Text>
-              <Text type="body" customColor="#FE7F3B">
-                {booking.currency} {service.price?.toLocaleString()}
-              </Text>
+              {service.price != null && (
+                <Text type="body" customColor="white">
+                  {booking.currency} {service.price.toLocaleString()}
+                </Text>
+              )}
             </Styled.ServiceItem>
           ))}
         </Styled.ServicesList>

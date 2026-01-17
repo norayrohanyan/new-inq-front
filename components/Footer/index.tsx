@@ -1,6 +1,7 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useTranslations, useLocale } from 'next-intl';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
 import { FacebookIcon } from '@/components/icons/facebook';
@@ -14,6 +15,7 @@ import { Logo } from '../Logo';
 
 export default function Footer() {
   const t = useTranslations();
+  const locale = useLocale();
 
   const socialLinks = [
     { icon: <FacebookIcon width={18} height={18} />, href: '#', label: 'Facebook' },
@@ -30,9 +32,11 @@ export default function Footer() {
             {t('footer.becomePartner.question')}{' '}
             <Styled.PartnerHighlight>{t('footer.becomePartner.highlight')}</Styled.PartnerHighlight>
           </Text>
-          <Button variant="primary" size="medium" rounded>
-            {t('footer.becomePartner.button')}
-          </Button>
+          <Link href={`/${locale}/about#join-us`}>
+            <Button variant="primary" size="medium" rounded>
+              {t('footer.becomePartner.button')}
+            </Button>
+          </Link>
         </Styled.PartnerContent>
       </Styled.PartnerSection>
 
