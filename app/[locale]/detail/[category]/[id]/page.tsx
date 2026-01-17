@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { useCallback } from 'react';
 import {
   getCompanyDetailsThunk,
   getCompanyServicesThunk,
   getCompanyEmployeesThunk,
   getCompanyPortfolioThunk,
+  getCompanyReviewsThunk,
   getCarDetailsThunk,
   getApartmentDetailsThunk,
   getCarIntervalsThunk,
@@ -41,6 +41,9 @@ export default function UnifiedDetailPage() {
   // Get template configuration
   const templateConfig = getCategoryTemplate(category);
   
+  // Reviews pagination state
+  const [reviewsPage, setReviewsPage] = useState(1);
+
   // Redux selectors
   const companyDetails = useAppSelector(companyDetailsSelectors.companyDetails);
   const carDetails = useAppSelector(companyDetailsSelectors.carDetails);
@@ -48,9 +51,12 @@ export default function UnifiedDetailPage() {
   const services = useAppSelector(companyDetailsSelectors.services);
   const employees = useAppSelector(companyDetailsSelectors.employees);
   const portfolio = useAppSelector(companyDetailsSelectors.portfolio);
+  const reviews = useAppSelector(companyDetailsSelectors.reviews);
+  const reviewsPagination = useAppSelector(companyDetailsSelectors.reviewsPagination);
   const intervals = useAppSelector(companyDetailsSelectors.intervals);
   const isLoading = useAppSelector(companyDetailsSelectors.isLoading);
   const isLoadingTimeSlots = useAppSelector(companyDetailsSelectors.isLoadingTimeSlots);
+  const isLoadingReviews = useAppSelector(companyDetailsSelectors.isLoadingReviews);
   const isAuthenticated = useAppSelector(authSelectors.isAuthenticated);
 
   // Interval thunks mapping
@@ -86,6 +92,10 @@ export default function UnifiedDetailPage() {
       if (templateConfig.features.hasPortfolio) {
         dispatch(getCompanyPortfolioThunk({ category, id: itemId }));
       }
+
+      if (templateConfig.features.hasReviews) {
+        dispatch(getCompanyReviewsThunk({ category, id: itemId, page: 1, perPage: 10 }));
+      }
     } else if (isRentalCategory(category)) {
       // Fetch item data for rental template (actual cars/apartments)
       if (category === 'car_rental') {
@@ -95,6 +105,19 @@ export default function UnifiedDetailPage() {
       }
     }
   }, [itemId, category, templateConfig, dispatch]);
+
+  // Fetch reviews when page changes
+  useEffect(() => {
+    if (!itemId || !category || !templateConfig?.features.hasReviews) return;
+    if (reviewsPage === 1) return; // Already fetched on initial load
+    
+    dispatch(getCompanyReviewsThunk({ category, id: itemId, page: reviewsPage, perPage: 10 }));
+  }, [reviewsPage, itemId, category, templateConfig, dispatch]);
+
+  // Handle reviews page change
+  const handleReviewsPageChange = useCallback((page: number) => {
+    setReviewsPage(page);
+  }, []);
 
   // Handle invalid category
   if (!templateConfig) {
@@ -144,6 +167,8 @@ export default function UnifiedDetailPage() {
       services: services || [],
       employees: employees || [],
       portfolio: portfolio || [],
+      reviews: reviews || [],
+      reviewsPagination: reviewsPagination || undefined,
     };
 
     const handleServiceBook = (serviceId: number) => {
@@ -187,7 +212,9 @@ export default function UnifiedDetailPage() {
         features={templateConfig.features}
         onServiceBook={handleServiceBook}
         onEmployeeBook={handleEmployeeBook}
+        onReviewsPageChange={handleReviewsPageChange}
         isLoading={isLoading}
+        isLoadingReviews={isLoadingReviews}
       />
     );
   }

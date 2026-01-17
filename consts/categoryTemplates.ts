@@ -13,6 +13,7 @@ export interface CategoryTemplateConfig {
     hasEmployees?: boolean;
     hasPortfolio?: boolean;
     hasServices?: boolean;
+    hasReviews?: boolean;
     hasReservationForm?: boolean;
     hasBookingFlow?: boolean; // For future separate booking pages
   };
@@ -46,6 +47,7 @@ export const CATEGORY_TEMPLATES: Record<string, CategoryTemplateConfig> = {
       hasServices: true,
       hasEmployees: true,
       hasPortfolio: true,
+      hasReviews: true,
       hasBookingFlow: true, // Will use separate reservation page
     },
   },
@@ -55,6 +57,7 @@ export const CATEGORY_TEMPLATES: Record<string, CategoryTemplateConfig> = {
       hasServices: true,
       hasEmployees: true,
       hasPortfolio: true,
+      hasReviews: true,
       hasBookingFlow: true,
     },
   },
@@ -64,6 +67,7 @@ export const CATEGORY_TEMPLATES: Record<string, CategoryTemplateConfig> = {
       hasServices: true,
       hasEmployees: true,
       hasPortfolio: true,
+      hasReviews: true,
       hasBookingFlow: true,
     },
   },
@@ -73,6 +77,7 @@ export const CATEGORY_TEMPLATES: Record<string, CategoryTemplateConfig> = {
       hasServices: true,
       hasEmployees: true,
       hasPortfolio: true,
+      hasReviews: true,
       hasBookingFlow: true,
     },
   },
@@ -82,6 +87,7 @@ export const CATEGORY_TEMPLATES: Record<string, CategoryTemplateConfig> = {
       hasServices: true,
       hasEmployees: false,
       hasPortfolio: true,
+      hasReviews: true,
       hasBookingFlow: true,
     },
   },
@@ -91,6 +97,7 @@ export const CATEGORY_TEMPLATES: Record<string, CategoryTemplateConfig> = {
       hasServices: true,
       hasEmployees: false,
       hasPortfolio: true,
+      hasReviews: true,
       hasBookingFlow: true,
     },
   },

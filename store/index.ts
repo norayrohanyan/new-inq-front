@@ -54,6 +54,7 @@ export {
 export {
   getCompanyDetailsThunk,
   getCompanyServicesThunk,
+  getCompanyReviewsThunk,
   getEmployeeServicesThunk,
   getEmployeesByServiceThunk,
   getCompanyEmployeesThunk,

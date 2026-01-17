@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import {
   getCompanyDetailsThunk,
   getCompanyServicesThunk,
+  getCompanyReviewsThunk,
   companyDetailsSelectors,
 } from '@/store';
 import Text from '@/components/Text';
@@ -14,9 +15,9 @@ import RentalItemCard from '@/components/RentalItemCard';
 import CompanyInfo from '@/components/CompanyInfo';
 import CompanyTabs from '@/components/CompanyTabs';
 import Pagination from '@/components/Pagination';
+import ReviewCard, { ReviewsGrid } from '@/components/ReviewCard';
 import * as Styled from '../../../styled';
 import styled from 'styled-components';
-import { COLORS } from '@/consts/colors';
 
 export default function CompanyInventoryPage() {
   const params = useParams();
@@ -30,11 +31,15 @@ export default function CompanyInventoryPage() {
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [activeTab, setActiveTab] = useState<string>('items');
+  const [reviewsPage, setReviewsPage] = useState<number>(1);
 
   // Redux selectors
   const companyDetails = useAppSelector(companyDetailsSelectors.companyDetails);
   const services = useAppSelector(companyDetailsSelectors.services); // For rental categories, this returns cars/apartments
+  const reviews = useAppSelector(companyDetailsSelectors.reviews);
+  const reviewsPagination = useAppSelector(companyDetailsSelectors.reviewsPagination);
   const isLoading = useAppSelector(companyDetailsSelectors.isLoading);
+  const isLoadingReviews = useAppSelector(companyDetailsSelectors.isLoadingReviews);
 
   // Fetch company details and services (which returns cars/apartments for rental categories)
   useEffect(() => {
@@ -43,6 +48,13 @@ export default function CompanyInventoryPage() {
     dispatch(getCompanyDetailsThunk({ category, id: companyId }));
     dispatch(getCompanyServicesThunk({ category, id: companyId }));
   }, [category, companyId, dispatch]);
+
+  // Fetch reviews when reviews tab is active
+  useEffect(() => {
+    if (!companyId || !category || activeTab !== 'reviews') return;
+
+    dispatch(getCompanyReviewsThunk({ category, id: companyId, page: reviewsPage, perPage: 10 }));
+  }, [category, companyId, activeTab, reviewsPage, dispatch]);
 
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -162,14 +174,45 @@ export default function CompanyInventoryPage() {
             )}
 
             {activeTab === 'reviews' && (
-              <ReviewsPlaceholder>
-                <Text type="h3" color="white">
-                  Reviews
-                </Text>
-                <Text type="body" customColor="rgba(255, 255, 255, 0.7)" style={{ marginTop: '1rem' }}>
-                  Reviews feature coming soon...
-                </Text>
-              </ReviewsPlaceholder>
+              <>
+                {isLoadingReviews ? (
+                  <Styled.LoadingContainer>
+                    <div className="spinner" />
+                    <Text type="body" color="white">
+                      {t('common.loading')}
+                    </Text>
+                  </Styled.LoadingContainer>
+                ) : reviews.length > 0 ? (
+                  <>
+                    <ReviewsGrid>
+                      {reviews.map((review) => (
+                        <ReviewCard
+                          key={review.id}
+                          userName={review.user_name}
+                          rating={review.rating}
+                          comment={review.comment}
+                        />
+                      ))}
+                    </ReviewsGrid>
+                    {reviewsPagination && reviewsPagination.last_page > 1 && (
+                      <Pagination
+                        currentPage={reviewsPagination.current_page}
+                        totalPages={reviewsPagination.last_page}
+                        onPageChange={(page) => setReviewsPage(page)}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <Styled.EmptyState>
+                    <Text type="h2" color="white">
+                      No reviews yet
+                    </Text>
+                    <Text type="body" customColor="rgba(255, 255, 255, 0.7)">
+                      Be the first to review this company!
+                    </Text>
+                  </Styled.EmptyState>
+                )}
+              </>
             )}
           </CompanyTabs>
         </LeftColumn>
@@ -269,15 +312,4 @@ const ItemsList = styled.div`
   gap: 1.5rem;
 `;
 
-const ReviewsPlaceholder = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 2rem;
-  text-align: center;
-  background: ${COLORS.secondaryDark};
-  border-radius: 20px;
-  min-height: 300px;
-`;
 

@@ -168,6 +168,24 @@ export interface IBeautyBooking {
   };
 }
 
+export interface IReview {
+  id: number;
+  rating: number;
+  comment: string;
+  user_name: string;
+}
+
+export interface IReviewsPagination {
+  current_page: number;
+  last_page: number;
+  per_page: number;
+  total: number;
+  first_page_url: string;
+  last_page_url: string;
+  next_page_url: string | null;
+  prev_page_url: string | null;
+}
+
 export interface ICompanyDetailsState {
   companyDetails: ICompanyDetails | null;
   apartmentDetails: IApartmentDetails | null;
@@ -177,8 +195,11 @@ export interface ICompanyDetailsState {
   portfolio: string[];
   intervals: Record<string, IInterval>;
   beautyTimeSlots: IBeautyTimeSlot[];
+  reviews: IReview[];
+  reviewsPagination: IReviewsPagination | null;
   isLoadingIntervals: boolean;
   isLoadingTimeSlots: boolean;
+  isLoadingReviews: boolean;
   isLoading: boolean;
   error: string | null;
 }

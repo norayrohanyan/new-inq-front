@@ -68,7 +68,7 @@ export const RightColumn = styled.div`
 
   @media (max-width: 1200px) {
     position: static;
-    order: -1; // Show company info first on mobile
+    order: -1;
   }
 `;
 
@@ -96,3 +96,15 @@ export const LoadingContainer = styled.div`
   gap: 1rem;
 `;
 
+export const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: ${COLORS.darkBgSemi};
+  border-radius: 20px;
+  min-height: 200px;
+  gap: 0.5rem;
+`;
