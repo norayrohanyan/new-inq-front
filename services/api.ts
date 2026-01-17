@@ -16,6 +16,7 @@ import {
 } from '@/types/user';
 import { ICompany } from '@/store/types/companies';
 import { IService } from '@/store/types/services';
+import { INearMeCompany, INearMeParams } from '@/store/types/nearMe';
 import { clearAuthCookies } from '@/utils/cookies';
 import { getStoreInstance } from './apiWithStore';
 import { authActions } from '@/store';
@@ -730,6 +731,23 @@ export const apiService = {
       const { data } = await api.post<IApiResponse<{ id: number; category: string }>>(
         `/api/beauty_salon/booking`,
         booking
+      );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get companies near me by category
+   * Returns companies with location information, optionally filtered by radius
+   */
+  async getCompaniesNearMe(params: INearMeParams): Promise<IApiResponse<INearMeCompany[]>> {
+    try {
+      const { category, ...queryParams } = params;
+      const { data } = await api.get<IApiResponse<INearMeCompany[]>>(
+        `/api/${category}/companies/near-me`,
+        { params: queryParams }
       );
       return data;
     } catch (error) {

@@ -60,7 +60,7 @@ export default function Header() {
         <Styled.NavLinks>
           <Styled.NavLink href={`/${locale}`}>HOME</Styled.NavLink>
           <Styled.NavLink href={`/${locale}/categories`}>BOOKING</Styled.NavLink>
-          <Styled.NavLink href={`/${locale}/button-demo`}>NEAR ME</Styled.NavLink>
+          <Styled.NavLink href={`/${locale}/near-me`}>NEAR ME</Styled.NavLink>
           <Styled.NavLink href={`/${locale}/about`}>ABOUT US</Styled.NavLink>
         </Styled.NavLinks>
 
