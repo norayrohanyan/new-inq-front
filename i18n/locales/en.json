@@ -42,7 +42,8 @@
     "status": {
       "inProcess": "In process",
       "pending": "Pending",
-      "cancelled": "Cancelled",
+      "canceled": "Canceled",
+      "rejected": "Rejected",
       "approved": "Approved",
       "completed": "Completed"
     },
@@ -163,6 +164,8 @@
     "favorite": "Favorite",
     "history": "History",
     "logout": "Log out",
+    "logoutConfirmTitle": "Are you sure you want to log out?",
+    "logoutConfirmDescription": "You will need to sign in again to access your account.",
     "phoneNumber": "Phone number",
     "email": "Email",
     "password": "Password",

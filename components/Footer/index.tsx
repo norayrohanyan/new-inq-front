@@ -32,7 +32,7 @@ export default function Footer() {
             {t('footer.becomePartner.question')}{' '}
             <Styled.PartnerHighlight>{t('footer.becomePartner.highlight')}</Styled.PartnerHighlight>
           </Text>
-          <Link href={`/${locale}/about#join-us`}>
+          <Link href={`/${locale}/about`}>
             <Button variant="primary" size="medium" rounded>
               {t('footer.becomePartner.button')}
             </Button>

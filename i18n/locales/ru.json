@@ -38,7 +38,8 @@
     "status": {
       "inProcess": "В процессе",
       "pending": "Ожидание",
-      "cancelled": "Отменено",
+      "canceled": "Отменено",
+      "rejected": "Отклонено",
       "approved": "Одобрено",
       "completed": "Завершено"
     },

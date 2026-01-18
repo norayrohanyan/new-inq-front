@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
-import { authSelectors, authActions } from '@/store';
+import { authSelectors, authActions, getCurrentUserThunk } from '@/store';
 import { apiService } from '@/services/api';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
@@ -14,14 +14,17 @@ import {
   LockIcon,
   SuccessIcon,
   ErrorIcon,
+  SmsIcon,
 } from '@/components/icons';
 import { ProfileLayout } from '../components';
+import { getLocalNumber } from '@/utils/phone';
 import * as Styled from './styled';
 
 export default function ProfileEditPage() {
   const t = useTranslations();
   const dispatch = useAppDispatch();
   const user = useAppSelector(authSelectors.user);
+  const isAuthenticated = useAppSelector(authSelectors.isAuthenticated);
 
   // Profile form state
   const [firstName, setFirstName] = useState(user?.first_name || '');
@@ -43,15 +46,31 @@ export default function ProfileEditPage() {
   const [successMessage, setSuccessMessage] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showSmsModal, setShowSmsModal] = useState(false);
+
+  // Fetch user data from server when authenticated but user data not loaded
+  useEffect(() => {
+    if (isAuthenticated && !user) {
+      dispatch(getCurrentUserThunk());
+    }
+  }, [isAuthenticated, user, dispatch]);
 
   // Update form fields when user data changes
   useEffect(() => {
     if (user) {
       setFirstName(user.first_name || '');
       setLastName(user.last_name || '');
-      setPhone(user.phone || '');
+      setPhone(getLocalNumber(user.phone));
     }
   }, [user]);
+
+  // Handle phone input - only allow digits, max 8
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let digits = e.target.value.replace(/\D/g, '');
+    digits = digits.replace(/^0+/, ''); // Remove leading zeros
+    digits = digits.slice(0, 8); // Max 8 digits
+    setPhone(digits);
+  };
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,8 +107,7 @@ export default function ProfileEditPage() {
 
       if (response.success) {
         dispatch(authActions.updateUser({ phone }));
-        setSuccessMessage(t('profile.edit.phoneUpdated'));
-        setShowSuccessModal(true);
+        setShowSmsModal(true);
       } else {
         setErrorMessage(response.error || t('common.error'));
         setShowErrorModal(true);
@@ -188,14 +206,20 @@ export default function ProfileEditPage() {
             {t('profile.edit.editPhone')}
           </Text>
           <Styled.EditForm onSubmit={handlePhoneSubmit}>
-            <Input
-              type="tel"
-              placeholder={t('profile.edit.phonePlaceholder')}
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              icon={<PhoneIcon width="20" height="20" />}
-              required
-            />
+            <Styled.PhoneInputWrapper>
+              <Styled.PhoneIconWrapper>
+                <PhoneIcon width="20" height="20" />
+              </Styled.PhoneIconWrapper>
+              <Styled.PhonePrefix>+374</Styled.PhonePrefix>
+              <Styled.PhoneInput
+                type="tel"
+                placeholder="XX XXX XXX"
+                value={phone}
+                onChange={handlePhoneChange}
+                inputMode="numeric"
+                required
+              />
+            </Styled.PhoneInputWrapper>
             <Button
               variant="primary"
               size="medium"
@@ -285,6 +309,14 @@ export default function ProfileEditPage() {
             {t('common.ok') || 'OK'}
           </Button>
         }
+      />
+
+      {/* SMS Verification Modal */}
+      <ModalDialog
+        isOpen={showSmsModal}
+        onClose={() => setShowSmsModal(false)}
+        icon={<SmsIcon />}
+        title={t('auth.checkYourSms')}
       />
     </ProfileLayout>
   );

@@ -30,13 +30,13 @@ const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick, onClick,
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'confirmed':
       case 'in_process':
         return 'primary'; // Orange
       case 'pending':
         return 'pending'; // Gray
-      case 'cancelled':
-        return 'cancelled'; // Red
+      case 'canceled':
+      case 'rejected':
+        return 'canceled'; // Red
       case 'completed':
       case 'approved':
         return 'approved'; // Green
@@ -47,14 +47,16 @@ const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick, onClick,
 
   const getStatusText = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'confirmed':
       case 'in_process':
         return t('booking.status.inProcess');
       case 'pending':
         return t('booking.status.pending');
-      case 'cancelled':
-        return t('booking.status.cancelled');
+      case 'canceled':
+        return t('booking.status.canceled');
+      case 'rejected':
+        return t('booking.status.rejected');
       case 'completed':
+        return t('booking.status.completed');
       case 'approved':
         return t('booking.status.approved');
       default:

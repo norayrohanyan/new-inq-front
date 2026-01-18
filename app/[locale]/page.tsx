@@ -26,28 +26,22 @@ export default function Home() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.12,
+        delayChildren: 0.1,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { 
+      opacity: 0,
+      scale: 0.96,
+    },
     visible: {
       opacity: 1,
-      y: 0,
+      scale: 1,
       transition: {
         duration: 0.5,
-        ease: 'easeOut' as const,
-      },
-    },
-  };
-
-  const cardHoverVariants = {
-    hover: {
-      y: -8,
-      transition: {
-        duration: 0.3,
         ease: 'easeOut' as const,
       },
     },
@@ -75,7 +69,13 @@ export default function Home() {
       </Styled.HeroBanner>
 
       {/* Discover Categories Section */}
-      <Styled.DiscoverSection>
+      <Styled.DiscoverSection
+        as={motion.section}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.8, ease: 'easeOut' as const }}
+      >
         <Styled.DiscoverHeader>
           <div>
             <Styled.DiscoverTitle type="h2" color="white">
@@ -100,8 +100,6 @@ export default function Home() {
       >
         <Styled.CategoryCard
           variants={itemVariants}
-          whileHover="hover"
-          custom={cardHoverVariants}
           onClick={() => handleCategoryClick('beauty_salon')}
           $bgImage="/images/beauty.png"
         >
@@ -120,8 +118,6 @@ export default function Home() {
 
         <Styled.CategoryCard
           variants={itemVariants}
-          whileHover="hover"
-          custom={cardHoverVariants}
           onClick={() => handleCategoryClick('apartments')}
           $bgImage="/images/apartment.png"
         >
@@ -140,8 +136,6 @@ export default function Home() {
 
         <Styled.CategoryCard
           variants={itemVariants}
-          whileHover="hover"
-          custom={cardHoverVariants}
           onClick={() => handleCategoryClick('car_rental')}
           $bgImage="/images/2.png"
         >
@@ -160,8 +154,6 @@ export default function Home() {
 
         <Styled.ExploreCard
           variants={itemVariants}
-          whileHover="hover"
-          custom={cardHoverVariants}
           onClick={handleExploreCategoriesClick}
         >
           <Styled.ExploreIcon>→</Styled.ExploreIcon>

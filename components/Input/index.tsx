@@ -1,11 +1,16 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import * as Styled from './styled';
 import { IInputProps } from './types';
+import { EyeIcon, EyeOffIcon } from '@/components/icons';
 
 const Input = React.forwardRef<HTMLInputElement, IInputProps>(
-  ({ icon, error, fullWidth = true, ...props }, ref) => {
+  ({ icon, error, fullWidth = true, type, ...props }, ref) => {
+    const [showPassword, setShowPassword] = useState(false);
+    const isPasswordType = type === 'password';
+    const inputType = isPasswordType && showPassword ? 'text' : type;
+
     const setRef = useCallback(
       (node: HTMLInputElement | null) => {
         if (typeof ref === 'function') {
@@ -17,10 +22,31 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>(
       [ref]
     );
 
+    const togglePasswordVisibility = (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setShowPassword((prev) => !prev);
+    };
+
     return (
       <Styled.InputWrapper $fullWidth={fullWidth}>
         {icon && <Styled.IconWrapper>{icon}</Styled.IconWrapper>}
-        <Styled.StyledInput ref={setRef} $hasIcon={!!icon} {...props} />
+        <Styled.StyledInput
+          ref={setRef}
+          $hasIcon={!!icon}
+          $hasEyeIcon={isPasswordType}
+          type={inputType}
+          {...props}
+        />
+        {isPasswordType && (
+          <Styled.EyeIconWrapper onClick={togglePasswordVisibility}>
+            {showPassword ? (
+              <EyeOffIcon width="20" height="20" />
+            ) : (
+              <EyeIcon width="20" height="20" />
+            )}
+          </Styled.EyeIconWrapper>
+        )}
         {error && <Styled.ErrorText>{error}</Styled.ErrorText>}
       </Styled.InputWrapper>
     );
@@ -30,4 +56,3 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>(
 Input.displayName = 'Input';
 
 export default Input;
-

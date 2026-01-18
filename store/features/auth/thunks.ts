@@ -61,42 +61,6 @@ export const registerThunk = createAsyncThunk(
   }
 );
 
-export const refreshTokensThunk = createAsyncThunk(
-  'auth/refreshTokens',
-  async (_, { dispatch, getState, rejectWithValue }) => {
-    try {
-      const state = getState() as any;
-      const refreshToken = state.auth.refreshToken;
-
-      if (!refreshToken) {
-        dispatch(authActions.logout());
-        return rejectWithValue('No refresh token available');
-      }
-
-      const response = await apiService.refreshTokens(refreshToken);
-
-      if (response.success && response.data) {
-        dispatch(
-          authActions.setTokens({
-            accessToken: response.data.access_token,
-            refreshToken: response.data.refresh_token,
-            accessTokenExpiresAt: response.data.access_token_expires_at,
-            refreshTokenExpiresAt: response.data.refresh_token_expires_at,
-          })
-        );
-        return response.data;
-      } else {
-        dispatch(authActions.logout());
-        return rejectWithValue(response.error);
-      }
-    } catch (error) {
-      dispatch(authActions.logout());
-      const errorMessage = error instanceof Error ? error.message : 'Token refresh failed';
-      return rejectWithValue(errorMessage);
-    }
-  }
-);
-
 export const verifyLinkThunk = createAsyncThunk(
   'auth/verifyLink',
   async (hash: string, { dispatch, rejectWithValue }) => {
@@ -140,33 +104,6 @@ export const verifyLinkThunk = createAsyncThunk(
       const errorMessage =
         error instanceof Error ? error.message : 'Link verification failed';
       dispatch(authActions.setError(errorMessage));
-      return rejectWithValue(errorMessage);
-    }
-  }
-);
-
-export const fetchUserProfileThunk = createAsyncThunk(
-  'auth/fetchUserProfile',
-  async (_, { dispatch, getState, rejectWithValue }) => {
-    try {
-      const state = getState() as any;
-      const accessToken = state.auth.accessToken;
-
-      if (!accessToken) {
-        return rejectWithValue('No access token available');
-      }
-
-      const response = await apiService.getUserProfile(accessToken);
-
-      if (response.success && response.data) {
-        dispatch(authActions.setUser(response.data));
-        return response.data;
-      } else {
-        return rejectWithValue(response.error);
-      }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to fetch user profile';
       return rejectWithValue(errorMessage);
     }
   }

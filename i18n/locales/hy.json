@@ -1,34 +1,34 @@
 {
   "common": {
-    "loading": "Բեռնվում է...",
+    "loading": "Բեռնվում է",
     "error": "Սխալ",
-    "tryAgain": "Կրկին փորձել",
+    "tryAgain": "Կրկնել",
     "logout": "Դուրս գալ",
     "login": "Մուտք",
     "register": "Գրանցում",
     "edit": "Խմբագրել",
-    "notFound": "Չգտնվեց",
+    "notFound": "Չկա",
     "yes": "Այո",
     "no": "Ոչ"
   },
   "home": {
     "categories": {
-      "searchNearMe": "Փնտրել մոտակայքում →",
+      "searchNearMe": "Մոտակայքում որոնել",
       "beautySalon": {
-        "title": "ԳԵՂԵՑԿՈՒԹՅԱՆ ՍՐԱՀՆԵՐ",
-        "description": "Գտեք լավագույն գեղեցկության սրահները ձեր մոտակայքում"
+        "title": "Գեղեցկության սրահներ",
+        "description": "Լավագույն սրահները ձեր մոտ"
       },
       "apartments": {
-        "title": "ԲՆԱԿԱՐԱՆՆԵՐ",
-        "description": "Վարձակալեք կամ գտեք բնակարաններ ձեր ճաշակին համապատասխան"
+        "title": "Բնակարաններ",
+        "description": "Վարձույթ կամ վաճառք"
       },
       "carRental": {
-        "title": "ՄԵՔԵՆԱՆԵՐԻ ՎԱՐՁՈՒՅԹ",
-        "description": "Վարձեք մեքենա հեշտությամբ և հարմարությամբ"
+        "title": "Մեքենաների վարձույթ",
+        "description": "Արագ և հարմար"
       },
       "explore": {
-        "title": "ՏԵՍՆԵԼ ԲՈԼՈՐ ԿԱՏԵԳՈՐԻԱՆԵՐԸ",
-        "description": "Բացահայտեք ավելին և գտեք այն, ինչ փնտրում եք"
+        "title": "Բոլոր կատեգորիաները",
+        "description": "Դիտել ավելին"
       }
     }
   },
@@ -44,15 +44,15 @@
       "company": "Ընկերություն",
       "service": "Ծառայություն",
       "employee": "Աշխատակից",
-      "datetime": "Ամսաթիվ/Ժամ",
-      "final": "Վերջնական"
+      "datetime": "Ամսաթիվ / Ժամ",
+      "final": "Վերջ"
     },
-    "chooseService": "Ընտրեք ծառայություն",
-    "chooseEmployee": "Ընտրեք աշխատակից",
-    "chooseAnotherEmployee": "Ընտրեք այլ աշխատակից (ոչ պարտադիր)",
+    "chooseService": "Ընտրեք ծառայությունը",
+    "chooseEmployee": "Ընտրեք աշխատակցին",
+    "chooseAnotherEmployee": "Այլ աշխատակից (ըստ ցանկության)",
     "selectedEmployee": "Ընտրված աշխատակից",
-    "chooseDateTime": "Ընտրեք ամսաթիվ և ժամ",
-    "bookingInfo": "Ամրագրման տեղեկություններ",
+    "chooseDateTime": "Ընտրեք օրն ու ժամը",
+    "bookingInfo": "Ամրագրման տվյալներ",
     "additionalServices": "Լրացուցիչ ծառայություններ",
     "total": "Ընդամենը",
     "date": "Ամսաթիվ",
@@ -64,26 +64,26 @@
     "minutes": "րոպե",
     "mainService": "Հիմնական ծառայություն",
     "price": "Գին",
-    "dram": "դրամ",
+    "dram": "դր.",
     "back": "Հետ",
     "continue": "Շարունակել",
     "finish": "Ավարտել",
-    "thankYou": "Շնորհակալություն ձեր ամրագրման համար",
-    "confirmationMessage": "Ձեր ամրագրումը հաջողությամբ ընդունվել է։ Մենք կկապվենք ձեզ հետ մոտ ժամանակում։",
+    "thankYou": "Շնորհակալություն",
+    "confirmationMessage": "Ձեր ամրագրումը ընդունված է",
     "backToHome": "Գլխավոր էջ",
     "viewBooking": "Դիտել ամրագրումը",
     "availableTimes": "Հասանելի ժամեր",
-    "noAvailableTimes": "Ընտրված ամսաթվի համար հասանելի ժամեր չկան"
+    "noAvailableTimes": "Ժամեր չկան"
   },
   "auth": {
-    "welcome": "Բարի գալուստ!",
-    "authenticated": "Նույնականացված է",
+    "welcome": "Բարի գալուստ",
+    "authenticated": "Մուտք գործած",
     "userId": "Օգտատիրոջ ID",
     "name": "Անուն",
     "phone": "Հեռախոս",
-    "accessToken": "Մուտքի թոքեն",
-    "expires": "Սպառվում է",
-    "authenticationDemo": "Նույնականացման ցուցադրում",
+    "accessToken": "Թոքեն",
+    "expires": "Ժամկետ",
+    "authenticationDemo": "Նույնականացում",
     "firstName": "Անուն",
     "lastName": "Ազգանուն",
     "password": "Գաղտնաբառ",
@@ -93,31 +93,31 @@
     "phoneNumber": "Համար",
     "forgotPassword": "Մոռացե՞լ եք գաղտնաբառը",
     "accountRecovery": "Վերականգնում",
-    "dontHaveAccount": "Չունե՞ք հաշիվ",
+    "dontHaveAccount": "Հաշիվ չունե՞ք",
     "alreadyHaveAccount": "Արդեն ունե՞ք հաշիվ",
     "signUp": "Գրանցվել",
-    "registrationSuccess": "Գրանցումը հաջողվեց։ Ստուգեք ձեր հեռախոսը հաստատման համար։"
+    "registrationSuccess": "Գրանցումը հաջողվեց"
   },
   "categories": {
     "title": "Կատեգորիաներ",
-    "description": "Դիտել բոլոր հասանելի կատեգորիաները և ծառայությունների տեսակները",
-    "noCategories": "Կատեգորիաներ չեն գտնվել",
-    "noCategoriesDescription": "Ներկայումս հասանելի կատեգորիաներ չկան։",
-    "loadingCategories": "Կատեգորիաները բեռնվում են...",
+    "description": "Բոլոր կատեգորիաները",
+    "noCategories": "Չկան",
+    "noCategoriesDescription": "Տվյալներ չկան",
+    "loadingCategories": "Բեռնվում են",
     "company": "Ընկերություն",
     "service": "Ծառայություն",
     "search": "Որոնում",
-    "filterAndSort": "Ֆիլտրել և տեսակավորել",
-    "noCompanies": "Ընկերություններ չեն գտնվել",
-    "noCompaniesDescription": "Այս կատեգորիայի համար հասանելի ընկերություններ չկան։",
-    "noServices": "Ծառայություններ չեն գտնվել",
-    "noServicesDescription": "Այս կատեգորիայի համար հասանելի ծառայություններ չկան։",
+    "filterAndSort": "Ֆիլտր / տեսակավորում",
+    "noCompanies": "Ընկերություններ չկան",
+    "noCompaniesDescription": "Տվյալներ չկան",
+    "noServices": "Ծառայություններ չկան",
+    "noServicesDescription": "Տվյալներ չկան",
     "companies": "Ընկերություններ",
     "services": "Ծառայություններ",
     "apartments": "Բնակարաններ",
     "cars": "Մեքենաներ",
-    "enabled": "Միացված է",
-    "disabled": "Անջատված է"
+    "enabled": "Միացված",
+    "disabled": "Անջատված"
   },
   "header": {
     "home": "Գլխավոր",
@@ -125,28 +125,28 @@
     "language": "Լեզու"
   },
   "profile": {
-    "personalInformation": "Անձնական տեղեկություններ",
+    "personalInformation": "Անձնական տվյալներ",
     "activeTickets": "Ակտիվ տոմսեր",
     "favorite": "Ընտրյալներ",
     "history": "Պատմություն",
     "logout": "Դուրս գալ",
-    "phoneNumber": "Հեռախոսահամար",
-    "email": "Էլեկտրոնային փոստ",
+    "phoneNumber": "Հեռախոս",
+    "email": "Էլ․ փոստ",
     "password": "Գաղտնաբառ",
-    "noActiveTickets": "Ակտիվ տոմսեր չկան",
-    "noActiveTicketsDescription": "Ներկայումս դուք ակտիվ տոմսեր չունեք",
-    "noFavorites": "Ընտրյալներ չկան",
-    "noFavoritesDescription": "Դուք դեռ ընտրյալներ չեք ավելացրել",
-    "noHistory": "Պատմություն չկա",
-    "noHistoryDescription": "Ձեր ամրագրումների պատմությունը դատարկ է"
+    "noActiveTickets": "Չկան",
+    "noActiveTicketsDescription": "Ակտիվ տոմսեր չկան",
+    "noFavorites": "Չկան",
+    "noFavoritesDescription": "Ընտրյալներ չկան",
+    "noHistory": "Դատարկ է",
+    "noHistoryDescription": "Պատմություն չկա"
   },
   "footer": {
     "becomePartner": {
       "question": "Ցանկանու՞մ եք դառնալ մեր",
-      "highlight": "Գործընկերը?",
-      "button": "Միացեք մեզ"
+      "highlight": "գործընկերը",
+      "button": "Միանալ"
     },
-    "copyright": "Բոլոր իրավունքները պաշտպանված են։"
+    "copyright": "Բոլոր իրավունքները պաշտպանված են"
   },
   "company": {
     "reservation": "Ամրագրում",
@@ -157,12 +157,12 @@
     "pickUp": "Վերցնել",
     "return": "Վերադարձնել",
     "comments": "Մեկնաբանություններ",
-    "addComment": "Ավելացրեք մեկնաբանություն...",
-    "bookingForSomeoneElse": "Ամրագրում եմ մեկ ուրիշի համար",
+    "addComment": "Գրել մեկնաբանություն",
+    "bookingForSomeoneElse": "Մյուսի համար",
     "guestName": "Հյուրի անուն",
     "guestPhone": "Հյուրի հեռախոս",
     "total": "Ընդամենը",
-    "forDays": "{count, plural, one {# օրվա համար} other {# օրերի համար}}",
+    "forDays": "{count, plural, one {# օր} other {# օր}}",
     "reserve": "Ամրագրել",
     "services": "Ծառայություններ",
     "employees": "Աշխատակիցներ",
@@ -172,25 +172,24 @@
     "showLess": "Քիչ",
     "aboutCompany": "Ընկերության մասին",
     "aboutApartment": "Բնակարանի մասին",
-    "aboutCar": "Ավտոմեքենայի մասին",
-    "workHours": "Աշխատանքային ժամեր",
+    "aboutCar": "Մեքենայի մասին",
+    "workHours": "Աշխ. ժամեր",
     "address": "Հասցե",
     "phones": "Հեռախոսներ",
-    "closed": "Փակ է",
-    "noServices": "Ծառայություններ չկան",
-    "noEmployees": "Աշխատակիցներ չկան",
-    "noPortfolio": "Պորտֆոլիո չկա",
+    "closed": "Փակ",
+    "noServices": "Չկան",
+    "noEmployees": "Չկան",
+    "noPortfolio": "Չկա",
     "apartment": "Բնակարան",
     "house": "Տուն",
-    "totalSquare": "Ընդհանուր մակերես",
+    "totalSquare": "Մակերես",
     "rooms": "Սենյակներ",
     "errors": {
-      "guestNameRequired": "Հյուրի անունը պարտադիր է",
-      "guestPhoneRequired": "Հյուրի հեռախոսը պարտադիր է",
-      "guestPhoneInvalid": "Հեռախոսահամարը պետք է լինի ճշգրիտ 8 թվանշան",
-      "bookingFailed": "Ամրագրումը չհաջողվեց։ Խնդրում ենք փորձել ևս մեկ անգամ։"
+      "guestNameRequired": "Անունը պարտադիր է",
+      "guestPhoneRequired": "Հեռախոսը պարտադիր է",
+      "guestPhoneInvalid": "Սխալ հեռախոսահամար",
+      "bookingFailed": "Ամրագրումը չհաջողվեց"
     },
-    "bookingSuccess": "Ամրագրումը հաջողվեց։ Ձեր ամրագրումը հաստատված է։"
+    "bookingSuccess": "Ամրագրումը հաջողվեց"
   }
 }
-

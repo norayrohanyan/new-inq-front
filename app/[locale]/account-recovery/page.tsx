@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { authSelectors, forgotPasswordThunk } from '@/store';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
-import Input from '@/components/Input';
 import { PhoneIcon, SmsIcon } from '@/components/icons';
 import ModalDialog from '@/components/Modal/ModalDialog';
 import * as Styled from './styled';
@@ -20,6 +19,14 @@ export default function AccountRecoveryPage() {
 
   const [phone, setPhone] = useState('');
   const [showSmsModal, setShowSmsModal] = useState(false);
+
+  // Handle phone input - only allow digits, max 8
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let digits = e.target.value.replace(/\D/g, '');
+    digits = digits.replace(/^0+/, ''); // Remove leading zeros
+    digits = digits.slice(0, 8); // Max 8 digits
+    setPhone(digits);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,14 +55,20 @@ export default function AccountRecoveryPage() {
         </Text>
 
         <Styled.Form onSubmit={handleSubmit}>
-          <Input
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder={t('auth.phoneNumber') + ' (ex. 091234567)'}
-            icon={<PhoneIcon width="20" height="20" />}
-            required
-          />
+          <Styled.PhoneInputWrapper>
+            <Styled.PhoneIconWrapper>
+              <PhoneIcon width="20" height="20" />
+            </Styled.PhoneIconWrapper>
+            <Styled.PhonePrefix>+374</Styled.PhonePrefix>
+            <Styled.PhoneInput
+              type="tel"
+              value={phone}
+              onChange={handlePhoneChange}
+              placeholder="XX XXX XXX"
+              inputMode="numeric"
+              required
+            />
+          </Styled.PhoneInputWrapper>
 
           {error && (
             <Text type="small" color="accentRed" align="center">

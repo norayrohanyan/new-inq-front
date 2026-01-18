@@ -104,7 +104,10 @@ export const DiscoverHeader = styled.div`
 `;
 
 export const HighlightText = styled.span`
-  color: ${COLORS.brandOrangeMid};
+  background: linear-gradient(135deg, #F6572F 0%, #FE7F3B 50%, #FEB245 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 `;
 
 
@@ -124,10 +127,23 @@ export const CategoriesGrid = styled(motion.div)`
   }
 `;
 
+export const CategoryContent = styled.div`
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: flex-end;
+  z-index: 1;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+`;
+
 export const CategoryCard = styled(motion.div)<{ $bgImage?: string }>`
-  background: ${({ $bgImage }) => 
-    $bgImage 
-      ? `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url(${$bgImage})`
+  background: ${({ $bgImage }) =>
+    $bgImage
+      ? `linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)), url(${$bgImage})`
       : COLORS.darkBgSemi
   };
   background-size: cover;
@@ -141,55 +157,60 @@ export const CategoryCard = styled(motion.div)<{ $bgImage?: string }>`
   flex-direction: column;
   justify-content: flex-end;
   cursor: pointer;
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(0) scale(1);
 
-  &:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(246, 87, 47, 0) 0%, rgba(254, 127, 59, 0.1) 50%, rgba(254, 178, 69, 0.2) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
   }
-`;
-
-
-export const CategoryContent = styled.div`
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  justify-content: flex-end;
-  z-index: 1;
-`;
-
-export const ExploreCard = styled(motion.div)`
-  background: linear-gradient(135deg, ${COLORS.brandOrangeMid} 0%, #FFB84D 100%);
-  border-radius: 40px;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  width: 256px;
-  height: 400px;
-  cursor: pointer;
-  transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 8px 24px rgba(255, 130, 67, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    transform: translateY(-8px) scale(1.02);
+
+    &::before {
+      opacity: 1;
+    }
+
+    ${CategoryContent} {
+      transform: translateY(-4px);
+    }
+  }
+
+  &:active {
+    transform: translateY(-4px) scale(0.98);
+    transition: all 0.1s ease;
   }
 `;
 
 export const ExploreIcon = styled.div`
   position: absolute;
-  top: 24px;
-  right: 24px;
+  top: 12px;
+  right: 12px;
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 32px;
+  font-weight: 400;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: rotate(-45deg);
+  transform-origin: center;
+  transform-box: fill-box;
+  transform-origin: center;
 `;
 
 export const ExploreContent = styled.div`
@@ -197,6 +218,111 @@ export const ExploreContent = styled.div`
   flex-direction: column;
   gap: 16px;
   margin-top: auto;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+`;
+
+export const ExploreCard = styled(motion.div)`
+background: linear-gradient(157.18deg, #F6572F 22.32%, #FE7F3B 47.72%, #FEB245 73.63%);
+  border-radius: 40px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  width: 256px;
+  height: 400px;
+  cursor: pointer;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transform: translateY(0) scale(1);
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+    transition: all 0.4s ease;
+  }
+
+  &::before {
+    top: 20%;
+    left: 20%;
+    width: 100px;
+    height: 100px;
+    animation: bubble-float-1 4s ease-in-out infinite;
+  }
+
+  &::after {
+    bottom: 15%;
+    right: 15%;
+    width: 120px;
+    height: 120px;
+    animation: bubble-float-2 5s ease-in-out infinite 1s;
+  }
+
+  @keyframes bubble-float-1 {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translate(-20px, -30px) scale(1.3);
+      opacity: 0;
+    }
+  }
+
+  @keyframes bubble-float-2 {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.35;
+    }
+    50% {
+      transform: translate(15px, 20px) scale(1.4);
+      opacity: 0;
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 20px 40px rgba(255, 130, 67, 0.2);
+    transform: translateY(-8px) scale(1.02);
+
+    ${ExploreContent} {
+      transform: translateY(-4px);
+    }
+  }
+
+  @keyframes bubble-float-1-hover {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translate(-25px, -35px) scale(1.4);
+      opacity: 0.2;
+    }
+  }
+
+  @keyframes bubble-float-2-hover {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.55;
+    }
+    50% {
+      transform: translate(20px, 25px) scale(1.5);
+      opacity: 0.15;
+    }
+  }
+
+  &:active {
+    transform: translateY(-4px) scale(0.98);
+    transition: all 0.1s ease;
+  }
 `;
 
 export const PartnerSection = styled.div`

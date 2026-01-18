@@ -15,7 +15,7 @@ const ModalDialog = ({
   type = 'info',
 }: ModalDialogProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} showCloseButton>
       <Styled.DialogContainer>
         {icon && <Styled.IconWrapper>{icon}</Styled.IconWrapper>}
         {title && <Styled.DialogTitle>{title}</Styled.DialogTitle>}
