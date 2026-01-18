@@ -3,12 +3,14 @@ import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import Text from '@/components/Text';
 import { FavoriteButton } from '@/components/FavoriteButton';
+import { ShareButton } from '@/components/ShareButton';
 import * as Styled from './styled';
 import { ICompany } from '@/store/types/companies';
 import { IService } from '@/store/types/services';
-import { ShareIcon, LocationIcon, ClockIcon, StarIcon } from '@/components/icons';
+import { LocationIcon, ClockIcon, StarIcon } from '@/components/icons';
 import { COLORS } from '@/consts/colors';
 import { isRentalCategory } from '@/consts/categoryTemplates';
+import { getShareUrl } from '@/utils/url';
 
 type CompanyService = ICompany | IService;
 
@@ -29,9 +31,18 @@ const CompanyServiceCard: React.FC<ICompanyServiceCardProps> = ({
     ? (data as ICompany).image_url
     : (data as IService).image_urls?.[0];
 
+  // Build the share URL using utility function
+  const shareUrl = getShareUrl({
+    locale,
+    category,
+    id: data.id,
+    isCompany,
+    serviceId: !isCompany ? (data as IService).id : undefined,
+  });
+
   const handleCardClick = () => {
     const isRental = isRentalCategory(category);
-    
+
     if (isCompany) {
       // For companies in rental categories, navigate to company inventory page
       if (isRental) {
@@ -47,7 +58,7 @@ const CompanyServiceCard: React.FC<ICompanyServiceCardProps> = ({
         router.push(`/${locale}/detail/${category}/${data.id}`);
       } else {
         // For services, navigate to booking page with company selection
-        router.push(`/${locale}/booking/${category}/0?serviceId=${data.id}`);  
+        router.push(`/${locale}/booking/${category}/0?serviceId=${data.id}`);
       }
     }
   };
@@ -112,12 +123,7 @@ const CompanyServiceCard: React.FC<ICompanyServiceCardProps> = ({
         )}
       </Styled.InfoWrapper>
       <Styled.ActionButtons onClick={(e) => e.stopPropagation()}>
-        <Styled.ActionButton onClick={(e) => {
-          e.stopPropagation();
-          // Handle share
-        }}>
-          <ShareIcon width={12} height={12} />
-        </Styled.ActionButton>
+        <ShareButton size="small" url={shareUrl} />
         <FavoriteButton
           companyId={data.id}
           category={category}

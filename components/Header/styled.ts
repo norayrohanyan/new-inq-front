@@ -31,9 +31,9 @@ export const NavLinks = styled.div`
   }
 `;
 
-export const NavLink = styled(Link)`
+export const NavLink = styled(Link)<{ $isActive?: boolean }>`
   text-decoration: none;
-  color: ${COLORS.white};
+  color: ${({ $isActive }) => ($isActive ? COLORS.brandOrangeMid : COLORS.white)};
   font-weight: 500;
   font-size: 0.95rem;
   letter-spacing: 0.5px;
