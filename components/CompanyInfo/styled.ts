@@ -102,11 +102,13 @@ export const ActionButton = styled.button`
 `;
 
 export const TwoColumnSection = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
+  align-items: stretch;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -114,22 +116,25 @@ export const PhoneAndSocialSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  flex: 1;
 `;
 
 export const PhoneSection = styled.div`
   background: ${COLORS.darkBgSemi};
   border-radius: 16px;
   padding: 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const PhoneRow = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   white-space: nowrap;
 
   svg {
@@ -180,10 +185,9 @@ export const WorkHoursSection = styled.div`
   background: ${COLORS.darkBgSemi};
   border-radius: 16px;
   padding: 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  flex: 1;
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  gap: 0.5rem;
 `;
 
 export const WorkHourRow = styled.div`

@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@/hooks';
+import { useAuth, useFavorites } from '@/hooks';
 
 /**
  * Provider that initializes global hooks that need to run on every page
@@ -9,6 +9,9 @@ import { useAuth } from '@/hooks';
 export default function GlobalHooksProvider() {
   // Initialize auth - handles localStorage sync and hydration
   useAuth();
+
+  // Initialize favorites - fetches favorites when user is authenticated
+  useFavorites();
 
   // Add other global hooks here if needed
   // useTheme();

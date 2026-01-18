@@ -9,4 +9,5 @@ export { useEventListener } from './useEventListener';
 // App-specific hooks with localStorage
 export { useAuth } from './useAuth';
 export { useTheme } from './useTheme';
+export { useFavorites } from './useFavorites';
 

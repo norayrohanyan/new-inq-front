@@ -23,3 +23,4 @@ export { ShareIcon } from './share';
 export { StarIcon } from './starIcon';
 export { TelegramIcon } from './telegram';
 export { BedIcon } from './bed';
+export { EyeIcon, EyeOffIcon } from './eye';

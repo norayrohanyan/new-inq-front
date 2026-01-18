@@ -22,9 +22,35 @@ export const IconWrapper = styled.span`
   }
 `;
 
-export const StyledInput = styled.input<{ $hasIcon?: boolean }>`
+export const EyeIconWrapper = styled.button`
+  position: absolute;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const StyledInput = styled.input<{ $hasIcon?: boolean; $hasEyeIcon?: boolean }>`
   width: 100%;
-  padding: ${({ $hasIcon }) => ($hasIcon ? '1rem 1rem 1rem 3rem' : '1rem')};
+  padding: ${({ $hasIcon, $hasEyeIcon }) => {
+    const leftPadding = $hasIcon ? '3rem' : '1rem';
+    const rightPadding = $hasEyeIcon ? '2.5rem' : '1rem';
+    return `1rem ${rightPadding} 1rem ${leftPadding}`;
+  }};
   background: transparent;
   border: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -54,4 +80,3 @@ export const ErrorText = styled.span`
   font-size: 0.75rem;
   color: ${COLORS.accentRed};
 `;
-

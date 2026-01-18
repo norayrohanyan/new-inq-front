@@ -4,8 +4,10 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import Text from '@/components/Text';
-import { StarIcon, LocationIcon, ShareIcon } from '@/components/icons';
+import { StarIcon, LocationIcon } from '@/components/icons';
+import { ShareButton } from '@/components/ShareButton';
 import * as Styled from './styled';
+import { getDetailUrl } from '@/utils/url';
 
 interface RentalItemCardProps {
   id: number;
@@ -56,11 +58,8 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
     router.push(`/${locale}/detail/${category}/${id}`);
   };
 
-  const handleShare = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    // TODO: Implement share functionality
-    console.log('Share:', id);
-  };
+  // Build the share URL for this rental item
+  const shareUrl = getDetailUrl(locale, category, id);
 
   return (
     <Styled.Card>
@@ -116,9 +115,7 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
 
       {/* Price and Action Section */}
       <Styled.ActionSection>
-        <Styled.ShareButton onClick={handleShare}>
-          <ShareIcon width={14} height={14} />
-        </Styled.ShareButton>
+        <ShareButton size="medium" url={shareUrl} />
 
         <Styled.PriceContainer>
           {hasDiscount && (

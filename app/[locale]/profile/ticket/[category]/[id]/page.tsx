@@ -126,17 +126,18 @@ function TicketDetailContent() {
 
   const getStatusText = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'confirmed':
       case 'in_process':
         return t('booking.status.inProcess');
       case 'pending':
         return t('booking.status.pending');
-      case 'cancelled':
-        return t('booking.status.cancelled');
+      case 'canceled':
+        return t('booking.status.canceled');
+      case 'rejected':
+        return t('booking.status.rejected');
       case 'completed':
-      case 'approved':
-      case 'finished':
         return t('booking.status.completed');
+      case 'approved':
+        return t('booking.status.approved');
       default:
         return status;
     }
