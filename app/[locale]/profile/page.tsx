@@ -258,7 +258,6 @@ function ProfileContent() {
                             address={favorite.address || ''}
                             workHours={favorite.work_hours || 'N/A'}
                             phone={favorite.phones?.[0]}
-                            onShare={(id) => console.log('Share company:', id)}
                             onClick={(id) =>
                               router.push(`/${locale}/detail/${favorite.category}/${id}`)
                             }
