@@ -9,16 +9,19 @@ import {
   getActiveTicketsThunk,
   getHistoryTicketsThunk,
   getFavoritesThunk,
+  getCurrentUserThunk,
 } from '@/store';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ProfileTabProvider, useProfileTab } from '@/contexts/ProfileTabContext';
 import Text from '@/components/Text';
 import Button from '@/components/Button';
+import Spinner from '@/components/Spinner';
 import TicketCard from '@/components/TicketCard';
 import FavoriteCard from '@/components/FavoriteCard';
 import Pagination from '@/components/Pagination';
 import { ProfileLayout } from './components';
 import { getEmptyStates } from './consts';
+import { formatPhoneDisplay } from '@/utils/phone';
 import * as Styled from './styled';
 
 function ProfileContent() {
@@ -28,11 +31,34 @@ function ProfileContent() {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const user = useAppSelector(authSelectors.user);
+  const isAuthenticated = useAppSelector(authSelectors.isAuthenticated);
   const activeTickets = useAppSelector(userSelectors.activeTickets);
   const historyTickets = useAppSelector(userSelectors.historyTickets);
   const favorites = useAppSelector(userSelectors.favorites);
   const isLoading = useAppSelector(userSelectors.isLoading);
   const { activeTab, setActiveTab } = useProfileTab();
+
+  // Track if initial auth check has completed
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Wait for auth hydration before showing content
+  useEffect(() => {
+    // Give time for auth to hydrate from cookies
+    const timer = setTimeout(() => {
+      setIsInitialized(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Fetch user data from server when authenticated but user data not loaded
+  useEffect(() => {
+    if (isAuthenticated && !user) {
+      dispatch(getCurrentUserThunk());
+    }
+  }, [isAuthenticated, user, dispatch]);
+
+  // Show loading until initialized AND user data is loaded (if authenticated)
+  const isUserLoading = !isInitialized || (isAuthenticated && !user);
 
   // Read tab from URL query parameter on mount
   useEffect(() => {
@@ -95,47 +121,40 @@ function ProfileContent() {
     <ProfileLayout activeTab={activeTab}>
       {activeTab === 'personal' && (
         <>
-          <Styled.Header>
-            <Text type="h1" color="white">
-              {user?.first_name || 'Name'} {user?.last_name || 'Surname'}
-            </Text>
-            <Button
-              variant="secondary"
-              size="small"
-              onClick={() => router.push(`/${locale}/profile/edit`)}
-            >
-              {t('common.edit')}
-            </Button>
-          </Styled.Header>
+          {isUserLoading ? (
+            <Styled.EmptyState>
+              <Spinner size="large" />
+              <Text type="body" color="white">
+                {t('common.loading')}
+              </Text>
+            </Styled.EmptyState>
+          ) : (
+            <>
+              <Styled.Header>
+                <Text type="h1" color="white">
+                  {user?.first_name} {user?.last_name}
+                </Text>
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onClick={() => router.push(`/${locale}/profile/edit`)}
+                >
+                  {t('common.edit')}
+                </Button>
+              </Styled.Header>
 
-          <Styled.InfoSection>
-            <Styled.InfoItem>
-              <Text type="body" customColor="rgba(255, 255, 255, 0.7)">
-                {t('profile.phoneNumber')}
-              </Text>
-              <Text type="body" color="white" fontWeight="500">
-                {user?.phone || '+374 12345678'}
-              </Text>
-            </Styled.InfoItem>
-
-            <Styled.InfoItem>
-              <Text type="body" customColor="rgba(255, 255, 255, 0.7)">
-                {t('profile.email')}
-              </Text>
-              <Text type="body" color="white" fontWeight="500">
-                {user?.email || 'name.surname@gmail.com'}
-              </Text>
-            </Styled.InfoItem>
-
-            <Styled.InfoItem>
-              <Text type="body" customColor="rgba(255, 255, 255, 0.7)">
-                {t('profile.password')}
-              </Text>
-              <Text type="body" color="white" fontWeight="500">
-                ••••••••••••••
-              </Text>
-            </Styled.InfoItem>
-          </Styled.InfoSection>
+              <Styled.InfoSection>
+                <Styled.InfoItem>
+                  <Text type="body" color="white">
+                    {t('profile.phoneNumber')}
+                  </Text>
+                  <Text type="body" color="white" fontWeight="500">
+                    {formatPhoneDisplay(user?.phone)}
+                  </Text>
+                </Styled.InfoItem>
+              </Styled.InfoSection>
+            </>
+          )}
         </>
       )}
 
@@ -143,6 +162,7 @@ function ProfileContent() {
         <>
           {isLoading ? (
             <Styled.EmptyState>
+              <Spinner size="large" />
               <Text type="body" color="white">
                 {t('common.loading')}
               </Text>

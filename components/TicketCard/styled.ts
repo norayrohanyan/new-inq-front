@@ -45,18 +45,18 @@ export const StatusBadge = styled.div<{ $status: string }>`
   background: ${({ $status }) => {
     switch ($status) {
       case 'primary':
-        return COLORS.brandOrangeMid;
+        return COLORS.brandGradient;
       case 'pending':
-        return COLORS.secondary;
-      case 'cancelled':
-        return COLORS.accentRed;
+        return '#868686';
+      case 'canceled':
+        return '#DD0000';
       case 'approved':
-        return '#4CAF50';
+        return '#27AE35';
       default:
-        return COLORS.secondary;
+        return '#D9D9D9';
     }
   }};
-  color: ${({ $status }) => ($status === 'primary' ? COLORS.black : COLORS.white)};
+  color: ${({ $status }) => ($status === 'pending' ? COLORS.black : COLORS.white)};
 `;
 
 export const MenuButton = styled.button`

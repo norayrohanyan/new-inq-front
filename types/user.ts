@@ -106,6 +106,9 @@ export interface IFavoriteCompany {
   work_hours: string[];
   is_open: boolean;
   image_url: string | null;
+  category: string;
+  logo: string;
+  phones: string[];
 }
 
 export interface IBookingHistory {

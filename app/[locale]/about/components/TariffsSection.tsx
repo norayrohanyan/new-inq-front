@@ -1,12 +1,13 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import PricingCard from '@/app/[locale]/about/components/PricingCard';
-import TabButton from '@/app/[locale]/about/components/TabButton';
+
 import Text from '@/components/Text';
 import * as Styled from '../styled';
 import { MonthIcon } from '@/components/icons/month';
 import { BoxIcon } from '@/components/icons/box';
+import TabButton from '@/app/[locale]/about/components/TabButton';
+import PricingCard from '@/app/[locale]/about/components/PricingCard';
 
 type TariffPlan = 'monthly' | '3months' | '6months' | '1year';
 

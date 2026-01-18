@@ -19,9 +19,7 @@ export { filtersActions, filtersSelectors } from './features/filters';
 export {
   loginThunk,
   registerThunk,
-  refreshTokensThunk,
   verifyLinkThunk,
-  fetchUserProfileThunk,
   getCurrentUserThunk,
   forgotPasswordThunk,
   updatePasswordThunk,

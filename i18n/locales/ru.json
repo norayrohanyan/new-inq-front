@@ -11,7 +11,8 @@
     "yes": "Да",
     "no": "Нет",
     "ok": "ОК",
-    "returnHome": "На главную"
+    "returnHome": "На главную",
+    "linkCopied": "Ссылка скопирована!"
   },
   "home": {
     "categories": {
@@ -38,7 +39,8 @@
     "status": {
       "inProcess": "В процессе",
       "pending": "Ожидание",
-      "cancelled": "Отменено",
+      "canceled": "Отменено",
+      "rejected": "Отклонено",
       "approved": "Одобрено",
       "completed": "Завершено"
     },

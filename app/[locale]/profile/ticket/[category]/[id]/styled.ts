@@ -84,21 +84,21 @@ export const StatusBadge = styled.div<{ $status: string }>`
   border-radius: 8px;
   display: inline-block;
   width: fit-content;
+  color: ${({ $status }) => ($status === 'pending' ? COLORS.black : COLORS.white)};
   background: ${({ $status }) => {
     switch ($status) {
-      case 'confirmed':
       case 'in_process':
-        return COLORS.brandOrangeMid;
+        return COLORS.brandGradient;
       case 'pending':
-        return COLORS.secondary;
-      case 'cancelled':
-        return COLORS.accentRed;
+        return '#868686';
+      case 'canceled':
+      case 'rejected':
+        return '#DD0000';
       case 'completed':
       case 'approved':
-      case 'finished':
-        return '#4CAF50';
+        return '#27AE35';
       default:
-        return COLORS.secondary;
+        return '#868686';
     }
   }};
 `;

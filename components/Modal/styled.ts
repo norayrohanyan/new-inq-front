@@ -54,7 +54,7 @@ export const CloseButton = styled.button`
   align-items: center;
   justify-content: center;
   color: ${COLORS.white};
-  font-size: 24px;
+  font-size: 32px;
   opacity: 0.7;
   transition: opacity 0.2s;
   z-index: 2;

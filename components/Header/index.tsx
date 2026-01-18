@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import Button from '@/components/Button';
@@ -21,7 +21,6 @@ const LANGUAGES = [
 export default function Header() {
   const t = useTranslations();
   const locale = useLocale();
-  const router = useRouter();
   const pathname = usePathname();
   const isAuthenticated = useAppSelector(authSelectors.isAuthenticated);
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
@@ -53,15 +52,23 @@ export default function Header() {
 
   const currentLanguage = LANGUAGES.find((lang) => lang.code === locale);
 
+  // Helper function to check if a path is active
+  const isActivePath = (path: string) => {
+    if (path === `/${locale}`) {
+      return pathname === `/${locale}` || pathname === `/${locale}/`;
+    }
+    return pathname.startsWith(path);
+  };
+
   return (
     <Styled.HeaderContainer>
       <Styled.Nav>
         <Logo width={90} height={48} />
         <Styled.NavLinks>
-          <Styled.NavLink href={`/${locale}`}>HOME</Styled.NavLink>
-          <Styled.NavLink href={`/${locale}/categories`}>BOOKING</Styled.NavLink>
-          <Styled.NavLink href={`/${locale}/button-demo`}>NEAR ME</Styled.NavLink>
-          <Styled.NavLink href={`/${locale}/about`}>ABOUT US</Styled.NavLink>
+          <Styled.NavLink href={`/${locale}`} $isActive={isActivePath(`/${locale}`)}>HOME</Styled.NavLink>
+          <Styled.NavLink href={`/${locale}/categories`} $isActive={isActivePath(`/${locale}/categories`)}>BOOKING</Styled.NavLink>
+          <Styled.NavLink href={`/${locale}/button-demo`} $isActive={isActivePath(`/${locale}/button-demo`)}>NEAR ME</Styled.NavLink>
+          <Styled.NavLink href={`/${locale}/about`} $isActive={isActivePath(`/${locale}/about`)}>ABOUT US</Styled.NavLink>
         </Styled.NavLinks>
 
         <Styled.RightSection>

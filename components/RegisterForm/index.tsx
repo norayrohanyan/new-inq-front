@@ -19,6 +19,14 @@ export default function RegisterForm() {
   const [password, setPassword] = useState('');
   const [success, setSuccess] = useState(false);
 
+  // Handle phone input - only allow digits, max 8
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let digits = e.target.value.replace(/\D/g, '');
+    digits = digits.replace(/^0+/, ''); // Remove leading zeros
+    digits = digits.slice(0, 8); // Max 8 digits
+    setPhone(digits);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSuccess(false);
@@ -80,14 +88,18 @@ export default function RegisterForm() {
           <Text type="small" color="secondaryDark" fontWeight="500">
             {t('auth.phoneNumber')}
           </Text>
-          <Styled.Input
-            type="tel"
-            value={phone}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
-            placeholder="93852741"
-            disabled={isLoading}
-            required
-          />
+          <Styled.PhoneInputWrapper>
+            <Styled.PhonePrefix>+374</Styled.PhonePrefix>
+            <Styled.PhoneInput
+              type="tel"
+              value={phone}
+              onChange={handlePhoneChange}
+              placeholder="XX XXX XXX"
+              disabled={isLoading}
+              inputMode="numeric"
+              required
+            />
+          </Styled.PhoneInputWrapper>
         </div>
         <div>
           <Text type="small" color="secondaryDark" fontWeight="500">

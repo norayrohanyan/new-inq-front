@@ -1,13 +1,15 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useAppDispatch } from '@/lib/hooks';
 import { authActions } from '@/store';
 import { useRouter } from 'next/navigation';
 import { apiService } from '@/services/api';
 import Text from '@/components/Text';
-import { LogoutIcon } from '@/components/icons';
+import { LogoutIcon, WarningIcon } from '@/components/icons';
+import ModalDialog from '@/components/Modal/ModalDialog';
+import Button from '@/components/Button';
 import { getMenuItems } from '../../consts';
 import * as Styled from './styled';
 
@@ -21,16 +23,29 @@ export default function ProfileLayout({ children, activeTab }: ProfileLayoutProp
   const locale = useLocale();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const menuItems = getMenuItems(t);
 
-  const handleLogout = async () => {
+  const handleLogoutClick = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const handleLogoutCancel = () => {
+    setIsLogoutModalOpen(false);
+  };
+
+  const handleLogoutConfirm = async () => {
+    setIsLoggingOut(true);
     try {
       await apiService.logout();
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
       dispatch(authActions.logout());
+      setIsLogoutModalOpen(false);
+      setIsLoggingOut(false);
       router.push(`/${locale}/login`);
     }
   };
@@ -64,7 +79,7 @@ export default function ProfileLayout({ children, activeTab }: ProfileLayoutProp
             ))}
           </Styled.MenuList>
 
-          <Styled.LogoutButton onClick={handleLogout}>
+          <Styled.LogoutButton onClick={handleLogoutClick}>
             <Styled.MenuIcon $active={false}>
               <LogoutIcon width="20" height="20" />
             </Styled.MenuIcon>
@@ -76,6 +91,27 @@ export default function ProfileLayout({ children, activeTab }: ProfileLayoutProp
 
         <Styled.MainContent>{children}</Styled.MainContent>
       </Styled.ContentWrapper>
+
+      <ModalDialog
+        isOpen={isLogoutModalOpen}
+        onClose={handleLogoutCancel}
+        icon={<WarningIcon />}
+        title={t('profile.logoutConfirmTitle')}
+        description={t('profile.logoutConfirmDescription')}
+        type="warning"
+        buttons={
+          <>
+            <Button
+              variant="primary"
+              onClick={handleLogoutConfirm}
+              isLoading={isLoggingOut}
+              fullWidth
+            >
+              {t('profile.logout')}
+            </Button>
+          </>
+        }
+      />
     </Styled.PageContainer>
   );
 }

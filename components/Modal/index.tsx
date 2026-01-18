@@ -46,7 +46,7 @@ const Modal = ({
           <Styled.ModalContent {...CONTENT_ANIMATION_PROPS}>
             {showCloseButton && onClose && (
               <Styled.CloseButton onClick={onClose} aria-label="Close">
-                ×
+                × {/* TODO: Add close icon */}
               </Styled.CloseButton>
             )}
             {children}
