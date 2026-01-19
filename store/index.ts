@@ -73,3 +73,7 @@ export {
   getServicesFiltersThunk,
 } from './features/filters/thunks';
 
+// Export ads actions, selectors, and thunks
+export { adsActions, adsSelectors } from './features/ads';
+export { getAdsThunk } from './features/ads/thunks';
+
