@@ -1,9 +1,12 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
+import { AnimatePresence } from 'framer-motion';
 import Text from '@/components/Text';
+import Button from '@/components/Button';
 import { PhoneIcon, LocationIcon, StarIcon, FacebookIcon, InstagramIcon, LinkedinIcon } from '@/components/icons';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { ShareButton } from '@/components/ShareButton';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import * as Styled from './styled';
 
 interface ICompanyInfoProps {
@@ -40,6 +43,8 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
   externalLinks,
 }) => {
   const t = useTranslations();
+  const isMobile = useIsMobile();
+  const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
 
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -86,8 +91,40 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
         </Text>
       )}
 
-      {/* Two Column Section: Phone & Social (left) + Work Hours (right) */}
-      <Styled.TwoColumnSection>
+      {/* Mobile Toggle Button */}
+      {isMobile && (
+        <Styled.MobileToggleButton>
+          <Button 
+            variant="primary" 
+            size="medium" 
+            rounded
+            onClick={() => setIsDetailsOpen(!isDetailsOpen)}
+          >
+            {isDetailsOpen ? t('common.close') : t('common.info')}
+          </Button>
+        </Styled.MobileToggleButton>
+      )}
+
+      {/* Collapsible Details Section */}
+      <Styled.DetailsWrapper $isOpen={isDetailsOpen} $isMobile={isMobile}>
+        <AnimatePresence initial={false}>
+          {(!isMobile || isDetailsOpen) && (
+            <Styled.DetailsContent
+              key="details"
+              initial={isMobile ? { height: 0, opacity: 0 } : undefined}
+              animate={isMobile ? { height: 'auto', opacity: 1 } : undefined}
+              exit={isMobile ? { height: 0, opacity: 0 } : undefined}
+              transition={
+                isMobile
+                  ? {
+                      height: { duration: 0.2, ease: 'easeOut' },
+                      opacity: { duration: 0.15, ease: 'easeOut' },
+                    }
+                  : undefined
+              }
+            >
+        {/* Two Column Section: Phone & Social (left) + Work Hours (right) */}
+        <Styled.TwoColumnSection>
         {/* Phone and Social Section */}
         <Styled.PhoneAndSocialSection>
           {/* Phones */}
@@ -162,14 +199,18 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
             );
           })}
         </Styled.WorkHoursSection>
-      </Styled.TwoColumnSection>
+        </Styled.TwoColumnSection>
 
-      {/* Map */}
-      <Styled.MapPlaceholder>
-        <Text type="body" color="secondarySemiLight">
-          Map
-        </Text>
-      </Styled.MapPlaceholder>
+        {/* Map */}
+        <Styled.MapPlaceholder>
+          <Text type="body" color="secondarySemiLight">
+            Map
+          </Text>
+        </Styled.MapPlaceholder>
+            </Styled.DetailsContent>
+          )}
+        </AnimatePresence>
+      </Styled.DetailsWrapper>
     </Styled.InfoContainer>
   );
 };

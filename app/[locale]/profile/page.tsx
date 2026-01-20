@@ -23,6 +23,7 @@ import { ProfileLayout } from './components';
 import { getEmptyStates } from './consts';
 import { formatPhoneDisplay } from '@/utils/phone';
 import * as Styled from './styled';
+import { useIsMobile } from '@/hooks';
 
 function ProfileContent() {
   const t = useTranslations();
@@ -37,6 +38,8 @@ function ProfileContent() {
   const favorites = useAppSelector(userSelectors.favorites);
   const isLoading = useAppSelector(userSelectors.isLoading);
   const { activeTab, setActiveTab } = useProfileTab();
+
+  const isMobile = useIsMobile();
 
   // Track if initial auth check has completed
   const [isInitialized, setIsInitialized] = useState(false);
@@ -129,9 +132,9 @@ function ProfileContent() {
               </Text>
             </Styled.EmptyState>
           ) : (
-            <>
+            <Styled.PersonalContainer>
               <Styled.Header>
-                <Text type="h1" color="white">
+                <Text type={isMobile ? 'h3' : 'h1'} color="white">
                   {user?.first_name} {user?.last_name}
                 </Text>
                 <Button
@@ -153,7 +156,7 @@ function ProfileContent() {
                   </Text>
                 </Styled.InfoItem>
               </Styled.InfoSection>
-            </>
+            </Styled.PersonalContainer>
           )}
         </>
       )}
@@ -196,7 +199,7 @@ function ProfileContent() {
 
                 return fullData.length > 0 ? (
                   <Styled.TicketsContainer>
-                    <Text type="h2" color="white">
+                    <Text type="h2" color="white" align={isMobile ? 'center' : 'left'}>
                       {activeTab === 'tickets' && `Active Tickets`}
                       {activeTab === 'favorite' && `Favorites`}
                       {activeTab === 'history' && `History`}

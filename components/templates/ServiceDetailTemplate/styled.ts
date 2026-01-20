@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT, TABLET_SIZE_BREAKPOINT } from '@/consts';
 
 export const PageContainer = styled.div`
   max-width: 1600px;
@@ -18,7 +19,7 @@ export const BannerImage = styled.img`
   object-fit: cover;
   border-radius: 0 0 24px 24px;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     height: 250px;
     border-radius: 0 0 16px 16px;
   }
@@ -33,7 +34,7 @@ export const BannerPlaceholder = styled.div`
   justify-content: center;
   border-radius: 0 0 24px 24px;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     height: 250px;
     border-radius: 0 0 16px 16px;
   }
@@ -45,13 +46,17 @@ export const MainContent = styled.div`
   gap: 2rem;
   padding: 0 4rem 4rem;
 
-  @media (max-width: 1200px) {
+  @media (max-width: ${TABLET_SIZE_BREAKPOINT}px) {
     grid-template-columns: 1fr;
     padding: 0 2rem 2rem;
   }
 
-  @media (max-width: 768px) {
-    padding: 0 1rem 1.5rem;
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0;
+    width: 100%;
   }
 `;
 
@@ -59,6 +64,13 @@ export const LeftColumn = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    width: 100%;
+    padding: 0 1rem;
+
+    margin-bottom: 2rem;
+  }
 `;
 
 export const RightColumn = styled.div`
@@ -66,9 +78,14 @@ export const RightColumn = styled.div`
   top: 2rem;
   align-self: flex-start;
 
-  @media (max-width: 1200px) {
+  @media (max-width: ${TABLET_SIZE_BREAKPOINT}px) {
     position: static;
     order: -1;
+  }
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    width: 100%;
+    padding: 0 1rem;
   }
 `;
 
@@ -78,7 +95,7 @@ export const EmployeesGrid = styled.div`
   gap: 1rem;
   width: 100%;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     grid-template-columns: 1fr;
   }
 `;
@@ -107,4 +124,10 @@ export const EmptyState = styled.div`
   border-radius: 20px;
   min-height: 200px;
   gap: 0.5rem;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    padding: 2rem 1rem;
+    min-height: 150px;
+    border-radius: 16px;
+  }
 `;

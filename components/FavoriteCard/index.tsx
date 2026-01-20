@@ -10,6 +10,7 @@ import { ShareButton } from '@/components/ShareButton';
 import Text from '@/components/Text';
 import * as Styled from './styled';
 import { getDetailUrl } from '@/utils/url';
+import { useIsMobile } from '@/hooks';
 
 interface WorkHours {
   [key: string]: string;
@@ -39,7 +40,7 @@ const FavoriteCard: React.FC<IFavoriteCardProps> = ({
   onClick,
 }) => {
   const locale = useLocale();
-
+  const isMobile = useIsMobile();
   // Build the share URL for this favorite company's detail page
   const shareUrl = getDetailUrl(locale, category, id);
 
@@ -90,17 +91,19 @@ const FavoriteCard: React.FC<IFavoriteCardProps> = ({
       {/* Info Section */}
       <Styled.InfoSection>
         <Styled.TopRow>
-          <Text type="h4" color="white" fontWeight="500">
+          <Text type={isMobile ? 'body' : 'h4'} color="white" fontWeight="500">
             {name}
           </Text>
-          <Styled.Actions>
+          {!isMobile && (
+            <Styled.Actions>
             <ShareButton size="small" url={shareUrl} />
             <FavoriteButton
               companyId={id}
               category={category}
-              size="small"
-            />
-          </Styled.Actions>
+                size="small"
+              />
+            </Styled.Actions>
+          )}
         </Styled.TopRow>
 
         <Styled.RatingRow>
@@ -133,6 +136,16 @@ const FavoriteCard: React.FC<IFavoriteCardProps> = ({
           </Styled.DetailRow>
         )}
       </Styled.InfoSection>
+      {isMobile && (
+            <Styled.Actions>
+            <ShareButton size="small" url={shareUrl} />
+            <FavoriteButton
+              companyId={id}
+              category={category}
+                size="small"
+              />
+            </Styled.Actions>
+          )}
     </Styled.CardContainer>
   );
 };

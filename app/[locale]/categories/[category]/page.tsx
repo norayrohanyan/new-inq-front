@@ -18,7 +18,9 @@ import {
   CategoriesContent,
 } from '../components';
 import FilterSidebar from '@/components/FilterSidebar';
+import FilterButton from '@/components/FilterButton';
 import * as Styled from '../styled';
+import { useIsMobile } from '@/hooks';
 
 export default function CategoryPage() {
   const params = useParams();
@@ -30,7 +32,8 @@ export default function CategoryPage() {
   // Get current category data
   const categories = useAppSelector(categoriesSelectors.categories);
   const currentCategory = categories.find(cat => cat.slug === categorySlug);
-
+  const isMobile = useIsMobile();
+  
   // Local state
   const [showCompanies, setShowCompanies] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -122,19 +125,39 @@ export default function CategoryPage() {
 
       {/* Combined Toggle and Search Section */}
       <Styled.ToggleSearchSection>
-        {currentCategory && (
-          <CategoriesToggle
-            showCompanies={showCompanies}
-            onToggleChange={handleToggleChange}
-            categorySwitch={currentCategory.switch}
-          />
+        {isMobile ? (
+          <>
+            <Styled.ToggleFilterRow>
+              {currentCategory && (
+                <CategoriesToggle
+                  showCompanies={showCompanies}
+                  onToggleChange={handleToggleChange}
+                  categorySwitch={currentCategory.switch}
+                />
+              )}
+              <FilterButton onClick={handleFilterClick} />
+            </Styled.ToggleFilterRow>
+            <CategoriesSearch
+              searchTerm={searchTerm}
+              onSearchChange={handleSearchChange}
+            />
+          </>
+        ) : (
+          <>
+            {currentCategory && (
+              <CategoriesToggle
+                showCompanies={showCompanies}
+                onToggleChange={handleToggleChange}
+                categorySwitch={currentCategory.switch}
+              />
+            )}
+            <CategoriesSearch
+              searchTerm={searchTerm}
+              onSearchChange={handleSearchChange}
+            />
+            <FilterButton onClick={handleFilterClick} />
+          </>
         )}
-        
-        <CategoriesSearch
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
-          onFilterClick={handleFilterClick}
-        />
       </Styled.ToggleSearchSection>
 
       <Styled.ContentSection>
