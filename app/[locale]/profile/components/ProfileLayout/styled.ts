@@ -1,9 +1,12 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 export const PageContainer = styled.div`
   min-height: 100vh;
   background: ${COLORS.darkBg};
+  position: relative;
   padding-top: 2rem;
   margin-bottom: 2rem;
 `;
@@ -17,21 +20,33 @@ export const ContentWrapper = styled.div`
   gap: 3rem;
   align-items: start;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     grid-template-columns: 1fr;
     gap: 2rem;
+    padding: 0;
   }
 `;
 
-export const Sidebar = styled.aside`
+export const Sidebar = styled.aside<{ $isOpen: boolean; $isMobile: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 2rem;
   position: sticky;
   top: 100px;
 
-  @media (max-width: 968px) {
-    position: static;
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    background: ${COLORS.darkBgSemi};
+    backdrop-filter: blur(10px);
+    z-index: 1001;
+    padding: 2rem 1rem;
+    transform: ${({ $isOpen }) => ($isOpen ? 'translateX(0)' : 'translateX(-100%)')};
+    transition: transform 0.3s ease-out;
+    overflow-y: auto;
   }
 `;
 
@@ -89,8 +104,48 @@ export const LogoutButton = styled.button`
 export const MainContent = styled.main`
   min-height: 600px;
 
-  @media (max-width: 768px) {
-    padding: 0 0.5rem;
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    padding: 0 1rem;
+  }
+`;
+
+export const MobileMenuButton = styled.div`
+  display: none;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: -0.5rem;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+`;
+
+export const ThreeDotsIcon = styled.span`
+  font-size: 24px;
+  color: ${COLORS.white};
+  font-weight: bold;
+  line-height: 1;
+`;
+
+export const Overlay = styled(motion.div)`
+  display: none;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
   }
 `;
 

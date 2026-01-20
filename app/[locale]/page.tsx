@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import Text from '@/components/Text';
-import Button from '@/components/Button';
 import * as Styled from './styled';
 
 export default function Home() {
@@ -110,9 +109,9 @@ export default function Home() {
             <Text type="caption" color="white">
               {t('home.categories.beautySalon.description')}
             </Text>
-            <Button variant="primary" size="small" rounded>
-              {t('home.categories.searchNearMe')}
-            </Button>
+            <Styled.CardButton variant="primary" size="small" rounded>
+              {t('home.categories.searchNearMe')} {/* //TODO: Add arrow right icon */}
+            </Styled.CardButton>
           </Styled.CategoryContent>
         </Styled.CategoryCard>
 
@@ -128,9 +127,9 @@ export default function Home() {
             <Text type="caption" color="white">
               {t('home.categories.apartments.description')}
             </Text>
-            <Button variant="primary" size="small" rounded>
-              {t('home.categories.searchNearMe')}
-            </Button>
+            <Styled.CardButton variant="primary" size="small" rounded>
+              {t('home.categories.searchNearMe')} {/* //TODO: Add arrow right icon */}
+            </Styled.CardButton>
           </Styled.CategoryContent>
         </Styled.CategoryCard>
 
@@ -146,9 +145,9 @@ export default function Home() {
             <Text type="caption" color="white">
               {t('home.categories.carRental.description')}
             </Text>
-            <Button variant="primary" size="small" rounded>
-              {t('home.categories.searchNearMe')}
-            </Button>
+            <Styled.CardButton variant="primary" size="small" rounded>
+              {t('home.categories.searchNearMe')} {/* //TODO: Add arrow right icon */}
+            </Styled.CardButton>
           </Styled.CategoryContent>
         </Styled.CategoryCard>
 

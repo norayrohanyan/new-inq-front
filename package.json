@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
+    "@types/lodash": "^4.17.23",
     "axios": "^1.12.2",
     "framer-motion": "^12.23.24",
+    "lodash": "^4.17.21",
     "next": "15.5.9",
     "next-intl": "^4.3.12",
     "prop-types": "^15.8.1",

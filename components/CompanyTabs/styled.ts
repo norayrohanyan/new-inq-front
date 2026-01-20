@@ -13,10 +13,6 @@ export const TabsList = styled.div`
   gap: 2rem;
   border-bottom: 1px solid ${COLORS.borderColor};
   padding-bottom: 0;
-
-  @media (max-width: 768px) {
-    gap: 1rem;
-  }
 `;
 
 export const Tab = styled.button<{ $active: boolean }>`
@@ -36,4 +32,3 @@ export const Tab = styled.button<{ $active: boolean }>`
 export const TabContent = styled.div`
   width: 100%;
 `;
-

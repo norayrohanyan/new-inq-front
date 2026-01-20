@@ -2,6 +2,7 @@
 
 import { ReactNode, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
+import { AnimatePresence } from 'framer-motion';
 import { useAppDispatch } from '@/lib/hooks';
 import { authActions } from '@/store';
 import { useRouter } from 'next/navigation';
@@ -10,6 +11,7 @@ import Text from '@/components/Text';
 import { LogoutIcon, WarningIcon } from '@/components/icons';
 import ModalDialog from '@/components/Modal/ModalDialog';
 import Button from '@/components/Button';
+import { useIsMobile } from '@/hooks';
 import { getMenuItems } from '../../consts';
 import * as Styled from './styled';
 
@@ -23,8 +25,10 @@ export default function ProfileLayout({ children, activeTab }: ProfileLayoutProp
   const locale = useLocale();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const menuItems = getMenuItems(t);
 
@@ -52,12 +56,39 @@ export default function ProfileLayout({ children, activeTab }: ProfileLayoutProp
 
   const handleTabChange = (tab: string) => {
     router.push(`/${locale}/profile?tab=${tab}`);
+    if (isMobile) {
+      setIsMobileMenuOpen(false);
+    }
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   return (
     <Styled.PageContainer>
+      {/* Mobile Menu Toggle Button */}
+      {isMobile && (
+        <Styled.MobileMenuButton onClick={toggleMobileMenu}>
+          <Styled.ThreeDotsIcon>⋮</Styled.ThreeDotsIcon>
+        </Styled.MobileMenuButton>
+      )}
+
+      {/* Mobile Overlay */}
+      <AnimatePresence>
+        {isMobile && isMobileMenuOpen && (
+          <Styled.Overlay
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={toggleMobileMenu}
+          />
+        )}
+      </AnimatePresence>
+
       <Styled.ContentWrapper>
-        <Styled.Sidebar>
+        <Styled.Sidebar $isOpen={isMobileMenuOpen} $isMobile={isMobile}>
           <Styled.MenuList>
             {menuItems.map((item) => (
               <Styled.MenuItem

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 export const FooterContainer = styled.footer`
   background: ${COLORS.darkBgSemi};
@@ -20,7 +21,7 @@ export const PartnerContent = styled.div`
   align-items: center;
   gap: 2rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     gap: 1.5rem;
     padding: 0 1rem;
   }
@@ -40,7 +41,7 @@ export const MainFooter = styled.div`
   border-top: 1px solid ${COLORS.borderColor};
   max-width: 1400px;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 24px 0;
   }
 `;
@@ -54,7 +55,7 @@ export const FooterContent = styled.div`
   gap: 2rem;
   margin-bottom: 2rem;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     flex-direction: column;
     gap: 2rem;
     text-align: center;
@@ -66,7 +67,9 @@ export const LeftSection = styled.div`
   align-items: center;
   gap: 5rem;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    flex-direction: column;
+    gap: 2rem;
     justify-content: center;
   }
 `;
@@ -74,6 +77,11 @@ export const LeftSection = styled.div`
 export const ContactSection = styled.div`
   display: flex;
   gap: 1rem;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 `;
 
 
@@ -90,7 +98,7 @@ export const ContactItem = styled.a`
     transform: translateX(2px);
   }
 
-  @media (max-width: 968px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     justify-content: center;
   }
 `;
@@ -107,7 +115,7 @@ export const RightSection = styled.div`
   justify-content: flex-end;
   gap: 1rem;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     justify-content: center;
   }
 `;
@@ -125,6 +133,15 @@ export const SocialLink = styled.a`
 
   &:hover {
     background-color: ${COLORS.borderColor};
+  }
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    padding: 8px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
   }
 `;
 

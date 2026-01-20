@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo, useCallback, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { ICategorySwitch } from '@/types/categories';
@@ -11,8 +11,10 @@ import {
   servicesActions,
 } from '@/store';
 import Text from '@/components/Text';
+import Spinner from '@/components/Spinner';
 import CompanyServiceCard from '@/components/CompanyServiceCard';
 import Pagination from '@/components/Pagination';
+import { useIsMobile, useInfiniteScroll } from '@/hooks';
 import * as Styled from '../styled';
 
 interface ICategoriesContentProps {
@@ -38,6 +40,11 @@ export const CategoriesContent: React.FC<ICategoriesContentProps> = ({
 }) => {
   const t = useTranslations();
   const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
+
+  // Mobile "Load More" accumulated data state
+  const [accumulatedData, setAccumulatedData] = useState<any[]>([]);
+  const [mobileCurrentPage, setMobileCurrentPage] = useState(1);
 
   // Companies selectors
   const companies = useAppSelector(companiesSelectors.companies);
@@ -51,14 +58,22 @@ export const CategoriesContent: React.FC<ICategoriesContentProps> = ({
   const servicesError = useAppSelector(servicesSelectors.error);
   const servicesTotalPages = useAppSelector(servicesSelectors.totalPages);
 
+  // Reset accumulated data when category, toggle, search, or filters change
+  useEffect(() => {
+    setAccumulatedData([]);
+    setMobileCurrentPage(1);
+  }, [selectedCategory, showCompanies, searchTerm, filters]);
+
   // Fetch data when dependencies change (filters only, not sort)
   useEffect(() => {
     if (!selectedCategory) return;
 
+    const pageToFetch = isMobile ? mobileCurrentPage : currentPage;
+
     const params: any = {
       category: selectedCategory,
       search: searchTerm,
-      page: currentPage,
+      page: pageToFetch,
       per_page: 10,
       filters: filters, // Only backend filters trigger API call
     };
@@ -68,7 +83,44 @@ export const CategoriesContent: React.FC<ICategoriesContentProps> = ({
     } else {
       dispatch(getServicesThunk(params));
     }
-  }, [selectedCategory, showCompanies, searchTerm, currentPage, filters, dispatch]); // sortOption removed from dependencies
+  }, [selectedCategory, showCompanies, searchTerm, currentPage, mobileCurrentPage, filters, dispatch, isMobile]);
+
+  // Accumulate data for mobile "Load More" mode
+  useEffect(() => {
+    if (!isMobile) return;
+    
+    const newData = showCompanies ? companies : services;
+    if (newData.length === 0) return;
+
+    if (mobileCurrentPage === 1) {
+      setAccumulatedData(newData);
+    } else {
+      setAccumulatedData(prev => {
+        // Avoid duplicates by checking IDs
+        const existingIds = new Set(prev.map(item => item.id));
+        const uniqueNewData = newData.filter((item: any) => !existingIds.has(item.id));
+        return [...prev, ...uniqueNewData];
+      });
+    }
+  }, [companies, services, showCompanies, isMobile, mobileCurrentPage]);
+
+  // Handle "Load More" - used by infinite scroll
+  const handleLoadMore = useCallback(() => {
+    setMobileCurrentPage(prev => prev + 1);
+  }, []);
+
+  // Infinite scroll with debounce for mobile (using reusable hook)
+  const currentTotalPages = showCompanies ? companiesTotalPages : servicesTotalPages;
+  const currentIsLoading = showCompanies ? isLoadingCompanies : isLoadingServices;
+  
+  const { sentinelRef } = useInfiniteScroll({
+    enabled: isMobile,
+    isLoading: currentIsLoading,
+    hasMore: mobileCurrentPage < currentTotalPages,
+    onLoadMore: handleLoadMore,
+    threshold: 200,
+    debounceMs: 150,
+  });
 
   // Apply frontend sorting to the data
   const sortData = useCallback((data: any[]) => {
@@ -110,14 +162,19 @@ export const CategoriesContent: React.FC<ICategoriesContentProps> = ({
 
   // Computed values with frontend sorting applied
   const currentData = useMemo(() => {
-    const data = showCompanies ? companies : services;
+    // On mobile, use accumulated data; on desktop, use current page data
+    const data = isMobile ? accumulatedData : (showCompanies ? companies : services);
     return sortData(data);
-  }, [showCompanies, companies, services, sortData]);
+  }, [showCompanies, companies, services, sortData, isMobile, accumulatedData]);
 
   const isLoading = useMemo(
     () => (showCompanies ? isLoadingCompanies : isLoadingServices),
     [showCompanies, isLoadingCompanies, isLoadingServices]
   );
+
+  // Only show full loading state for initial load, not for "Load More"
+  const isInitialLoading = isLoading && (isMobile ? accumulatedData.length === 0 : true);
+  const isLoadingMore = isLoading && isMobile && accumulatedData.length > 0;
 
   const error = useMemo(
     () => (showCompanies ? companiesError : servicesError),
@@ -129,7 +186,20 @@ export const CategoriesContent: React.FC<ICategoriesContentProps> = ({
     [showCompanies, companiesTotalPages, servicesTotalPages]
   );
 
-  if (isLoading) {
+  // Show full loading only for initial load (not "Load More")
+  if (isInitialLoading && !isMobile) {
+    return (
+      <Styled.LoadingContainer>
+        <div className="spinner" />
+        <Text type="body" color="white">
+          {t('common.loading')}
+        </Text>
+      </Styled.LoadingContainer>
+    );
+  }
+
+  // For mobile initial load (no accumulated data yet)
+  if (isLoading && isMobile && accumulatedData.length === 0) {
     return (
       <Styled.LoadingContainer>
         <div className="spinner" />
@@ -182,12 +252,27 @@ export const CategoriesContent: React.FC<ICategoriesContentProps> = ({
         ))}
       </Styled.CardsGrid>
 
-      {totalPages > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-        />
+      {isMobile ? (
+        // Mobile: Infinite scroll with loading indicator
+        <>
+          {/* Sentinel for infinite scroll detection */}
+          <div ref={sentinelRef} style={{ height: 1 }} />
+          
+          {isLoadingMore && (
+            <Styled.LoadMoreContainer>
+              <Spinner size="medium" />
+            </Styled.LoadMoreContainer>
+          )}
+        </>
+      ) : (
+        // Desktop: Pagination
+        totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+          />
+        )
       )}
     </>
   );

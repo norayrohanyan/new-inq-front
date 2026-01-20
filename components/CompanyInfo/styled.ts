@@ -1,5 +1,7 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 export const InfoContainer = styled.div`
   width: fit-content;
@@ -11,9 +13,31 @@ export const InfoContainer = styled.div`
   position: sticky;
   top: 100px;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     position: static;
+    padding: 1rem;
   }
+`;
+
+export const DetailsWrapper = styled.div<{ $isOpen: boolean; $isMobile: boolean }>`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    overflow: hidden;
+  }
+
+  @media (min-width: ${MOBILE_SIZE_BREAKPOINT + 1}px) {
+    max-height: none;
+    overflow: visible;
+  }
+`;
+
+export const DetailsContent = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 `;
 
 export const HeaderSection = styled.div`
@@ -106,10 +130,6 @@ export const TwoColumnSection = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   align-items: stretch;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
 `;
 
 export const PhoneAndSocialSection = styled.div`
@@ -218,4 +238,9 @@ export const MapPlaceholder = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const MobileToggleButton = styled.div`
+  width: 100%;
+  display: flex;
 `;

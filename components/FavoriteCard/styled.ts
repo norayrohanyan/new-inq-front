@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 export const CardContainer = styled.div`
   background: ${COLORS.darkBgSemi};
-  border-radius: 20px;
+  border-radius: 30px;
   padding: 16px;
   display: flex;
   gap: 16px;
@@ -14,25 +15,16 @@ export const CardContainer = styled.div`
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
   }
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
 `;
 
 export const CompanyLogoWrapper = styled.div`
   width: 120px;
   height: 120px;
-  border-radius: 12px;
+  border-radius: 24px;
   flex-shrink: 0;
   position: relative;
   overflow: hidden;
   background: ${COLORS.secondaryDark};
-
-  @media (max-width: 768px) {
-    width: 100%;
-    height: 180px;
-  }
 `;
 
 export const PlaceholderLogo = styled.div`
@@ -63,6 +55,10 @@ export const Actions = styled.div`
   display: flex;
   gap: 8px;
   flex-shrink: 0;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    flex-direction: column;
+  }
 `;
 
 export const ActionButton = styled.button<{ $active?: boolean }>`

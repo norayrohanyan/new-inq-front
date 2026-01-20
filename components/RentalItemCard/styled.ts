@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 export const Card = styled.div`
   display: flex;
@@ -9,9 +10,11 @@ export const Card = styled.div`
   padding: 1.5rem;
   position: relative;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     flex-direction: column;
     gap: 1rem;
+    padding: 1rem;
+    border-radius: 16px;
   }
 `;
 
@@ -19,9 +22,6 @@ export const ImageSection = styled.div`
   flex-shrink: 0;
   width: 170px;
 
-  @media (max-width: 968px) {
-    width: 100%;
-  }
 `;
 
 export const ImageWrapper = styled.div`
@@ -31,6 +31,10 @@ export const ImageWrapper = styled.div`
   border-radius: 16px;
   overflow: hidden;
   background: ${COLORS.darkBg};
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    border-radius: 12px;
+  }
 `;
 
 export const Image = styled.img`
@@ -84,7 +88,7 @@ export const InfoSection = styled.div`
   gap: 0.75rem;
   justify-content: center;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     gap: 0.5rem;
   }
 `;
@@ -96,6 +100,10 @@ export const InfoRow = styled.div`
 
   svg {
     flex-shrink: 0;
+  }
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    gap: 0.375rem;
   }
 `;
 
@@ -112,9 +120,11 @@ export const ActionSection = styled.div`
   gap: 1rem;
   min-width: 240px;
 
-  @media (max-width: 968px) {
-    min-width: 100%;
-    align-items: stretch;
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    align-items: start;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.75rem;
   }
 `;
 
@@ -139,6 +149,11 @@ export const ShareButton = styled.button`
   svg {
     color: ${COLORS.brandOrangeMid};
   }
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    width: 36px;
+    height: 36px;
+  }
 `;
 
 export const PriceContainer = styled.div`
@@ -147,9 +162,6 @@ export const PriceContainer = styled.div`
   align-items: flex-end;
   gap: 0.25rem;
 
-  @media (max-width: 968px) {
-    align-items: flex-start;
-  }
 `;
 
 export const OldPrice = styled.div`

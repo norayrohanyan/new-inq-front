@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 import Text from '@/components/Text';
+import Button from '@/components/Button';
 
 export const PageContainer = styled.div`
   width: 100%;
@@ -13,7 +15,7 @@ export const PageContainer = styled.div`
   gap: 60px;
   min-height: 100vh;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 20px;
     gap: 32px;
   }
@@ -31,7 +33,7 @@ export const HeroBanner = styled.div`
   position: relative;
   overflow: hidden;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     height: 250px;
     padding: 24px;
   }
@@ -121,7 +123,7 @@ export const CategoriesGrid = styled(motion.div)`
     justify-content: center;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     flex-direction: column;
     align-items: center;
   }
@@ -151,7 +153,8 @@ export const CategoryCard = styled(motion.div)<{ $bgImage?: string }>`
   border-radius: 40px;
   overflow: hidden;
   position: relative;
-  width: 256px;
+  width: 100%;
+  max-width: 256px;
   height: 400px;
   display: flex;
   flex-direction: column;
@@ -222,7 +225,7 @@ export const ExploreContent = styled.div`
 `;
 
 export const ExploreCard = styled(motion.div)`
-background: linear-gradient(157.18deg, #F6572F 22.32%, #FE7F3B 47.72%, #FEB245 73.63%);
+  background: linear-gradient(157.18deg, #F6572F 22.32%, #FE7F3B 47.72%, #FEB245 73.63%);
   border-radius: 40px;
   padding: 24px;
   display: flex;
@@ -325,6 +328,11 @@ background: linear-gradient(157.18deg, #F6572F 22.32%, #FE7F3B 47.72%, #FEB245 7
   }
 `;
 
+export const CardButton = styled(Button)`
+  width: 100%;
+  padding: 8px 0;
+`;
+
 export const PartnerSection = styled.div`
   text-align: center;
   display: flex;
@@ -349,6 +357,10 @@ export const DiscoverTitle = styled(Text)`
   line-height: 110%;
   letter-spacing: 0;
   text-align: center;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    font-size: 24px;
+  }
 `;
 
 export const DiscoverSubtitle = styled(Text)`
@@ -357,6 +369,10 @@ export const DiscoverSubtitle = styled(Text)`
   line-height: 110%;
   letter-spacing: 0;
   text-align: center;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    font-size: 24px;
+  }
 `;
 
 // Error Page Styles
@@ -371,7 +387,7 @@ export const ErrorPageContainer = styled.div`
   min-height: calc(100vh - 400px);
   background: ${COLORS.darkBg};
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 60px 20px;
     min-height: calc(100vh - 300px);
   }
@@ -384,7 +400,7 @@ export const ErrorContent = styled.div`
   gap: 32px;
   text-align: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     gap: 24px;
   }
 `;
@@ -399,7 +415,7 @@ export const ErrorCode = styled(Text)`
   -webkit-text-fill-color: transparent;
   background-clip: text;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     font-size: 120px;
   }
 `;
@@ -411,7 +427,7 @@ export const ErrorTitle = styled(Text)`
   text-transform: uppercase;
   letter-spacing: 2px;
   color: #999999;
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     font-size: 32px;
   }
 `;
@@ -421,7 +437,7 @@ export const ErrorDescription = styled(Text)`
   line-height: 61px;
   max-width: 1200px;
   color: #F7F7F7;
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     font-size: 16px;
   }
 `;
