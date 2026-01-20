@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT, TABLET_SIZE_BREAKPOINT } from '@/consts';
 
 export const FormContainer = styled.form`
   display: flex;
@@ -10,11 +11,12 @@ export const FormContainer = styled.form`
   padding: 1rem;
   top: 100px;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${TABLET_SIZE_BREAKPOINT}px) {
     position: static;
+    order: 2;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 1.5rem;
   }
 `;
@@ -25,6 +27,10 @@ export const HostSection = styled.div`
   gap: 1rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid ${COLORS.borderColor};
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    order: 1;
+  }
 `;
 
 export const HostAvatar = styled.div`
@@ -184,12 +190,6 @@ export const TotalSection = styled.div`
   align-items: center;
   padding: 1.5rem 0 0 0;
   margin-top: 1rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
 `;
 
 export const DateInputButton = styled.button`
@@ -237,10 +237,6 @@ export const CalendarPopover = styled.div`
   overflow: visible;
   width: max-content;
   min-width: 350px;
-  
-  @media (max-width: 768px) {
-    min-width: 300px;
-  }
 `;
 
 export const DateFieldsRow = styled.div`

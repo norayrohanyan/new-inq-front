@@ -64,59 +64,65 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
   return (
     <Styled.Card>
       {/* Image Section - Simple, no carousel */}
-      <Styled.ImageSection>
-        <Styled.ImageWrapper>
-          <Styled.Image src={imageUrls[0] || '/placeholder.png'} alt={name} />
-        </Styled.ImageWrapper>
-      </Styled.ImageSection>
+      <div style={{ display: 'flex', gap: '1rem', flex: 1 }}>
 
-      {/* Info Section */}
-      <Styled.InfoSection>
-        <Text type="h6" color="white" fontWeight="600">
-          {name}
-        </Text>
+        <Styled.ImageSection>
+          <Styled.ImageWrapper>
+            <Styled.Image src={imageUrls[0] || '/placeholder.png'} alt={name} />
+          </Styled.ImageWrapper>
+        </Styled.ImageSection>
 
-        <Styled.InfoRow>
-          <StarIcon width={16} height={16} />
-          <Text type="body" color="white">
-            {rating}
+        {/* Info Section */}
+        <Styled.InfoSection>
+          <Text type="h6" color="white" fontWeight="600">
+            {name}
           </Text>
-        </Styled.InfoRow>
 
-        <Styled.InfoRow>
-          <LocationIcon width={16} height={16} />
-          <Text type="caption" color="white">
-            {address}
-          </Text>
-        </Styled.InfoRow>
+          <Styled.InfoRow>
+            <StarIcon width={16} height={16} />
+            <Text type="body" color="white">
+              {rating}
+            </Text>
+          </Styled.InfoRow>
 
-        {isApartment && (
-          <>
-            {totalSquare && (
-              <Styled.InfoRow>
-                <Styled.Icon>📐</Styled.Icon>
-                <Text type="body" color="white">
-                  {totalSquare} m²
-                </Text>
-              </Styled.InfoRow>
-            )}
+          <Styled.InfoRow>
+            <LocationIcon width={16} height={16} />
+            <Text type="caption" color="white">
+              {address}
+            </Text>
+          </Styled.InfoRow>
 
-            {bedrooms && (
-              <Styled.InfoRow>
-                <Styled.Icon>🛏️</Styled.Icon>
-                <Text type="body" color="white">
-                  {bedrooms} {bedrooms === 1 ? 'bedroom' : 'bedrooms'}
-                </Text>
-              </Styled.InfoRow>
-            )}
-          </>
-        )}
-      </Styled.InfoSection>
+          {isApartment && (
+            <>
+              {totalSquare && (
+                <Styled.InfoRow>
+                  <Styled.Icon>📐</Styled.Icon>
+                  <Text type="body" color="white">
+                    {totalSquare} m²
+                  </Text>
+                </Styled.InfoRow>
+              )}
+
+              {bedrooms && (
+                <Styled.InfoRow>
+                  <Styled.Icon>🛏️</Styled.Icon>
+                  <Text type="body" color="white">
+                    {bedrooms} {bedrooms === 1 ? 'bedroom' : 'bedrooms'}
+                  </Text>
+                </Styled.InfoRow>
+              )}
+            </>
+          )}
+        </Styled.InfoSection>
+      </div>
 
       {/* Price and Action Section */}
       <Styled.ActionSection>
-        <ShareButton size="medium" url={shareUrl} />
+        {/* <Styled.ShareButtonWrapper> */}
+          <ShareButton size="medium" url={shareUrl} />
+        {/* </Styled.ShareButtonWrapper> */}
 
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         <Styled.PriceContainer>
           {hasDiscount && (
             <Styled.OldPrice>
@@ -135,6 +141,7 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
             More information »
           </Text>
         </Styled.ActionButton>
+      </div>
       </Styled.ActionSection>
     </Styled.Card>
   );

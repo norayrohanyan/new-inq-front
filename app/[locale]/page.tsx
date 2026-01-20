@@ -95,9 +95,9 @@ export default function Home() {
             <Text type="caption" color="white">
               {t('home.categories.beautySalon.description')}
             </Text>
-            <Button variant="primary" size="small" rounded>
-              {t('home.categories.searchNearMe')}
-            </Button>
+            <Styled.CardButton variant="primary" size="small" rounded>
+              {t('home.categories.searchNearMe')} {/* //TODO: Add arrow right icon */}
+            </Styled.CardButton>
           </Styled.CategoryContent>
         </Styled.CategoryCard>
 
@@ -113,9 +113,9 @@ export default function Home() {
             <Text type="caption" color="white">
               {t('home.categories.apartments.description')}
             </Text>
-            <Button variant="primary" size="small" rounded>
-              {t('home.categories.searchNearMe')}
-            </Button>
+            <Styled.CardButton variant="primary" size="small" rounded>
+              {t('home.categories.searchNearMe')} {/* //TODO: Add arrow right icon */}
+            </Styled.CardButton>
           </Styled.CategoryContent>
         </Styled.CategoryCard>
 
@@ -131,9 +131,9 @@ export default function Home() {
             <Text type="caption" color="white">
               {t('home.categories.carRental.description')}
             </Text>
-            <Button variant="primary" size="small" rounded>
-              {t('home.categories.searchNearMe')}
-            </Button>
+            <Styled.CardButton variant="primary" size="small" rounded>
+              {t('home.categories.searchNearMe')} {/* //TODO: Add arrow right icon */}
+            </Styled.CardButton>
           </Styled.CategoryContent>
         </Styled.CategoryCard>
 

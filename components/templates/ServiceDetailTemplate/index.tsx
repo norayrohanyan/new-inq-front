@@ -174,9 +174,9 @@ export default function ServiceDetailTemplate({
             <CompanyTabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab}>
               {activeTab === 'services' && data.services && (
                 <Masonry 
-                  columnsCount={2} 
+                  columnsCount={1} 
                   gutter="0.5rem"
-                  columnsCountBreakPoints={{ 350: 1, 750: 2 }}
+                  columnsCountBreakPoints={{ 0: 1, 900: 2 }}
                 >
                   {data.services.map((service) => (
                     <ServiceCard

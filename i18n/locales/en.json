@@ -16,11 +16,14 @@
     "ok": "OK",
     "search": "Search",
     "returnHome": "Return Home",
-    "linkCopied": "Link copied!"
+    "linkCopied": "Link copied!",
+    "loadMore": "Load more",
+    "info": "Info",
+    "close": "Close"
   },
   "home": {
     "categories": {
-      "searchNearMe": "Search near me →",
+      "searchNearMe": "Search near me",
       "beautySalon": {
         "title": "BEAUTY SALONS",
         "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
@@ -145,6 +148,7 @@
   },
   "filters": {
     "filterAndSort": "Filter & Sort",
+    "filter": "Filter",
     "sortingOptions": "Sorting options",
     "recommended": "Recommended",
     "newest": "Newest",
@@ -156,6 +160,9 @@
   },
   "header": {
     "home": "Home",
+    "booking": "Booking",
+    "nearMe": "Near Me",
+    "aboutUs": "About Us",
     "categories": "Categories",
     "language": "Language"
   },
@@ -317,4 +324,3 @@
     "returnHome": "Return"
   }
 }
-

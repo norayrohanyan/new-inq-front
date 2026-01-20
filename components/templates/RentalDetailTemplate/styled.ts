@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 export const PageContainer = styled.div`
   max-width: 1600px;
@@ -19,9 +20,10 @@ export const HeaderSection = styled.div`
   margin-bottom: 2rem;
   gap: 1rem;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1rem;
   }
 `;
 
@@ -29,6 +31,11 @@ export const TitleSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    flex: 1;
+    gap: 0.25rem;
+  }
 `;
 
 export const RatingRow = styled.div`
@@ -45,6 +52,10 @@ export const ActionButtons = styled.div`
   display: flex;
   gap: 0.75rem;
   align-items: center;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    gap: 0.5rem;
+  }
 `;
 
 export const ActionButton = styled.button`
@@ -75,7 +86,7 @@ export const ContentSection = styled.div`
   margin-bottom: 3rem;
 
   @media (max-width: 1200px) {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 `;
 
@@ -84,6 +95,11 @@ export const LeftSection = styled.div`
   flex: 1;
   flex-direction: column;
   gap: 2rem;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    order: 2;
+    gap: 1.5rem;
+  }
 `;
 
 export const RightSection = styled.div`
@@ -98,6 +114,11 @@ export const RightSection = styled.div`
 
   @media (max-width: 1200px) {
     position: static;
+    max-width: 100%;
+  }
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    order: 3;
   }
 `;
 
@@ -108,8 +129,9 @@ export const MapContainer = styled.div`
   overflow: hidden;
   border: 1px solid ${COLORS.borderColor};
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     height: 250px;
+    order: 1;
   }
 `;
 
@@ -120,7 +142,7 @@ export const AboutSection = styled.div`
   padding: 2rem;
   border-radius: 24px;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 1.5rem;
   }
 `;
@@ -142,14 +164,16 @@ export const SpecificationItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 2rem;
   padding: 1.25rem 0;
   border-bottom: 1px solid ${COLORS.borderColor};
+  text-align: right;
 
   &:last-child {
     border-bottom: none;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 1rem 0;
   }
 `;

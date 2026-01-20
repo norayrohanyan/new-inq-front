@@ -1,45 +1,49 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
+import { useEventListener } from '@/hooks/useEventListener';
 import * as Styled from './styled';
 
-interface Option {
+export interface DropdownOption {
   value: string;
   label: string;
 }
 
-interface CustomDropdownProps {
-  options: Option[];
+export interface CustomDropdownProps {
+  options: DropdownOption[];
   value: string;
   onChange: (value: string) => void;
-  placeholder: string;
+  placeholder?: string;
   required?: boolean;
   error?: boolean;
+  /** Visual variant of the dropdown */
+  variant?: 'default' | 'filled';
 }
 
 export default function CustomDropdown({
   options,
   value,
   onChange,
-  placeholder,
+  placeholder = 'Select...',
   required = false,
   error = false,
+  variant = 'default',
 }: CustomDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const selectedOption = options.find((opt) => opt.value === value);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+  // Close dropdown when clicking outside
+  useEventListener(
+    'mousedown',
+    (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    },
+    isOpen ? document : null
+  );
 
   const handleSelect = (optionValue: string) => {
     onChange(optionValue);
@@ -53,6 +57,7 @@ export default function CustomDropdown({
         $isOpen={isOpen}
         $hasError={error}
         $hasValue={!!value}
+        $variant={variant}
       >
         {selectedOption ? selectedOption.label : placeholder}
         <Styled.DropdownArrow $isOpen={isOpen}>
@@ -67,19 +72,17 @@ export default function CustomDropdown({
         </Styled.DropdownArrow>
       </Styled.DropdownButton>
 
-      {isOpen && (
-        <Styled.DropdownList>
-          {options.map((option) => (
-            <Styled.DropdownOption
-              key={option.value}
-              onClick={() => handleSelect(option.value)}
-              $isSelected={value === option.value}
-            >
-              {option.label}
-            </Styled.DropdownOption>
-          ))}
-        </Styled.DropdownList>
-      )}
+      <Styled.DropdownList $isOpen={isOpen} $variant={variant}>
+        {options.map((option) => (
+          <Styled.DropdownOption
+            key={option.value}
+            onClick={() => handleSelect(option.value)}
+            $isSelected={value === option.value}
+          >
+            {option.label}
+          </Styled.DropdownOption>
+        ))}
+      </Styled.DropdownList>
     </Styled.DropdownContainer>
   );
 }

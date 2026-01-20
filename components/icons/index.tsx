@@ -5,6 +5,7 @@ export { SmsIcon } from './sms';
 export { BookmarkIcon } from './bookmark';
 export { CheckedIcon } from './checked';
 export { ClockIcon } from './clock';
+export { CloseIcon } from './close';
 export { ClosedIcon } from './closed';
 export { FacebookIcon } from './facebook';
 export { FilterIcon } from './filter';
