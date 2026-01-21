@@ -23,19 +23,21 @@ export const useResponsive = (size: TSize): boolean => {
   );
 
   const checkRangeMatch = useCallback((): boolean => {
+    if (!isClient) return false; // Always return false on server to prevent hydration mismatch
     const width = getWidth();
     return width >= min && width <= max;
-  }, [getWidth, min, max]);
+  }, [getWidth, min, max, isClient]);
 
-  const [isMatching, setMatchingState] = useState<boolean>(checkRangeMatch());
+  const [isMatching, setMatchingState] = useState<boolean>(false);
 
   const handleResize = useCallback((): void => {
     setMatchingState(checkRangeMatch());
-  }, [checkRangeMatch, setMatchingState]);
+  }, [checkRangeMatch]);
 
   useEffect(() => {
+    // Set correct state after mount to match client dimensions
     setMatchingState(checkRangeMatch());
-  }, [size, checkRangeMatch]);
+  }, [checkRangeMatch]);
 
   useEffect(() => {
     if (!isClient) {
