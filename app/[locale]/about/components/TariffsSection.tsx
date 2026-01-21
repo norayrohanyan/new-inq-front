@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 
 import Text from '@/components/Text';
 import * as Styled from '../styled';
@@ -8,6 +8,7 @@ import { MonthIcon } from '@/components/icons/month';
 import { BoxIcon } from '@/components/icons/box';
 import TabButton from '@/app/[locale]/about/components/TabButton';
 import PricingCard from '@/app/[locale]/about/components/PricingCard';
+import { useIsMobile } from '@/hooks';
 
 type TariffPlan = 'monthly' | '3months' | '6months' | '1year';
 
@@ -17,6 +18,9 @@ interface TariffsSectionProps {
 
 export default function TariffsSection({ onTariffSelect }: TariffsSectionProps) {
   const [activePlan, setActivePlan] = useState<TariffPlan>('1year');
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const isMobile = useIsMobile();
 
   const _pricingData = {
     monthly: [
@@ -165,33 +169,68 @@ export default function TariffsSection({ onTariffSelect }: TariffsSectionProps) 
     return _pricingData;
   }, [_pricingData])
 
+  const handleTabClick = (plan: TariffPlan) => {
+    setActivePlan(plan);
+
+    if (!isMobile) {
+      return;
+    }
+
+    // Scroll the selected tab into view
+    const tabElement = tabRefs.current[plan];
+    const container = tabsContainerRef.current;
+
+    if (tabElement && container) {
+      const containerRect = container.getBoundingClientRect();
+      const tabRect = tabElement.getBoundingClientRect();
+
+      const scrollLeft = container.scrollLeft;
+      const tabLeft = tabRect.left - containerRect.left + scrollLeft;
+      const tabCenter = tabLeft + tabRect.width / 2;
+      const containerCenter = container.offsetWidth / 2;
+
+      container.scrollTo({
+        left: tabCenter - containerCenter,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <Styled.TariffsSection>
       <Text type="h2" color="white" align="start" fontWeight="500">
         Tariffs
       </Text>
 
-      <Styled.TabsContainer>
-        <TabButton
-          label="Monthly"
-          active={activePlan === 'monthly'}
-          onClick={() => setActivePlan('monthly')}
-        />
-        <TabButton
-          label="3 Moths"
-          active={activePlan === '3months'}
-          onClick={() => setActivePlan('3months')}
-        />
-        <TabButton
-          label="6 Moths"
-          active={activePlan === '6months'}
-          onClick={() => setActivePlan('6months')}
-        />
-        <TabButton
-          label="1 Year"
-          active={activePlan === '1year'}
-          onClick={() => setActivePlan('1year')}
-        />
+      <Styled.TabsContainer ref={tabsContainerRef}>
+        <div ref={(el) => { tabRefs.current['monthly'] = el; }}>
+          <TabButton
+            label="Monthly"
+            active={activePlan === 'monthly'}
+            onClick={() => handleTabClick('monthly')}
+          />
+        </div>
+        <div ref={(el) => { tabRefs.current['3months'] = el; }}>
+          <TabButton
+            label="3 Moths"
+            active={activePlan === '3months'}
+            onClick={() => handleTabClick('3months')}
+          />
+        </div>
+        <div ref={(el) => { tabRefs.current['6months'] = el; }}>
+          <TabButton
+            label="6 Moths"
+            active={activePlan === '6months'}
+            onClick={() => handleTabClick('6months')}
+          />
+        </div>
+        <div ref={(el) => { tabRefs.current['1year'] = el; }}>
+          <TabButton
+            label="1 Year"
+            active={activePlan === '1year'}
+            onClick={() => handleTabClick('1year')}
+          />
+        </div>
       </Styled.TabsContainer>
 
       <Styled.PricingCardsGrid>

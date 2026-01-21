@@ -1,5 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 interface BannerContainerProps {
   height: string;
@@ -14,7 +15,7 @@ export const BannerContainer = styled.div<BannerContainerProps>`
   overflow: hidden;
   position: relative;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     height: ${props => props.mobileHeight};
   }
 `;
@@ -78,7 +79,7 @@ export const NavButton = styled.div<{ $position: 'left' | 'right' }>`
     transform: translateY(-50%) scale(0.95);
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     width: 40px;
     height: 40px;
     ${props => props.$position}: 10px;
@@ -99,7 +100,7 @@ export const DotsContainer = styled.div`
   gap: 8px;
   z-index: 10;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     bottom: 12px;
     gap: 6px;
   }
@@ -119,7 +120,7 @@ export const Dot = styled.button<{ $active: boolean }>`
     background: ${props => props.$active ? 'white' : 'rgba(255, 255, 255, 0.8)'};
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     width: ${props => props.$active ? '20px' : '8px'};
     height: 8px;
   }
@@ -134,26 +135,10 @@ export const PlaceholderContent = styled.div`
   padding: 60px;
   gap: 40px;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 24px;
-    flex-direction: column;
     justify-content: center;
     gap: 20px;
-  }
-`;
-
-export const PlaceholderText = styled.h1`
-  color: white;
-  font-size: 72px;
-  font-weight: 900;
-  text-align: left;
-  margin: 0;
-  line-height: 1.1;
-  flex: 1;
-
-  @media (max-width: 768px) {
-    font-size: 32px;
-    text-align: center;
   }
 `;
 
@@ -165,7 +150,7 @@ export const SkeletonContainer = styled.div`
   flex: 1;
   max-width: 500px;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     max-width: 100%;
     width: 100%;
     gap: 12px;
@@ -184,8 +169,8 @@ export const SkeletonLine = styled.div<{ width: string }>`
   background-size: 1000px 100%;
   border-radius: 20px;
 
-  @media (max-width: 768px) {
-    height: 30px;
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    height: 24px;
   }
 `;
 
@@ -202,7 +187,7 @@ export const SkeletonCircle = styled.div`
   top: 50%;
   transform: translateY(-50%);
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     width: 60px;
     height: 60px;
     right: 24px;

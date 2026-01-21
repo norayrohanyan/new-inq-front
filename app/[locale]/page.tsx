@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import Text from '@/components/Text';
-import Button from '@/components/Button';
 import AdBanner from '@/components/AdBanner';
 import * as Styled from './styled';
 

@@ -3,101 +3,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { getAdsThunk, adsSelectors } from '@/store';
-import { IAd } from '@/store/types/ads';
 import { ArrowIcon } from '@/components/icons/arrow';
 import * as Styled from './styled';
-
-// Mock data for testing - Remove this when real API is ready
-const MOCK_ADS: Record<string, IAd[]> = {
-  home_page: [
-    {
-      id: 1,
-      company_id: 101,
-      category: 'beauty_salon',
-      url: 'https://example.com/beauty-salon',
-      desktop_image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&h=300&fit=crop',
-      mobile_image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=250&fit=crop',
-    },
-    {
-      id: 2,
-      company_id: 102,
-      category: 'car_rental',
-      url: 'https://example.com/car-rental',
-      desktop_image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1200&h=300&fit=crop',
-      mobile_image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&h=250&fit=crop',
-    },
-    {
-      id: 3,
-      company_id: 103,
-      category: 'apartments',
-      url: 'https://example.com/apartments',
-      desktop_image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=300&fit=crop',
-      mobile_image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=250&fit=crop',
-    },{
-      id: 4,
-      company_id: 103,
-      category: 'apartments',
-      url: 'https://example.com/apartments',
-      desktop_image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=300&fit=crop',
-      mobile_image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=250&fit=crop',
-    },{
-      id: 5,
-      company_id: 103,
-      category: 'apartments',
-      url: 'https://example.com/apartments',
-      desktop_image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=300&fit=crop',
-      mobile_image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=250&fit=crop',
-    },{
-      id: 6,
-      company_id: 103,
-      category: 'apartments',
-      url: 'https://example.com/apartments',
-      desktop_image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=300&fit=crop',
-      mobile_image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=250&fit=crop',
-    },{
-      id: 7,
-      company_id: 103,
-      category: 'apartments',
-      url: 'https://example.com/apartments',
-      desktop_image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&h=300&fit=crop',
-      mobile_image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=250&fit=crop',
-    },
-    
-  ],
-  categories_page: [
-
-  ],
-  company_page: [
-    {
-      id: 5,
-      company_id: 105,
-      category: 'car_rental',
-      url: 'https://example.com/featured-company',
-      desktop_image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&h=200&fit=crop',
-      mobile_image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&h=150&fit=crop',
-    },
-  ],
-  detail_page: [
-    {
-      id: 6,
-      company_id: 106,
-      category: 'beauty_salon',
-      url: 'https://example.com/book-now',
-      desktop_image: 'https://images.unsplash.com/photo-1519415943484-9fa1873496d4?w=1200&h=300&fit=crop',
-      mobile_image: 'https://images.unsplash.com/photo-1519415943484-9fa1873496d4?w=600&h=200&fit=crop',
-    },
-    {
-      id: 7,
-      company_id: 107,
-      category: 'beauty_salon',
-      url: 'https://example.com/new-service',
-      desktop_image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=1200&h=300&fit=crop',
-      mobile_image: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&h=200&fit=crop',
-    },
-  ],
-};
-
-const USE_MOCK_DATA = true; // Set to false when real API is ready
+import Text from '@/components/Text';
+import { useIsMobile } from '@/hooks';
 
 interface AdBannerProps {
   pageName: string;
@@ -113,34 +22,17 @@ export const AdBanner: React.FC<AdBannerProps> = ({
   autoScrollInterval = 5000,
 }) => {
   const dispatch = useAppDispatch();
-  const adsFromStore = useAppSelector(adsSelectors.getAdsByPage(pageName));
+  const ads = useAppSelector(adsSelectors.getAdsByPage(pageName));
   const isLoading = useAppSelector(adsSelectors.getIsLoadingByPage(pageName));
-  const [isMobile, setIsMobile] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(1); // Start at 1 because we'll add a clone at the beginning
   const [isHovered, setIsHovered] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Use mock data or real data from store
-  const ads = USE_MOCK_DATA ? (MOCK_ADS[pageName] || []) : adsFromStore;
-
+  const isMobile = useIsMobile();
   // Fetch ads on mount (only if not using mock data)
   useEffect(() => {
-    if (!USE_MOCK_DATA) {
-      dispatch(getAdsThunk(pageName));
-    }
+    dispatch(getAdsThunk(pageName));
   }, [dispatch, pageName]);
-
-  // Detect mobile TODO add mobile hook
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   const handleDotClick = useCallback((index: number) => {
     setCurrentIndex(index + 1); // +1 because of the cloned first slide
@@ -206,16 +98,18 @@ export const AdBanner: React.FC<AdBannerProps> = ({
     return (
       <Styled.BannerContainer height={height} mobileHeight={mobileHeight}>
         <Styled.PlaceholderContent>
-          <Styled.PlaceholderText>PLACE YOUR<br />AD HERE</Styled.PlaceholderText>
+          <Text type={isMobile ? 'h4' : 'h1'} color="white">PLACE YOUR<br />AD HERE</Text>
           <Styled.SkeletonContainer>
             <Styled.SkeletonLine width="100%" />
             <Styled.SkeletonLine width="75%" />
             <Styled.SkeletonLine width="80%" />
             <Styled.SkeletonLine width="85%" />
           </Styled.SkeletonContainer>
-          <Styled.SkeletonCircle>
-            <ArrowIcon width="40" height="40" fill="#FFFFFF99" />
-          </Styled.SkeletonCircle>
+          {!isMobile && <>
+            <Styled.SkeletonCircle>
+              <ArrowIcon width="40" height="40" fill="#FFFFFF99" />
+            </Styled.SkeletonCircle>
+          </>}
         </Styled.PlaceholderContent>
       </Styled.BannerContainer>
     );

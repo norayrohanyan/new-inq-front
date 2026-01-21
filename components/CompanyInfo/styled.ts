@@ -15,7 +15,7 @@ export const InfoContainer = styled.div`
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     position: static;
-    padding: 1rem;
+    padding: 0;
   }
 `;
 
@@ -130,12 +130,20 @@ export const TwoColumnSection = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   align-items: stretch;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    gap: 0.75rem;
+  }
 `;
 
 export const PhoneAndSocialSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    gap: 0.75rem;
+  }
 `;
 
 export const PhoneSection = styled.div`

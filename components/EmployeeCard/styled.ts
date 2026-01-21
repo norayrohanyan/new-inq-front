@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 export const CardContainer = styled.div`
   display: flex;
@@ -36,9 +37,9 @@ export const ImageWrapper = styled.div`
   }
 
   @media (max-width: 768px) {
-    width: 64px;
-    height: 64px;
-    min-width: 64px;
+    width: 86px;
+    height: 86px;
+    min-width: 86px;
   }
 `;
 
@@ -57,6 +58,10 @@ export const InfoWrapper = styled.div`
   gap: 32px;
   flex: 1;
   min-width: 0;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    gap: 12px;
+  }
 `;
 
 export const NameProfessionWrapper = styled.div`
