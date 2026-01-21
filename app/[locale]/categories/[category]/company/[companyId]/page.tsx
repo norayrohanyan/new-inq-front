@@ -11,6 +11,7 @@ import {
   companyDetailsSelectors,
 } from '@/store';
 import Text from '@/components/Text';
+import AdBanner from '@/components/AdBanner';
 import RentalItemCard from '@/components/RentalItemCard';
 import CompanyInfo from '@/components/CompanyInfo';
 import CompanyTabs from '@/components/CompanyTabs';
@@ -100,18 +101,7 @@ export default function CompanyInventoryPage() {
     <ParentStyled.PageContainer>
       {/* Company Header */}
       <ParentStyled.BannerSection>
-        <ParentStyled.Banner>
-          <Styled.BannerContent>
-            <Text type="h1" color="white">
-              {companyDetails?.name || 'Company'}
-            </Text>
-            <Styled.BannerSubtitle>
-              <Text type="body" color="white">
-                {getCategoryLabel()}
-              </Text>
-            </Styled.BannerSubtitle>
-          </Styled.BannerContent>
-        </ParentStyled.Banner>
+        <AdBanner pageName="company_page" height="200px" mobileHeight="150px" />
       </ParentStyled.BannerSection>
 
       {/* Main Content with 2 columns */}

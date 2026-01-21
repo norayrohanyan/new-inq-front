@@ -16,6 +16,7 @@ import {
 } from '@/types/user';
 import { ICompany } from '@/store/types/companies';
 import { IService } from '@/store/types/services';
+import { IAd } from '@/store/types/ads';
 import { clearAuthCookies, setAuthCookies, getCookie } from '@/utils/cookies';
 import { getStoreInstance } from './apiWithStore';
 import { authActions } from '@/store';
@@ -829,6 +830,20 @@ export const apiService = {
         `/api/beauty_salon/booking`,
         booking
       );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
+   * Get advertisements for a specific page
+   */
+  async getAds(pageName: string): Promise<IApiResponse<IAd[]>> {
+    try {
+      const { data } = await api.get<IApiResponse<IAd[]>>('/api/ads', {
+        params: { page_name: pageName },
+      });
       return data;
     } catch (error) {
       return handleError(error);

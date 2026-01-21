@@ -11,6 +11,11 @@ export const PageContainer = styled.div`
 export const BannerSection = styled.div`
   width: 100%;
   margin-bottom: 2rem;
+  padding: 0 4rem 4rem;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    padding: 0 1rem 1rem;
+  }
 `;
 
 export const BannerImage = styled.img`

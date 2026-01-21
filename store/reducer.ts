@@ -8,6 +8,7 @@ import { servicesSlice } from './features/services';
 import { companyDetailsSlice } from './features/companyDetails';
 import { errorsSlice } from './features/errors';
 import { filtersSlice } from './features/filters';
+import adsReducer from './features/ads/slice';
 
 const combinedReducers = combineReducers({
   app: appSlice.reducer,
@@ -19,6 +20,7 @@ const combinedReducers = combineReducers({
   companyDetails: companyDetailsSlice.reducer,
   errors: errorsSlice.reducer,
   filters: filtersSlice.reducer,
+  ads: adsReducer,
 });
 
 export default combinedReducers;

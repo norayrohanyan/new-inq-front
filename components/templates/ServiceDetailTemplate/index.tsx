@@ -3,6 +3,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import Masonry from 'react-responsive-masonry';
+import AdBanner from '@/components/AdBanner';
 import CompanyInfo from '@/components/CompanyInfo';
 import CompanyTabs from '@/components/CompanyTabs';
 import ServiceCard from '@/components/ServiceCard';
@@ -162,18 +163,7 @@ export default function ServiceDetailTemplate({
     <Styled.PageContainer>
       {/* Banner Section */}
       <Styled.BannerSection>
-        {data.bannerUrls?.desktopImage ? (
-          <Styled.BannerImage
-            src={data.bannerUrls.desktopImage}
-            alt={data.name}
-          />
-        ) : (
-          <Styled.BannerPlaceholder>
-            <Text type="h3" color="secondarySemiLight">
-              {data.name}
-            </Text>
-          </Styled.BannerPlaceholder>
-        )}
+        <AdBanner pageName="detail_page" height="300px" mobileHeight="200px" />
       </Styled.BannerSection>
 
       {/* Main Content - Two Column Layout */}

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import Text from '@/components/Text';
+import AdBanner from '@/components/AdBanner';
 import * as Styled from './styled';
 
 export default function Home() {
@@ -49,23 +50,7 @@ export default function Home() {
   return (
     <Styled.PageContainer>
       {/* Hero Banner Section */}
-      <Styled.HeroBanner>
-        <Styled.HeroContent>
-          <Styled.HeroTitle type="h1" color="white">
-            PLACE YOUR AD HERE
-          </Styled.HeroTitle>
-          <Styled.HeroPlaceholders>
-            <Styled.PlaceholderBox />
-            <Styled.PlaceholderBox />
-            <Styled.PlaceholderArrow />
-          </Styled.HeroPlaceholders>
-        </Styled.HeroContent>
-        <Styled.SliderDots>
-          <Styled.Dot $active />
-          <Styled.Dot />
-          <Styled.Dot />
-        </Styled.SliderDots>
-      </Styled.HeroBanner>
+      <AdBanner pageName="home_page" height="300px" mobileHeight="250px" />
 
       {/* Discover Categories Section */}
       <Styled.DiscoverSection
