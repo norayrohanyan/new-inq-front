@@ -94,37 +94,6 @@ export const SearchWrapper = styled.div`
   }
 `;
 
-export const SearchIcon = styled.span`
-  position: absolute;
-  left: 1.25rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.1rem;
-  color: ${COLORS.brandOrangeMid};
-`;
-
-export const SearchInput = styled.input`
-  width: 100%;
-  padding: 0.75rem 1.25rem 0.75rem 3.25rem;
-  border-radius: 50px;
-  border: 1px solid ${COLORS.borderColor};
-  background: transparent;
-  color: ${COLORS.white};
-  font-size: 0.95rem;
-
-  &::placeholder {
-    color: ${COLORS.secondarySemiLight};
-  }
-
-  &:focus {
-    outline: none;
-    border-color: ${COLORS.brandOrangeMid};
-    background: rgba(255, 255, 255, 0.02);
-  }
-
-  transition: all 0.3s ease;
-`;
-
 export const RadiusControls = styled.div`
   display: flex;
   align-items: center;
@@ -258,6 +227,39 @@ export const MapContainer = styled.div`
       color: ${COLORS.brandOrangeMid} !important;
     }
   }
+
+  .leaflet-control-locate {
+    border: none !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-top: 10px !important;
+  }
+
+  .leaflet-control-locate a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: ${COLORS.darkBgSemi} !important;
+    color: ${COLORS.white} !important;
+    border: none !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 12px !important;
+
+    &:hover {
+      background: ${COLORS.darkBg} !important;
+      color: ${COLORS.brandOrangeMid} !important;
+
+      .leaflet-control-locate-location-arrow {
+        background-color: ${COLORS.brandOrangeMid} !important;
+      }
+    }
+  }
+
+  .leaflet-control-locate-location-arrow {
+    background-color: ${COLORS.white} !important;
+  }
 `;
 
 export const MapOverlay = styled.div`
@@ -272,7 +274,6 @@ export const MapOverlay = styled.div`
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
-  z-index: 1000;
   border-radius: 24px;
 `;
 

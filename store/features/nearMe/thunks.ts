@@ -10,11 +10,21 @@ export const getCompaniesNearMeThunk = createAsyncThunk<
   try {
     const response = await apiService.getCompaniesNearMe(params);
     if (response.success && response.data) {
-      return response.data;
+      // Transform the data to ensure latitude and longitude are numbers
+      const transformedData = response.data.map((company: any) => ({
+        ...company,
+        latitude: typeof company.latitude === 'string'
+          ? parseFloat(company.latitude)
+          : company.latitude,
+        longitude: typeof company.longitude === 'string'
+          ? parseFloat(company.longitude)
+          : company.longitude,
+      }));
+      return transformedData;
     }
     return rejectWithValue(
-      typeof response.error === 'string' 
-        ? response.error 
+      typeof response.error === 'string'
+        ? response.error
         : 'Failed to fetch nearby companies'
     );
   } catch (error) {

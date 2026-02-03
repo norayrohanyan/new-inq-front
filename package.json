@@ -15,6 +15,7 @@
     "axios": "^1.12.2",
     "framer-motion": "^12.23.24",
     "leaflet": "^1.9.4",
+    "leaflet.locatecontrol": "^0.87.0",
     "next": "15.5.9",
     "next-intl": "^4.3.12",
     "prop-types": "^15.8.1",

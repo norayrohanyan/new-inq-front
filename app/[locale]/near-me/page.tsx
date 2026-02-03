@@ -58,28 +58,21 @@ export default function NearMePage() {
       category: selectedCategory,
     };
 
+    // Temporarily disabled location filtering to show all companies
     if (userLocation) {
       params.latitude = userLocation.latitude;
       params.longitude = userLocation.longitude;
       params.radius = radius;
     }
 
+    console.log('🔍 Fetching companies with params:', params);
     dispatch(getCompaniesNearMeThunk(params));
   }, [dispatch, selectedCategory, userLocation, radius]);
 
-  // Check for geolocation permission on mount
+  // Automatically get user location on mount
   useEffect(() => {
-    if (navigator.permissions) {
-      navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-        dispatch(nearMeActions.setLocationPermission(result.state as 'granted' | 'denied' | 'prompt'));
-        
-        // If already granted, get location automatically
-        if (result.state === 'granted') {
-          handleGetLocation();
-        }
-      });
-    }
-  }, [dispatch]);
+    handleGetLocation();
+  }, []);
 
   // Handlers
   const handleCategoryChange = useCallback((slug: string) => {
@@ -165,9 +158,6 @@ export default function NearMePage() {
         onSearchChange={handleSearchChange}
         radius={radius}
         onRadiusChange={handleRadiusChange}
-        hasLocation={!!userLocation}
-        onGetLocation={handleGetLocation}
-        isLoadingLocation={isLoadingLocation}
       />
 
       {filteredCompanies.length > 0 && (

@@ -7,7 +7,7 @@ export const HeaderContainer = styled.header`
   background: ${COLORS.darkBg};
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 1001;
 `;
 
 export const Nav = styled.nav`

@@ -10,8 +10,8 @@ interface INearMeControlsProps {
   onSearchChange: (value: string) => void;
   radius: number;
   onRadiusChange: (radius: number) => void;
-  hasLocation: boolean;
-  onGetLocation: () => void;
+  hasLocation?: boolean;
+  onGetLocation?: () => void;
   isLoadingLocation?: boolean;
 }
 
@@ -25,28 +25,13 @@ const RADIUS_OPTIONS = [
 ];
 
 export const NearMeControls: React.FC<INearMeControlsProps> = ({
-  searchTerm,
-  onSearchChange,
   radius,
-  onRadiusChange,
-  hasLocation,
-  onGetLocation,
-  isLoadingLocation,
+  onRadiusChange
 }) => {
   const t = useTranslations();
 
   return (
     <Styled.ControlsSection>
-      <Styled.SearchWrapper>
-        <Styled.SearchIcon>🔍</Styled.SearchIcon>
-        <Styled.SearchInput
-          type="text"
-          placeholder={t('nearMe.searchPlaceholder') || 'Search places...'}
-          value={searchTerm}
-          onChange={(e) => onSearchChange(e.target.value)}
-        />
-      </Styled.SearchWrapper>
-
       <Styled.RadiusControls>
         <Styled.RadiusLabel>Radius:</Styled.RadiusLabel>
         <Styled.RadiusSelect
@@ -60,19 +45,6 @@ export const NearMeControls: React.FC<INearMeControlsProps> = ({
           ))}
         </Styled.RadiusSelect>
       </Styled.RadiusControls>
-
-      <Styled.LocationButton
-        $active={hasLocation}
-        onClick={onGetLocation}
-        disabled={isLoadingLocation}
-      >
-        <LocationIcon width="18" height="18" />
-        {isLoadingLocation 
-          ? 'Getting location...' 
-          : hasLocation 
-            ? 'Location active' 
-            : 'Use my location'}
-      </Styled.LocationButton>
     </Styled.ControlsSection>
   );
 };
