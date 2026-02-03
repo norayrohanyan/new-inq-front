@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 import { COLORS } from '@/consts/colors';
 
 export const GalleryContainer = styled.div`
@@ -17,16 +18,20 @@ export const MainImage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  position: relative;
 
   @media (max-width: 768px) {
     height: 300px;
   }
+`;
+
+export const AnimatedImage = styled(motion.img)`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 export const NoImage = styled.div`

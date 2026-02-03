@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { 
-  categoriesSelectors, 
+import {
+  categoriesSelectors,
   filtersSelectors,
   getCompaniesFiltersThunk,
   getServicesFiltersThunk,
@@ -18,18 +18,23 @@ import {
   CategoriesContent,
 } from '../components';
 import FilterSidebar from '@/components/FilterSidebar';
+import FilterButton from '@/components/FilterButton';
+import FilterChips, { FilterChip } from '@/components/FilterChips';
 import * as Styled from '../styled';
+import { useIsMobile } from '@/hooks';
 
 export default function CategoryPage() {
   const params = useParams();
   const router = useRouter();
   const locale = useLocale();
   const dispatch = useAppDispatch();
+  const t = useTranslations();
   const categorySlug = params.category as string;
-  
+
   // Get current category data
   const categories = useAppSelector(categoriesSelectors.categories);
   const currentCategory = categories.find(cat => cat.slug === categorySlug);
+  const isMobile = useIsMobile();
 
   // Local state
   const [showCompanies, setShowCompanies] = useState<boolean>(true);
@@ -111,6 +116,81 @@ export default function CategoryPage() {
     setCurrentPage(1); // Reset to first page when filters change
   }, []);
 
+  // Convert selected filters to chip format with readable labels
+  const activeFilterChips = useMemo((): FilterChip[] => {
+    const chips: FilterChip[] = [];
+
+    // Add filter chips
+    Object.entries(selectedFilters).forEach(([filterKey, filterValue]) => {
+      if (typeof filterValue === 'string' && filterValue) {
+        const filterSection = filters[filterKey];
+        if (filterSection) {
+          // Split pipe-separated IDs
+          const selectedIds = filterValue.split('|');
+
+          selectedIds.forEach(id => {
+            // Find the option with this ID to get the readable name
+            const option = filterSection.options.find(opt => String(opt.id) === id);
+            if (option) {
+              chips.push({
+                key: filterKey,
+                value: id,
+                label: option.name,
+              });
+            }
+          });
+        }
+      }
+    });
+
+    // Add sort chip if not default
+    if (sortOption && sortOption !== 'recommended') {
+      chips.push({
+        key: 'sort',
+        value: sortOption,
+        label: t(`filters.${sortOption}`),
+      });
+    }
+
+    return chips;
+  }, [selectedFilters, sortOption, filters, t]);
+
+  // Remove individual filter chip
+  const handleRemoveFilter = useCallback((key: string, value: string) => {
+    if (key === 'sort') {
+      setSortOption('recommended');
+    } else {
+      setSelectedFilters(prev => {
+        const currentValue = prev[key];
+        if (!currentValue) return prev;
+
+        // Split the pipe-separated values
+        const values = currentValue.split('|');
+        const newValues = values.filter((v: string) => v !== value);
+
+        if (newValues.length === 0) {
+          // Remove the key entirely if no values left
+          const { [key]: _, ...rest } = prev;
+          return rest;
+        } else {
+          // Join remaining values back with pipe
+          return {
+            ...prev,
+            [key]: newValues.join('|'),
+          };
+        }
+      });
+    }
+    setCurrentPage(1);
+  }, []);
+
+  // Clear all filters
+  const handleClearAllFilters = useCallback(() => {
+    setSelectedFilters({});
+    setSortOption('recommended');
+    setCurrentPage(1);
+  }, []);
+
   return (
     <Styled.PageContainer>
       <CategoriesBanner />
@@ -122,20 +202,47 @@ export default function CategoryPage() {
 
       {/* Combined Toggle and Search Section */}
       <Styled.ToggleSearchSection>
-        {currentCategory && (
-          <CategoriesToggle
-            showCompanies={showCompanies}
-            onToggleChange={handleToggleChange}
-            categorySwitch={currentCategory.switch}
-          />
+        {isMobile ? (
+          <>
+            <Styled.ToggleFilterRow>
+              {currentCategory && (
+                <CategoriesToggle
+                  showCompanies={showCompanies}
+                  onToggleChange={handleToggleChange}
+                  categorySwitch={currentCategory.switch}
+                />
+              )}
+              <FilterButton onClick={handleFilterClick} />
+            </Styled.ToggleFilterRow>
+            <CategoriesSearch
+              searchTerm={searchTerm}
+              onSearchChange={handleSearchChange}
+            />
+          </>
+        ) : (
+          <>
+            {currentCategory && (
+              <CategoriesToggle
+                showCompanies={showCompanies}
+                onToggleChange={handleToggleChange}
+                categorySwitch={currentCategory.switch}
+              />
+            )}
+            <CategoriesSearch
+              searchTerm={searchTerm}
+              onSearchChange={handleSearchChange}
+            />
+            <FilterButton onClick={handleFilterClick} />
+          </>
         )}
-        
-        <CategoriesSearch
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
-          onFilterClick={handleFilterClick}
-        />
       </Styled.ToggleSearchSection>
+
+      {/* Active Filter Chips */}
+      <FilterChips
+        activeFilters={activeFilterChips}
+        onRemoveFilter={handleRemoveFilter}
+        onClearAll={handleClearAllFilters}
+      />
 
       <Styled.ContentSection>
         {currentCategory && (

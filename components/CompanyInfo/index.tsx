@@ -1,9 +1,12 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
+import { AnimatePresence } from 'framer-motion';
 import Text from '@/components/Text';
+import Button from '@/components/Button';
 import { PhoneIcon, LocationIcon, StarIcon, FacebookIcon, InstagramIcon, LinkedinIcon } from '@/components/icons';
 import { FavoriteButton } from '@/components/FavoriteButton';
-import { ShareIcon } from '@/components/icons';
+import { ShareButton } from '@/components/ShareButton';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import * as Styled from './styled';
 
 interface ICompanyInfoProps {
@@ -16,13 +19,13 @@ interface ICompanyInfoProps {
   description: string;
   phones: string[];
   workHours: {
-    Sunday: string[] | null;
-    Monday: string[] | null;
-    Tuesday: string[] | null;
-    Wednesday: string[] | null;
-    Thursday: string[] | null;
-    Friday: string[] | null;
-    Saturday: string[] | null;
+    Sunday: string | string[] | null;
+    Monday: string | string[] | null;
+    Tuesday: string | string[] | null;
+    Wednesday: string | string[] | null;
+    Thursday: string | string[] | null;
+    Friday: string | string[] | null;
+    Saturday: string | string[] | null;
   };
   externalLinks?: Record<string, string>;
 }
@@ -40,6 +43,8 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
   externalLinks,
 }) => {
   const t = useTranslations();
+  const isMobile = useIsMobile();
+  const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
 
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -74,9 +79,7 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
           </Styled.RatingRow>
         </Styled.HeaderContent>
         <Styled.ActionButtons>
-          <Styled.ActionButton>
-            <ShareIcon width={12} height={12} />
-          </Styled.ActionButton>
+          <ShareButton size="small" />
           <FavoriteButton companyId={companyId} category={category} size="small" />
         </Styled.ActionButtons>
       </Styled.HeaderSection>
@@ -88,8 +91,40 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
         </Text>
       )}
 
-      {/* Two Column Section: Phone & Social (left) + Work Hours (right) */}
-      <Styled.TwoColumnSection>
+      {/* Mobile Toggle Button */}
+      {isMobile && (
+        <Styled.MobileToggleButton>
+          <Button 
+            variant="primary" 
+            size="medium" 
+            rounded
+            onClick={() => setIsDetailsOpen(!isDetailsOpen)}
+          >
+            {isDetailsOpen ? t('common.close') : t('common.info')}
+          </Button>
+        </Styled.MobileToggleButton>
+      )}
+
+      {/* Collapsible Details Section */}
+      <Styled.DetailsWrapper $isOpen={isDetailsOpen} $isMobile={isMobile}>
+        <AnimatePresence initial={false}>
+          {(!isMobile || isDetailsOpen) && (
+            <Styled.DetailsContent
+              key="details"
+              initial={isMobile ? { height: 0, opacity: 0 } : undefined}
+              animate={isMobile ? { height: 'auto', opacity: 1 } : undefined}
+              exit={isMobile ? { height: 0, opacity: 0 } : undefined}
+              transition={
+                isMobile
+                  ? {
+                      height: { duration: 0.2, ease: 'easeOut' },
+                      opacity: { duration: 0.15, ease: 'easeOut' },
+                    }
+                  : undefined
+              }
+            >
+        {/* Two Column Section: Phone & Social (left) + Work Hours (right) */}
+        <Styled.TwoColumnSection>
         {/* Phone and Social Section */}
         <Styled.PhoneAndSocialSection>
           {/* Phones */}
@@ -142,28 +177,40 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
         <Styled.WorkHoursSection>
           {daysOfWeek.map((day) => {
             const hours = workHours[day as keyof typeof workHours];
+            let displayHours = t('company.closed');
+
+            if (hours) {
+              if (Array.isArray(hours) && hours.length > 0) {
+                displayHours = hours.join(', ');
+              } else if (typeof hours === 'string') {
+                displayHours = hours;
+              }
+            }
+
             return (
               <Styled.WorkHourRow key={day}>
                 <Text type="caption" color="white" fontWeight="600">
                   {day}
                 </Text>
                 <Text type="caption" color="white">
-                  {hours && Array.isArray(hours) && hours.length > 0
-                    ? hours.join(', ')
-                    : t('company.closed')}
+                  {displayHours}
                 </Text>
               </Styled.WorkHourRow>
             );
           })}
         </Styled.WorkHoursSection>
-      </Styled.TwoColumnSection>
+        </Styled.TwoColumnSection>
 
-      {/* Map */}
-      <Styled.MapPlaceholder>
-        <Text type="body" color="secondarySemiLight">
-          Map
-        </Text>
-      </Styled.MapPlaceholder>
+        {/* Map */}
+        <Styled.MapPlaceholder>
+          <Text type="body" color="secondarySemiLight">
+            Map
+          </Text>
+        </Styled.MapPlaceholder>
+            </Styled.DetailsContent>
+          )}
+        </AnimatePresence>
+      </Styled.DetailsWrapper>
     </Styled.InfoContainer>
   );
 };

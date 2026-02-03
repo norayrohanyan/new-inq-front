@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface IResponsiveSize {
   min?: number;
@@ -15,37 +15,35 @@ type TSize = number | IResponsiveSize;
 export const useResponsive = (size: TSize): boolean => {
   const sizes = typeof size === 'object' ? size : { max: size };
   const { min = 0, max } = sizes;
-  const isClient = typeof window === 'object';
 
-  const getWidth = useCallback(
-    (): number => (isClient ? window.innerWidth : 0),
-    [isClient]
-  );
-
-  const checkRangeMatch = useCallback((): boolean => {
-    const width = getWidth();
-    return width >= min && width <= max;
-  }, [getWidth, min, max]);
-
-  const [isMatching, setMatchingState] = useState<boolean>(checkRangeMatch());
-
-  const handleResize = useCallback((): void => {
-    setMatchingState(checkRangeMatch());
-  }, [checkRangeMatch, setMatchingState]);
+  // Start with false to match desktop SSR (prevents hydration mismatch)
+  const [isMatch, setIsMatch] = useState(false);
 
   useEffect(() => {
-    setMatchingState(checkRangeMatch());
-  }, [size, checkRangeMatch]);
+    // Build media query string
+    const minQuery = min > 0 ? `(min-width: ${min}px)` : '';
+    const maxQuery = `(max-width: ${max}px)`;
+    const query = min > 0 ? `${minQuery} and ${maxQuery}` : maxQuery;
 
-  useEffect(() => {
-    if (!isClient) {
-      return;
-    }
+    // Create MediaQueryList object
+    const mediaQuery = window.matchMedia(query);
 
-    window.addEventListener('resize', handleResize);
+    // Set initial value
+    setIsMatch(mediaQuery.matches);
 
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isClient, handleResize]);
+    // Handler for changes
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMatch(event.matches);
+    };
 
-  return isMatching;
+    // Add listener (works with DevTools device toolbar)
+    mediaQuery.addEventListener('change', handleChange);
+
+    // Cleanup
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange);
+    };
+  }, [min, max]);
+
+  return isMatch;
 };

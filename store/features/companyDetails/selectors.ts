@@ -9,9 +9,12 @@ export const companyDetailsSelectors = {
   portfolio: (state: RootState) => state.companyDetails.portfolio,
   intervals: (state: RootState) => state.companyDetails.intervals,
   beautyTimeSlots: (state: RootState) => state.companyDetails.beautyTimeSlots,
+  reviews: (state: RootState) => state.companyDetails.reviews,
+  reviewsPagination: (state: RootState) => state.companyDetails.reviewsPagination,
   isLoading: (state: RootState) => state.companyDetails.isLoading,
   isLoadingIntervals: (state: RootState) => state.companyDetails.isLoadingIntervals,
   isLoadingTimeSlots: (state: RootState) => state.companyDetails.isLoadingTimeSlots,
+  isLoadingReviews: (state: RootState) => state.companyDetails.isLoadingReviews,
   error: (state: RootState) => state.companyDetails.error,
 };
 

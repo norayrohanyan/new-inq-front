@@ -4,8 +4,9 @@ import { useTranslations } from 'next-intl';
 import ImageGallery from '@/components/ImageGallery';
 import ReservationForm from '@/components/ReservationForm';
 import Text from '@/components/Text';
-import { ShareIcon, StarIcon, LocationIcon, HomeIcon, BedIcon } from '@/components/icons';
+import { StarIcon, LocationIcon, HomeIcon, BedIcon } from '@/components/icons';
 import { FavoriteButton } from '@/components/FavoriteButton';
+import { ShareButton } from '@/components/ShareButton';
 import * as Styled from './styled';
 
 export interface RentalDetailData {
@@ -43,7 +44,6 @@ interface RentalDetailTemplateProps {
   data: RentalDetailData;
   category: string;
   type: 'car' | 'apartment';
-  onShare?: () => void;
   onMonthChange?: (startDate: string) => void;
   isLoadingIntervals?: boolean;
 }
@@ -52,23 +52,10 @@ export default function RentalDetailTemplate({
   data,
   category,
   type,
-  onShare,
   onMonthChange,
   isLoadingIntervals,
 }: RentalDetailTemplateProps) {
   const t = useTranslations();
-
-  const handleShare = () => {
-    if (onShare) {
-      onShare();
-    } else if (navigator.share) {
-      navigator.share({
-        title: data.name,
-        text: data.description,
-        url: window.location.href,
-      });
-    }
-  };
 
   const showMap = type === 'apartment' && data.latitude && data.longitude;
 
@@ -89,9 +76,7 @@ export default function RentalDetailTemplate({
         </Styled.TitleSection>
         
         <Styled.ActionButtons>
-          <Styled.ActionButton onClick={handleShare}>
-            <ShareIcon width={14} height={14} />
-          </Styled.ActionButton>
+          <ShareButton size="medium" />
           <FavoriteButton
             companyId={data.companyId || data.id}
             category={category}

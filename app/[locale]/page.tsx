@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { motion } from 'framer-motion';
 import Text from '@/components/Text';
-import Button from '@/components/Button';
+import AdBanner from '@/components/AdBanner';
 import * as Styled from './styled';
 
 export default function Home() {
@@ -26,28 +26,22 @@ export default function Home() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
+        staggerChildren: 0.12,
+        delayChildren: 0.1,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { 
+      opacity: 0,
+      scale: 0.96,
+    },
     visible: {
       opacity: 1,
-      y: 0,
+      scale: 1,
       transition: {
         duration: 0.5,
-        ease: 'easeOut' as const,
-      },
-    },
-  };
-
-  const cardHoverVariants = {
-    hover: {
-      y: -8,
-      transition: {
-        duration: 0.3,
         ease: 'easeOut' as const,
       },
     },
@@ -56,26 +50,16 @@ export default function Home() {
   return (
     <Styled.PageContainer>
       {/* Hero Banner Section */}
-      <Styled.HeroBanner>
-        <Styled.HeroContent>
-          <Styled.HeroTitle type="h1" color="white">
-            PLACE YOUR AD HERE
-          </Styled.HeroTitle>
-          <Styled.HeroPlaceholders>
-            <Styled.PlaceholderBox />
-            <Styled.PlaceholderBox />
-            <Styled.PlaceholderArrow />
-          </Styled.HeroPlaceholders>
-        </Styled.HeroContent>
-        <Styled.SliderDots>
-          <Styled.Dot $active />
-          <Styled.Dot />
-          <Styled.Dot />
-        </Styled.SliderDots>
-      </Styled.HeroBanner>
+      <AdBanner pageName="home_page" height="300px" mobileHeight="250px" />
 
       {/* Discover Categories Section */}
-      <Styled.DiscoverSection>
+      <Styled.DiscoverSection
+        as={motion.section}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.8, ease: 'easeOut' as const }}
+      >
         <Styled.DiscoverHeader>
           <div>
             <Styled.DiscoverTitle type="h2" color="white">
@@ -100,8 +84,6 @@ export default function Home() {
       >
         <Styled.CategoryCard
           variants={itemVariants}
-          whileHover="hover"
-          custom={cardHoverVariants}
           onClick={() => handleCategoryClick('beauty_salon')}
           $bgImage="/images/beauty.png"
         >
@@ -112,16 +94,14 @@ export default function Home() {
             <Text type="caption" color="white">
               {t('home.categories.beautySalon.description')}
             </Text>
-            <Button variant="primary" size="small" rounded>
-              {t('home.categories.searchNearMe')}
-            </Button>
+            <Styled.CardButton variant="primary" size="small" rounded>
+              {t('home.categories.searchNearMe')} {/* //TODO: Add arrow right icon */}
+            </Styled.CardButton>
           </Styled.CategoryContent>
         </Styled.CategoryCard>
 
         <Styled.CategoryCard
           variants={itemVariants}
-          whileHover="hover"
-          custom={cardHoverVariants}
           onClick={() => handleCategoryClick('apartments')}
           $bgImage="/images/apartment.png"
         >
@@ -132,16 +112,14 @@ export default function Home() {
             <Text type="caption" color="white">
               {t('home.categories.apartments.description')}
             </Text>
-            <Button variant="primary" size="small" rounded>
-              {t('home.categories.searchNearMe')}
-            </Button>
+            <Styled.CardButton variant="primary" size="small" rounded>
+              {t('home.categories.searchNearMe')} {/* //TODO: Add arrow right icon */}
+            </Styled.CardButton>
           </Styled.CategoryContent>
         </Styled.CategoryCard>
 
         <Styled.CategoryCard
           variants={itemVariants}
-          whileHover="hover"
-          custom={cardHoverVariants}
           onClick={() => handleCategoryClick('car_rental')}
           $bgImage="/images/2.png"
         >
@@ -152,16 +130,14 @@ export default function Home() {
             <Text type="caption" color="white">
               {t('home.categories.carRental.description')}
             </Text>
-            <Button variant="primary" size="small" rounded>
-              {t('home.categories.searchNearMe')}
-            </Button>
+            <Styled.CardButton variant="primary" size="small" rounded>
+              {t('home.categories.searchNearMe')} {/* //TODO: Add arrow right icon */}
+            </Styled.CardButton>
           </Styled.CategoryContent>
         </Styled.CategoryCard>
 
         <Styled.ExploreCard
           variants={itemVariants}
-          whileHover="hover"
-          custom={cardHoverVariants}
           onClick={handleExploreCategoriesClick}
         >
           <Styled.ExploreIcon>→</Styled.ExploreIcon>

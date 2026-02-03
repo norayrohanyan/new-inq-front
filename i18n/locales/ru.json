@@ -11,11 +11,15 @@
     "yes": "Да",
     "no": "Нет",
     "ok": "ОК",
-    "returnHome": "На главную"
+    "returnHome": "На главную",
+    "linkCopied": "Ссылка скопирована!",
+    "loadMore": "Загрузить ещё",
+    "info": "Инфо",
+    "close": "Закрыть"
   },
   "home": {
     "categories": {
-      "searchNearMe": "Искать рядом →",
+      "searchNearMe": "Искать рядом",
       "beautySalon": {
         "title": "САЛОНЫ КРАСОТЫ",
         "description": "Найдите лучшие салоны красоты рядом с вами"
@@ -38,7 +42,8 @@
     "status": {
       "inProcess": "В процессе",
       "pending": "Ожидание",
-      "cancelled": "Отменено",
+      "canceled": "Отменено",
+      "rejected": "Отклонено",
       "approved": "Одобрено",
       "completed": "Завершено"
     },
@@ -139,6 +144,7 @@
   },
   "filters": {
     "filterAndSort": "Фильтр и сортировка",
+    "filter": "Фильтр",
     "sortingOptions": "Параметры сортировки",
     "recommended": "Рекомендуемые",
     "newest": "Новые",
@@ -150,6 +156,9 @@
   },
   "header": {
     "home": "Главная",
+    "booking": "Бронирование",
+    "nearMe": "Рядом",
+    "aboutUs": "О нас",
     "categories": "Категории",
     "language": "Язык"
   },
@@ -307,4 +316,3 @@
     "returnHome": "Вернуться"
   }
 }
-

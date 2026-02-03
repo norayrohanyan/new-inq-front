@@ -28,6 +28,14 @@ export default function LoginPage() {
   // Get the return URL from query params (where user wanted to go before login)
   const returnUrl = searchParams.get('returnUrl');
 
+  // Handle phone input - only allow digits, max 8
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let digits = e.target.value.replace(/\D/g, '');
+    digits = digits.replace(/^0+/, ''); // Remove leading zeros
+    digits = digits.slice(0, 8); // Max 8 digits
+    setPhone(digits);
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = await dispatch(loginThunk({ phone, password }));
@@ -51,14 +59,20 @@ export default function LoginPage() {
         </Text>
 
         <Styled.Form onSubmit={handleLogin}>
-          <Input
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder={t('auth.phoneNumber') + ' (ex. 091234567)'}
-            icon={<PhoneIcon width="20" height="20" />}
-            required
-          />
+          <Styled.PhoneInputWrapper>
+            <Styled.PhoneIconWrapper>
+              <PhoneIcon width="20" height="20" />
+            </Styled.PhoneIconWrapper>
+            <Styled.PhonePrefix>+374</Styled.PhonePrefix>
+            <Styled.PhoneInput
+              type="tel"
+              value={phone}
+              onChange={handlePhoneChange}
+              placeholder="XX XXX XXX"
+              inputMode="numeric"
+              required
+            />
+          </Styled.PhoneInputWrapper>
 
           <Input
             type="password"

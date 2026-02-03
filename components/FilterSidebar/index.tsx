@@ -55,16 +55,16 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
     }));
   };
 
-  const handleFilterToggle = (sectionKey: string, optionId: string) => {
+  const handleFilterToggle = (sectionKey: string, optionValue: string) => {
     setSelectedFilters(prev => {
       const current = prev[sectionKey] || [];
-      const isSelected = current.includes(optionId);
-      
+      const isSelected = current.includes(optionValue);
+
       return {
         ...prev,
         [sectionKey]: isSelected
-          ? current.filter(id => id !== optionId)
-          : [...current, optionId],
+          ? current.filter(val => val !== optionValue)
+          : [...current, optionValue],
       };
     });
   };
@@ -75,7 +75,15 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
   };
 
   const handleApply = () => {
-    onApply(selectedFilters, selectedSort);
+    // Transform filter arrays into pipe-separated strings for API
+    const transformedFilters: Record<string, string> = {};
+    Object.entries(selectedFilters).forEach(([key, values]) => {
+      if (values.length > 0) {
+        transformedFilters[key] = values.join('|');
+      }
+    });
+
+    onApply(transformedFilters, selectedSort);
     onClose();
   };
 
@@ -133,12 +141,14 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
               {expandedSections[key] && (
                 <Styled.OptionsContainer>
                   {section.options.map((option) => {
-                    const isSelected = selectedFilters[key]?.includes(String(option.id)) || false;
-                    
+                    // Use option.id for filter values to match API expectations
+                    const optionId = String(option.id);
+                    const isSelected = selectedFilters[key]?.includes(optionId) || false;
+
                     return (
                       <Styled.CheckboxOption
                         key={option.id}
-                        onClick={() => handleFilterToggle(key, String(option.id))}
+                        onClick={() => handleFilterToggle(key, optionId)}
                       >
                         <Styled.Checkbox checked={isSelected}>
                           {isSelected && '✓'}

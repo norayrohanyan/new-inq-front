@@ -1,6 +1,7 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useTranslations, useLocale } from 'next-intl';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
 import { FacebookIcon } from '@/components/icons/facebook';
@@ -11,28 +12,35 @@ import { PhoneIcon } from '@/components/icons/phone';
 import { MailIcon } from '@/components/icons/mail';
 import * as Styled from './styled';
 import { Logo } from '../Logo';
+import { useMemo } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 export default function Footer() {
   const t = useTranslations();
+  const locale = useLocale();
 
-  const socialLinks = [
+  const isMobile = useIsMobile();
+
+  const socialLinks = useMemo(() => [
     { icon: <FacebookIcon width={18} height={18} />, href: '#', label: 'Facebook' },
     { icon: <InstagramIcon width={18} height={18} />, href: '#', label: 'Instagram' },
     { icon: <LinkedinIcon width={18} height={18} />, href: '#', label: 'LinkedIn' },
     { icon: <TelegramIcon width={18} height={18} />, href: '#', label: 'Telegram' },
-  ];
+  ], []);
 
   return (
     <Styled.FooterContainer>
       <Styled.PartnerSection>
         <Styled.PartnerContent>
-          <Text type="h2" color="white" align="center">
+          <Text type={isMobile ? 'p' : 'h2'} color="white" align="center">
             {t('footer.becomePartner.question')}{' '}
             <Styled.PartnerHighlight>{t('footer.becomePartner.highlight')}</Styled.PartnerHighlight>
           </Text>
-          <Button variant="primary" size="medium" rounded>
-            {t('footer.becomePartner.button')}
-          </Button>
+          <Link href={`/${locale}/about`}>
+            <Button variant="primary" size="medium" rounded>
+              {t('footer.becomePartner.button')}
+            </Button>
+          </Link>
         </Styled.PartnerContent>
       </Styled.PartnerSection>
 

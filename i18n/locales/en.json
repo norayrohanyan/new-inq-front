@@ -15,11 +15,15 @@
     "no": "No",
     "ok": "OK",
     "search": "Search",
-    "returnHome": "Return Home"
+    "returnHome": "Return Home",
+    "linkCopied": "Link copied!",
+    "loadMore": "Load more",
+    "info": "Info",
+    "close": "Close"
   },
   "home": {
     "categories": {
-      "searchNearMe": "Search near me →",
+      "searchNearMe": "Search near me",
       "beautySalon": {
         "title": "BEAUTY SALONS",
         "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
@@ -42,7 +46,8 @@
     "status": {
       "inProcess": "In process",
       "pending": "Pending",
-      "cancelled": "Cancelled",
+      "canceled": "Canceled",
+      "rejected": "Rejected",
       "approved": "Approved",
       "completed": "Completed"
     },
@@ -143,6 +148,7 @@
   },
   "filters": {
     "filterAndSort": "Filter & Sort",
+    "filter": "Filter",
     "sortingOptions": "Sorting options",
     "recommended": "Recommended",
     "newest": "Newest",
@@ -154,6 +160,9 @@
   },
   "header": {
     "home": "Home",
+    "booking": "Booking",
+    "nearMe": "Near Me",
+    "aboutUs": "About Us",
     "categories": "Categories",
     "language": "Language"
   },
@@ -163,6 +172,8 @@
     "favorite": "Favorite",
     "history": "History",
     "logout": "Log out",
+    "logoutConfirmTitle": "Are you sure you want to log out?",
+    "logoutConfirmDescription": "You will need to sign in again to access your account.",
     "phoneNumber": "Phone number",
     "email": "Email",
     "password": "Password",
@@ -223,6 +234,9 @@
     "services": "Services",
     "employees": "Employees",
     "portfolio": "Portfolio",
+    "reviews": "Reviews",
+    "noReviews": "No reviews yet",
+    "beFirstToReview": "Be the first to review this company!",
     "about": "About",
     "book": "Book",
     "showLess": "Less",
@@ -329,4 +343,3 @@
     "returnHome": "Return"
   }
 }
-

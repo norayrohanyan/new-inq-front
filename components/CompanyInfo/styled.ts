@@ -1,5 +1,7 @@
 import styled from 'styled-components';
+import { motion } from 'framer-motion';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 export const InfoContainer = styled.div`
   width: fit-content;
@@ -11,9 +13,31 @@ export const InfoContainer = styled.div`
   position: sticky;
   top: 100px;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     position: static;
+    padding: 0;
   }
+`;
+
+export const DetailsWrapper = styled.div<{ $isOpen: boolean; $isMobile: boolean }>`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    overflow: hidden;
+  }
+
+  @media (min-width: ${MOBILE_SIZE_BREAKPOINT + 1}px) {
+    max-height: none;
+    overflow: visible;
+  }
+`;
+
+export const DetailsContent = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 `;
 
 export const HeaderSection = styled.div`
@@ -102,11 +126,13 @@ export const ActionButton = styled.button`
 `;
 
 export const TwoColumnSection = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
+  align-items: stretch;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    gap: 0.75rem;
   }
 `;
 
@@ -114,22 +140,29 @@ export const PhoneAndSocialSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  flex: 1;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    gap: 0.75rem;
+  }
 `;
 
 export const PhoneSection = styled.div`
   background: ${COLORS.darkBgSemi};
   border-radius: 16px;
   padding: 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const PhoneRow = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   white-space: nowrap;
 
   svg {
@@ -180,10 +213,9 @@ export const WorkHoursSection = styled.div`
   background: ${COLORS.darkBgSemi};
   border-radius: 16px;
   padding: 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  flex: 1;
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  gap: 0.5rem;
 `;
 
 export const WorkHourRow = styled.div`
@@ -214,4 +246,9 @@ export const MapPlaceholder = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const MobileToggleButton = styled.div`
+  width: 100%;
+  display: flex;
 `;

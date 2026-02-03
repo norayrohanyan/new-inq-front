@@ -1,15 +1,11 @@
 import React from 'react';
-import Text from '@/components/Text';
+import AdBanner from '@/components/AdBanner';
 import * as Styled from '../styled';
 
 export const CategoriesBanner: React.FC = () => {
   return (
     <Styled.BannerSection>
-      <Styled.Banner>
-        <Text type="h1" color="white" fontWeight="700">
-          PLACE YOUR AD HERE
-        </Text>
-      </Styled.Banner>
+      <AdBanner pageName="categories_page" height="300px" mobileHeight="200px" />
     </Styled.BannerSection>
   );
 };

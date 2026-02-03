@@ -20,9 +20,7 @@ export { nearMeActions, nearMeSelectors } from './features/nearMe';
 export {
   loginThunk,
   registerThunk,
-  refreshTokensThunk,
   verifyLinkThunk,
-  fetchUserProfileThunk,
   getCurrentUserThunk,
   forgotPasswordThunk,
   updatePasswordThunk,
@@ -55,6 +53,7 @@ export {
 export {
   getCompanyDetailsThunk,
   getCompanyServicesThunk,
+  getCompanyReviewsThunk,
   getEmployeeServicesThunk,
   getEmployeesByServiceThunk,
   getCompanyEmployeesThunk,
@@ -77,3 +76,7 @@ export {
 
 // Export near me thunks
 export { getCompaniesNearMeThunk } from './features/nearMe/thunks';
+// Export ads actions, selectors, and thunks
+export { adsActions, adsSelectors } from './features/ads';
+export { getAdsThunk } from './features/ads/thunks';
+

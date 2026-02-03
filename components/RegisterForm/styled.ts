@@ -74,5 +74,43 @@ export const Button = styled.button`
   }
 `;
 
+export const PhoneInputWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  background: ${COLORS.white};
+  border-radius: 8px;
+  ${setCommonBorderStyles()}
+`;
+
+export const PhonePrefix = styled.span`
+  color: ${COLORS.secondaryExtraDark};
+  font-size: 1rem;
+  padding: 0.75rem 0 0.75rem 1rem;
+  white-space: nowrap;
+`;
+
+export const PhoneInput = styled.input`
+  flex: 1;
+  padding: 0.75rem 1rem 0.75rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: ${COLORS.secondaryExtraDark};
+  font-size: 1rem;
+
+  &::placeholder {
+    color: ${COLORS.secondaryLight};
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;
+
 // ErrorText and SuccessText are now replaced by Text component
 

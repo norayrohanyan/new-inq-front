@@ -1,13 +1,16 @@
 import React from 'react';
 import Image from 'next/image';
+import { useLocale } from 'next-intl';
 import { StarIcon } from '@/components/icons/starIcon';
 import { LocationIcon } from '@/components/icons/location';
 import { ClockIcon } from '@/components/icons/clock';
 import { PhoneIcon } from '@/components/icons/phone';
-import { ShareIcon } from '@/components/icons/share';
 import { FavoriteButton } from '@/components/FavoriteButton';
+import { ShareButton } from '@/components/ShareButton';
 import Text from '@/components/Text';
 import * as Styled from './styled';
+import { getDetailUrl } from '@/utils/url';
+import { useIsMobile } from '@/hooks';
 
 interface WorkHours {
   [key: string]: string;
@@ -22,7 +25,6 @@ interface IFavoriteCardProps {
   address: string;
   workHours: string | WorkHours;
   phone?: string;
-  onShare?: (id: number) => void;
   onClick?: (id: number) => void;
 }
 
@@ -35,13 +37,12 @@ const FavoriteCard: React.FC<IFavoriteCardProps> = ({
   address,
   workHours,
   phone,
-  onShare,
   onClick,
 }) => {
-  const handleShare = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onShare?.(id);
-  };
+  const locale = useLocale();
+  const isMobile = useIsMobile();
+  // Build the share URL for this favorite company's detail page
+  const shareUrl = getDetailUrl(locale, category, id);
 
   // Format work hours - handle both string and object formats
   const formatWorkHours = (hours: string | WorkHours): string => {
@@ -90,19 +91,19 @@ const FavoriteCard: React.FC<IFavoriteCardProps> = ({
       {/* Info Section */}
       <Styled.InfoSection>
         <Styled.TopRow>
-          <Text type="h4" color="white" fontWeight="500">
+          <Text type={isMobile ? 'body' : 'h4'} color="white" fontWeight="500">
             {name}
           </Text>
-          <Styled.Actions>
-            <Styled.ActionButton onClick={handleShare}>
-              <ShareIcon width="12" height="12" />
-            </Styled.ActionButton>
+          {!isMobile && (
+            <Styled.Actions>
+            <ShareButton size="small" url={shareUrl} />
             <FavoriteButton
               companyId={id}
               category={category}
-              size="small"
-            />
-          </Styled.Actions>
+                size="small"
+              />
+            </Styled.Actions>
+          )}
         </Styled.TopRow>
 
         <Styled.RatingRow>
@@ -135,6 +136,16 @@ const FavoriteCard: React.FC<IFavoriteCardProps> = ({
           </Styled.DetailRow>
         )}
       </Styled.InfoSection>
+      {isMobile && (
+            <Styled.Actions>
+            <ShareButton size="small" url={shareUrl} />
+            <FavoriteButton
+              companyId={id}
+              category={category}
+                size="small"
+              />
+            </Styled.Actions>
+          )}
     </Styled.CardContainer>
   );
 };

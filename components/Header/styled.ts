@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { COLORS } from '@/consts/colors';
 import Link from 'next/link';
-import Button from '@/components/Button';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 export const HeaderContainer = styled.header`
   background: ${COLORS.darkBg};
@@ -18,6 +18,10 @@ export const Nav = styled.nav`
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    padding: 2rem 1rem;
+  }
 `;
 
 export const NavLinks = styled.div`
@@ -25,15 +29,11 @@ export const NavLinks = styled.div`
   gap: 2.5rem;
   flex: 1;
   margin-left: 3rem;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
 `;
 
-export const NavLink = styled(Link)`
+export const NavLink = styled(Link)<{ $isActive?: boolean }>`
   text-decoration: none;
-  color: ${COLORS.white};
+  color: ${({ $isActive }) => ($isActive ? COLORS.brandOrangeMid : COLORS.white)};
   font-weight: 500;
   font-size: 0.95rem;
   letter-spacing: 0.5px;
@@ -159,5 +159,108 @@ export const LoginButton = styled.div`
     background: ${COLORS.darkBgSemi} !important; 
     transform: translateY(-1px) !important;
     border-color: ${COLORS.white} !important;
+  }
+`;
+
+// Mobile Menu Styles
+export const MobileRightSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const HamburgerButton = styled.button`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+`;
+
+export const HamburgerLine = styled.span`
+  width: 24px;
+  height: 3px;
+  background: ${COLORS.brandGradient};
+  border-radius: 2px;
+  transition: all 0.3s;
+`;
+
+export const MobileMenuOverlay = styled.div<{ $isOpen: boolean }>`
+  position: fixed;
+  top: 92px; /* Height of the header */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: ${COLORS.darkBg};
+  z-index: 999;
+  transform: translateY(${({ $isOpen }) => ($isOpen ? '0' : '-100%')});
+  opacity: ${({ $isOpen }) => ($isOpen ? '1' : '0')};
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  overflow-y: auto;
+`;
+
+export const CloseButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.38rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const MobileMenuContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2rem;
+  gap: 2rem;
+`;
+
+export const MobileAuthButtons = styled.div`
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 340px;
+`;
+
+export const MobileLoginButton = styled.div`
+  flex: 1;
+  border: 0.5px solid ${COLORS.borderColor};
+  transition: all 0.3s;
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+  border-radius: 50px;
+  color: ${COLORS.white};
+  text-align: center;
+  font-weight: 500;
+
+  &:hover {
+    background: ${COLORS.darkBgSemi};
+    border-color: ${COLORS.white};
+  }
+`;
+
+export const MobileNavLinks = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+`;
+
+export const MobileNavLink = styled(Link)<{ $isActive?: boolean }>`
+  text-decoration: none;
+  color: ${({ $isActive }) => ($isActive ? COLORS.brandOrangeMid : COLORS.white)};
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+  padding: 0.75rem 1.5rem;
+
+  &:hover {
+    color: ${COLORS.brandOrangeMid};
   }
 `;

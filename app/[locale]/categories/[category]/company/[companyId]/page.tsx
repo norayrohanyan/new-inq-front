@@ -1,26 +1,27 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import {
   getCompanyDetailsThunk,
   getCompanyServicesThunk,
+  getCompanyReviewsThunk,
   companyDetailsSelectors,
 } from '@/store';
 import Text from '@/components/Text';
+import AdBanner from '@/components/AdBanner';
 import RentalItemCard from '@/components/RentalItemCard';
 import CompanyInfo from '@/components/CompanyInfo';
 import CompanyTabs from '@/components/CompanyTabs';
 import Pagination from '@/components/Pagination';
-import * as Styled from '../../../styled';
-import styled from 'styled-components';
-import { COLORS } from '@/consts/colors';
+import ReviewCard, { ReviewsGrid } from '@/components/ReviewCard';
+import * as ParentStyled from '../../../styled';
+import * as Styled from './styled';
 
 export default function CompanyInventoryPage() {
   const params = useParams();
-  const router = useRouter();
   const locale = useLocale();
   const t = useTranslations();
   const dispatch = useAppDispatch();
@@ -30,11 +31,15 @@ export default function CompanyInventoryPage() {
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [activeTab, setActiveTab] = useState<string>('items');
+  const [reviewsPage, setReviewsPage] = useState<number>(1);
 
   // Redux selectors
   const companyDetails = useAppSelector(companyDetailsSelectors.companyDetails);
   const services = useAppSelector(companyDetailsSelectors.services); // For rental categories, this returns cars/apartments
+  const reviews = useAppSelector(companyDetailsSelectors.reviews);
+  const reviewsPagination = useAppSelector(companyDetailsSelectors.reviewsPagination);
   const isLoading = useAppSelector(companyDetailsSelectors.isLoading);
+  const isLoadingReviews = useAppSelector(companyDetailsSelectors.isLoadingReviews);
 
   // Fetch company details and services (which returns cars/apartments for rental categories)
   useEffect(() => {
@@ -43,6 +48,13 @@ export default function CompanyInventoryPage() {
     dispatch(getCompanyDetailsThunk({ category, id: companyId }));
     dispatch(getCompanyServicesThunk({ category, id: companyId }));
   }, [category, companyId, dispatch]);
+
+  // Fetch reviews when reviews tab is active
+  useEffect(() => {
+    if (!companyId || !category || activeTab !== 'reviews') return;
+
+    dispatch(getCompanyReviewsThunk({ category, id: companyId, page: reviewsPage, perPage: 10 }));
+  }, [category, companyId, activeTab, reviewsPage, dispatch]);
 
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -74,63 +86,54 @@ export default function CompanyInventoryPage() {
 
   if (isLoading && !companyDetails) {
     return (
-      <Styled.PageContainer>
-        <Styled.LoadingContainer>
+      <ParentStyled.PageContainer>
+        <ParentStyled.LoadingContainer>
           <div className="spinner" />
           <Text type="h4" color="white">
             {t('common.loading')}
           </Text>
-        </Styled.LoadingContainer>
-      </Styled.PageContainer>
+        </ParentStyled.LoadingContainer>
+      </ParentStyled.PageContainer>
     );
   }
 
   return (
-    <Styled.PageContainer>
+    <ParentStyled.PageContainer>
       {/* Company Header */}
-      <Styled.BannerSection>
-        <Styled.Banner>
-          <div style={{ textAlign: 'center', zIndex: 1 }}>
-            <Text type="h1" color="white">
-              {companyDetails?.name || 'Company'}
-            </Text>
-            <Text type="body" color="white" style={{ marginTop: '0.5rem' }}>
-              {getCategoryLabel()}
-            </Text>
-          </div>
-        </Styled.Banner>
-      </Styled.BannerSection>
+      <ParentStyled.BannerSection>
+        <AdBanner pageName="company_page" height="200px" mobileHeight="150px" />
+      </ParentStyled.BannerSection>
 
       {/* Main Content with 2 columns */}
-      <MainContentWrapper>
+      <Styled.MainContentWrapper>
         {/* Left Column - Tabs with Items List */}
-        <LeftColumn>
+        <Styled.LeftColumn>
           <CompanyTabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab}>
             {activeTab === 'items' && (
               <>
                 {/* Search Section */}
-                <SearchSection>
-                  <Styled.SearchWrapper>
-                    <Styled.SearchIcon>🔍</Styled.SearchIcon>
-                    <Styled.SearchInput
+                <Styled.SearchSection>
+                  <ParentStyled.SearchWrapper>
+                    <ParentStyled.SearchIcon>🔍</ParentStyled.SearchIcon>
+                    <ParentStyled.SearchInput
                       type="text"
                       placeholder={t('common.search')}
                       value={searchTerm}
                       onChange={handleSearchChange}
                     />
-                  </Styled.SearchWrapper>
-                </SearchSection>
+                  </ParentStyled.SearchWrapper>
+                </Styled.SearchSection>
 
                 {/* Items List */}
                 {isLoading ? (
-                  <Styled.LoadingContainer>
+                  <ParentStyled.LoadingContainer>
                     <div className="spinner" />
                     <Text type="body" color="white">
                       {t('common.loading')}
                     </Text>
-                  </Styled.LoadingContainer>
+                  </ParentStyled.LoadingContainer>
                 ) : filteredServices.length > 0 ? (
-                  <ItemsList>
+                  <Styled.ItemsList>
                     {filteredServices.map((item: any) => (
                       <RentalItemCard
                         key={item.id}
@@ -147,35 +150,66 @@ export default function CompanyInventoryPage() {
                         category={category}
                       />
                     ))}
-                  </ItemsList>
+                  </Styled.ItemsList>
                 ) : (
-                  <Styled.EmptyState>
+                  <ParentStyled.EmptyState>
                     <Text type="h2" color="white">
                       No items found
                     </Text>
                     <Text type="body" customColor="rgba(255, 255, 255, 0.7)">
                       This company currently has no {category === 'car_rental' ? 'cars' : 'apartments'} listed.
                     </Text>
-                  </Styled.EmptyState>
+                  </ParentStyled.EmptyState>
                 )}
               </>
             )}
 
             {activeTab === 'reviews' && (
-              <ReviewsPlaceholder>
-                <Text type="h3" color="white">
-                  Reviews
-                </Text>
-                <Text type="body" customColor="rgba(255, 255, 255, 0.7)" style={{ marginTop: '1rem' }}>
-                  Reviews feature coming soon...
-                </Text>
-              </ReviewsPlaceholder>
+              <>
+                {isLoadingReviews ? (
+                  <ParentStyled.LoadingContainer>
+                    <div className="spinner" />
+                    <Text type="body" color="white">
+                      {t('common.loading')}
+                    </Text>
+                  </ParentStyled.LoadingContainer>
+                ) : reviews.length > 0 ? (
+                  <>
+                    <ReviewsGrid>
+                      {reviews.map((review) => (
+                        <ReviewCard
+                          key={review.id}
+                          userName={review.user_name}
+                          rating={review.rating}
+                          comment={review.comment}
+                        />
+                      ))}
+                    </ReviewsGrid>
+                    {reviewsPagination && reviewsPagination.last_page > 1 && (
+                      <Pagination
+                        currentPage={reviewsPagination.current_page}
+                        totalPages={reviewsPagination.last_page}
+                        onPageChange={(page) => setReviewsPage(page)}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <ParentStyled.EmptyState>
+                    <Text type="h2" color="white">
+                      No reviews yet
+                    </Text>
+                    <Text type="body" customColor="rgba(255, 255, 255, 0.7)">
+                      Be the first to review this company!
+                    </Text>
+                  </ParentStyled.EmptyState>
+                )}
+              </>
             )}
           </CompanyTabs>
-        </LeftColumn>
+        </Styled.LeftColumn>
 
         {/* Right Column - Company Info */}
-        <RightColumn>
+        <Styled.RightColumn>
           {companyDetails && (
             <CompanyInfo
               companyId={companyDetails.id}
@@ -187,15 +221,17 @@ export default function CompanyInventoryPage() {
               description={companyDetails.description || ''}
               phones={companyDetails.phones || []}
               workHours={
-                typeof companyDetails.work_hours === 'object' && companyDetails.work_hours !== null && !Array.isArray(companyDetails.work_hours)
+                typeof companyDetails.work_hours === 'object' &&
+                companyDetails.work_hours !== null &&
+                !Array.isArray(companyDetails.work_hours)
                   ? (companyDetails.work_hours as {
-                      Sunday: string[] | null;
-                      Monday: string[] | null;
-                      Tuesday: string[] | null;
-                      Wednesday: string[] | null;
-                      Thursday: string[] | null;
-                      Friday: string[] | null;
-                      Saturday: string[] | null;
+                      Sunday: string | string[] | null;
+                      Monday: string | string[] | null;
+                      Tuesday: string | string[] | null;
+                      Wednesday: string | string[] | null;
+                      Thursday: string | string[] | null;
+                      Friday: string | string[] | null;
+                      Saturday: string | string[] | null;
                     })
                   : {
                       Sunday: null,
@@ -214,70 +250,8 @@ export default function CompanyInventoryPage() {
               }
             />
           )}
-        </RightColumn>
-      </MainContentWrapper>
-    </Styled.PageContainer>
+        </Styled.RightColumn>
+      </Styled.MainContentWrapper>
+    </ParentStyled.PageContainer>
   );
 }
-
-// Styled Components for 2-column layout
-const MainContentWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 2rem;
-  padding: 0 4rem 2rem 4rem;
-  max-width: 1600px;
-  margin: 0 auto;
-
-  @media (max-width: 1200px) {
-    grid-template-columns: 1fr;
-    padding: 0 2rem 2rem 2rem;
-  }
-
-  @media (max-width: 768px) {
-    padding: 0 1rem 1.5rem 1rem;
-  }
-`;
-
-const LeftColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-`;
-
-const RightColumn = styled.div`
-  position: sticky;
-  top: 2rem;
-  align-self: flex-start;
-
-  @media (max-width: 1200px) {
-    position: static;
-    order: -1; // Show company info first on mobile
-  }
-`;
-
-const SearchSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-`;
-
-const ItemsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-`;
-
-const ReviewsPlaceholder = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 2rem;
-  text-align: center;
-  background: ${COLORS.secondaryDark};
-  border-radius: 20px;
-  min-height: 300px;
-`;
-

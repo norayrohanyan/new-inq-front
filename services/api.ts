@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import {
   IApiResponse,
   ILoginRequest,
@@ -16,10 +16,11 @@ import {
 } from '@/types/user';
 import { ICompany } from '@/store/types/companies';
 import { IService } from '@/store/types/services';
-import { INearMeCompany, INearMeParams } from '@/store/types/nearMe';
-import { clearAuthCookies } from '@/utils/cookies';
+import { IAd } from '@/store/types/ads';
+import { clearAuthCookies, setAuthCookies, getCookie } from '@/utils/cookies';
 import { getStoreInstance } from './apiWithStore';
 import { authActions } from '@/store';
+import { INearMeCompany, INearMeParams } from '@/store/types/nearMe';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost';
 
@@ -32,17 +33,22 @@ const api: AxiosInstance = axios.create({
   timeout: 10000, // 10 seconds
 });
 
-// Helper to get cookie value
-const getCookie = (name: string): string | null => {
-  if (typeof window === 'undefined') return null;
-  const cookies = document.cookie.split(';');
-  for (const cookie of cookies) {
-    const [cookieName, cookieValue] = cookie.split('=').map((c) => c.trim());
-    if (cookieName === name) {
-      return cookieValue;
+// Track if we're currently refreshing to prevent multiple refresh calls
+let isRefreshing = false;
+let failedQueue: Array<{
+  resolve: (value?: unknown) => void;
+  reject: (reason?: unknown) => void;
+}> = [];
+
+const processQueue = (error: unknown, token: string | null = null) => {
+  failedQueue.forEach((promise) => {
+    if (error) {
+      promise.reject(error);
+    } else {
+      promise.resolve(token);
     }
-  }
-  return null;
+  });
+  failedQueue = [];
 };
 
 // Request interceptor - add auth token to requests
@@ -62,35 +68,122 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor - handle errors globally
+// Response interceptor - handle errors globally with token refresh
 api.interceptors.response.use(
   (response) => response,
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+
     // Handle 401 - Token expired or unauthorized
-    if (error.response?.status === 401) {
-      if (typeof window !== 'undefined') {
-        // Clear auth cookies
-        clearAuthCookies();
-        
-        // Clear localStorage
-        localStorage.removeItem('auth_tokens');
-        
-        // Dispatch logout action to Redux
-        const store = getStoreInstance();
-        if (store) {
-          store.dispatch(authActions.logout());
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      // Don't try to refresh if the failed request was the refresh token request itself
+      if (originalRequest.url?.includes('/api/tokens')) {
+        return Promise.reject(error);
+      }
+
+      if (isRefreshing) {
+        // If already refreshing, queue this request
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return api(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      const refreshToken = getCookie('refreshToken');
+
+      if (!refreshToken) {
+        // No refresh token, logout immediately
+        isRefreshing = false;
+        handleLogout();
+        return Promise.reject(error);
+      }
+
+      try {
+        // Try to refresh the token
+        const { data } = await axios.get<IApiResponse<ILoginResponse>>(
+          `${API_BASE_URL}/api/tokens`,
+          {
+            headers: {
+              Authorization: `Bearer ${refreshToken}`,
+            },
+          }
+        );
+
+        if (data.success && data.data) {
+          const newTokens = data.data;
+
+          // Update cookies with new tokens
+          setAuthCookies({
+            accessToken: newTokens.access_token,
+            refreshToken: newTokens.refresh_token,
+            accessTokenExpiresAt: newTokens.access_token_expires_at,
+            refreshTokenExpiresAt: newTokens.refresh_token_expires_at,
+          });
+
+          // Update Redux store
+          const store = getStoreInstance();
+          if (store) {
+            store.dispatch(
+              authActions.setTokens({
+                accessToken: newTokens.access_token,
+                refreshToken: newTokens.refresh_token,
+                accessTokenExpiresAt: newTokens.access_token_expires_at,
+                refreshTokenExpiresAt: newTokens.refresh_token_expires_at,
+              })
+            );
+          }
+
+          // Process queued requests with new token
+          processQueue(null, newTokens.access_token);
+
+          // Retry the original request with new token
+          originalRequest.headers.Authorization = `Bearer ${newTokens.access_token}`;
+          return api(originalRequest);
+        } else {
+          // Refresh failed, logout
+          processQueue(error, null);
+          handleLogout();
+          return Promise.reject(error);
         }
-        
-        // Redirect to login page
-        // Get current locale from URL or default to 'en'
-        const pathParts = window.location.pathname.split('/');
-        const locale = pathParts[1] || 'en';
-        window.location.href = `/${locale}/login`;
+      } catch (refreshError) {
+        // Refresh request failed, logout
+        processQueue(refreshError, null);
+        handleLogout();
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
       }
     }
+
     return Promise.reject(error);
   }
 );
+
+// Helper function to handle logout
+const handleLogout = () => {
+  if (typeof window !== 'undefined') {
+    // Clear auth cookies
+    clearAuthCookies();
+
+    // Dispatch logout action to Redux
+    const store = getStoreInstance();
+    if (store) {
+      store.dispatch(authActions.logout());
+    }
+
+    // Redirect to login page
+    const pathParts = window.location.pathname.split('/');
+    const locale = pathParts[1] || 'en';
+    window.location.href = `/${locale}/login`;
+  }
+};
 
 /**
  * API Service using axios
@@ -128,11 +221,12 @@ export const apiService = {
 
   /**
    * Refresh access token
+   * Uses axios directly to avoid interceptors that would add the expired access token
    */
   async refreshTokens(refreshToken: string): Promise<IApiResponse<ILoginResponse>> {
     try {
-      const { data } = await api.get<IApiResponse<ILoginResponse>>(
-        '/api/tokens',
+      const { data } = await axios.get<IApiResponse<ILoginResponse>>(
+        `${API_BASE_URL}/api/tokens`,
         {
           headers: {
             Authorization: `Bearer ${refreshToken}`,
@@ -156,21 +250,6 @@ export const apiService = {
           params: { hash },
         }
       );
-      return data;
-    } catch (error) {
-      return handleError(error);
-    }
-  },
-
-  /**
-   * Get user profile
-   */
-  async getUserProfile(accessToken?: string): Promise<IApiResponse<any>> {
-    try {
-      const config = accessToken
-        ? { headers: { Authorization: `Bearer ${accessToken}` } }
-        : {};
-      const { data } = await api.get<IApiResponse<any>>('/api/user', config);
       return data;
     } catch (error) {
       return handleError(error);
@@ -549,6 +628,26 @@ export const apiService = {
   },
 
   /**
+   * Get company reviews (paginated)
+   */
+  async getCompanyReviews(
+    category: string,
+    id: number,
+    page: number = 1,
+    perPage: number = 10
+  ): Promise<IApiResponse<any>> {
+    try {
+      const { data } = await api.get<IApiResponse<any>>(
+        `/api/${category}/company/${id}/reviews`,
+        { params: { page, per_page: perPage } }
+      );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
    * Get employee services (or company services if company is individual)
    */
   async getEmployeeServices(params: {
@@ -738,17 +837,31 @@ export const apiService = {
     }
   },
 
-  /**
+    /**
    * Get companies near me by category
    * Returns companies with location information, optionally filtered by radius
    */
-  async getCompaniesNearMe(params: INearMeParams): Promise<IApiResponse<INearMeCompany[]>> {
+    async getCompaniesNearMe(params: INearMeParams): Promise<IApiResponse<INearMeCompany[]>> {
+      try {
+        const { category, ...queryParams } = params;
+        const { data } = await api.get<IApiResponse<INearMeCompany[]>>(
+          `/api/${category}/companies/near-me`,
+          { params: queryParams }
+        );
+        return data;
+      } catch (error) {
+        return handleError(error);
+      }
+    },
+
+  /**
+   * Get advertisements for a specific page
+   */
+  async getAds(pageName: string): Promise<IApiResponse<IAd[]>> {
     try {
-      const { category, ...queryParams } = params;
-      const { data } = await api.get<IApiResponse<INearMeCompany[]>>(
-        `/api/${category}/companies/near-me`,
-        { params: queryParams }
-      );
+      const { data } = await api.get<IApiResponse<IAd[]>>('/api/ads', {
+        params: { page_name: pageName },
+      });
       return data;
     } catch (error) {
       return handleError(error);

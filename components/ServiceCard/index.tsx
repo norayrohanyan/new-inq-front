@@ -31,70 +31,73 @@ const ServiceCard: React.FC<IServiceCardProps> = ({
 
   return (
     <Styled.CardContainer>
-      <Styled.InfoSection>
-        <Text type="body" color="white" fontWeight="600">
-          {name}
-        </Text>
-        
-        {(price || duration) && (
-          <Styled.MetaInfo>
-            {price && (
-              <Text type="caption" color="secondarySemiLight">
-                {price} AMD
-              </Text>
-            )}
-            {duration && (
-              <Text type="caption" color="secondarySemiLight">
-                {duration}
-              </Text>
-            )}
-          </Styled.MetaInfo>
-        )}
+      <Styled.TopRow>
+        <Styled.InfoSection>
+          <Text type="body" color="white" fontWeight="600">
+            {name}
+          </Text>
+          
+          {(price || duration) && (
+            <Styled.MetaInfo>
+              {price && (
+                <Text type="caption" color="secondarySemiLight">
+                  {price} AMD
+                </Text>
+              )}
+              {duration && (
+                <Text type="caption" color="secondarySemiLight">
+                  {duration}
+                </Text>
+              )}
+            </Styled.MetaInfo>
+          )}
+        </Styled.InfoSection>
 
-        {description && (
-          <motion.div
-            layout
-            animate={{
-              height: isExpanded ? 'auto' : 0,
-              opacity: isExpanded ? 1 : 0,
-            }}
-            transition={{ 
-              duration: 0.25,
-              ease: 'easeInOut'
-            }}
-            style={{ 
-              overflow: 'hidden',
-              marginTop: isExpanded ? '0.75rem' : 0,
-              paddingTop: isExpanded ? '0.75rem' : 0
-            }}
+        <Styled.ButtonsSection>
+          {description && (
+            <Button
+              variant="secondary"
+              size="small"
+              onClick={toggleExpanded}
+            >
+              {isExpanded ? t('company.showLess') : t('company.about')}
+            </Button>
+          )}
+          <Button
+            variant="primary"
+            size="small"
+            onClick={() => onBook && onBook(id)}
           >
-            {isExpanded && (
+            {t('company.book')}
+          </Button>
+        </Styled.ButtonsSection>
+      </Styled.TopRow>
+
+      {description && (
+        <motion.div
+          layout
+          animate={{
+            height: isExpanded ? 'auto' : 0,
+            opacity: isExpanded ? 1 : 0,
+          }}
+          transition={{ 
+            duration: 0.25,
+            ease: 'easeInOut'
+          }}
+          style={{ 
+            overflow: 'hidden',
+            width: '100%'
+          }}
+        >
+          {isExpanded && (
+            <Styled.DescriptionSection>
               <Text type="caption" color="secondarySemiLight">
                 {description}
               </Text>
-            )}
-          </motion.div>
-        )}
-      </Styled.InfoSection>
-
-      <Styled.ButtonsSection>
-        {description && (
-          <Button
-            variant="secondary"
-            size="small"
-            onClick={toggleExpanded}
-          >
-            {isExpanded ? t('company.showLess') : t('company.about')}
-          </Button>
-        )}
-        <Button
-          variant="primary"
-          size="small"
-          onClick={() => onBook && onBook(id)}
-        >
-          {t('company.book')}
-        </Button>
-      </Styled.ButtonsSection>
+            </Styled.DescriptionSection>
+          )}
+        </motion.div>
+      )}
     </Styled.CardContainer>
   );
 };

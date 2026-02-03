@@ -1,5 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT, TABLET_SIZE_BREAKPOINT } from '@/consts';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -18,7 +19,7 @@ export const PageContainer = styled.div`
 export const BannerSection = styled.div`
   padding: 2rem 4rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 1.5rem 1rem;
   }
 `;
@@ -48,7 +49,7 @@ export const Banner = styled.div`
     );
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     height: 200px;
   }
 `;
@@ -57,8 +58,26 @@ export const Banner = styled.div`
 export const CategoriesSection = styled.div`
   padding: 0 4rem 2rem 4rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 0 1rem 1.5rem 1rem;
+  }
+`;
+
+export const CategoriesGridWrapper = styled.div`
+  position: relative;
+  
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 40px;
+      background: linear-gradient(to left, ${COLORS.darkBgSemi} 0%, transparent 100%);
+      pointer-events: none;
+      border-radius: 0 30px 30px 0;
+    }
   }
 `;
 
@@ -71,8 +90,21 @@ export const CategoriesGrid = styled.div`
   padding: 2rem 3rem;
   border-radius: 30px;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
     gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    padding-right: 2.5rem;
+    border-radius: 30px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
 
@@ -95,9 +127,10 @@ export const CategoryChip = styled.button<{ $active: boolean }>`
     border-color: ${({ $active }) => ($active ? 'transparent' : COLORS.brandOrangeMid)};
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 0.75rem 1.5rem;
     font-size: 0.85rem;
+    flex-shrink: 0;
   }
 `;
 
@@ -110,49 +143,21 @@ export const ToggleSearchSection = styled.div`
   justify-content: space-between;
   gap: 1.5rem;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${TABLET_SIZE_BREAKPOINT}px) {
     flex-direction: column;
     padding: 0 1rem 1rem 1rem;
     align-items: stretch;
+    gap: 1rem;
   }
 `;
 
-export const SearchFilterWrapper = styled.div`
+// Toggle + Filter row for mobile
+export const ToggleFilterRow = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
-  flex: 1;
-  
-  @media (max-width: 968px) {
-    width: 100%;
-  }
-`;
-
-export const FilterButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1.5rem;
-  background: ${COLORS.darkBgSemi};
-  border-radius: 50px;
-  color: ${COLORS.white};
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-
-  svg {
-    color: ${COLORS.brandOrangeMid};
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  @media (max-width: 968px) {
-    justify-content: center;
-  }
+  width: 100%;
 `;
 
 // Toggle Section
@@ -164,6 +169,10 @@ export const ToggleSection = styled.div`
   padding: 0.5rem 1.5rem;
   border-radius: 50px;
   flex-shrink: 0;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    padding: 0.5rem 0.75rem;
+  }
 `;
 
 export const ToggleLabel = styled.span<{ $active: boolean }>`
@@ -243,7 +252,7 @@ export const SearchInput = styled.input`
 export const ContentSection = styled.div`
   padding: 0 4rem 2rem 4rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 0 1rem 1.5rem 1rem;
   }
 `;
@@ -254,7 +263,7 @@ export const CardsGrid = styled.div`
   gap: 1.5rem;
   margin-bottom: 2rem;
 
-  @media (max-width: 968px) {
+  @media (max-width: ${TABLET_SIZE_BREAKPOINT}px) {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
@@ -290,11 +299,9 @@ export const EmptyState = styled.div`
   gap: 1rem;
 `;
 
-export const FilterIconWrapper = styled.div`
+// Load More Container
+export const LoadMoreContainer = styled.div`
   display: flex;
-  align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  border: 1px solid ${COLORS.borderColor};
-  padding: 0.4rem;
+  margin-bottom: 1rem;
 `;

@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { authActions, authSelectors } from '@/store';
 import { setAuthCookies, clearAuthCookies, getCookie } from '@/utils/cookies';
+import { apiService } from '@/services/api';
 
 /**
  * Custom hook for authentication with cookies as single source of truth
@@ -15,6 +16,37 @@ export const useAuth = () => {
   const isLoading = useAppSelector(authSelectors.isLoading);
   const error = useAppSelector(authSelectors.error);
 
+  // Function to refresh tokens
+  const refreshTokens = useCallback(async (refreshToken: string) => {
+    try {
+      const response = await apiService.refreshTokens(refreshToken);
+      if (response.success && response.data) {
+        const newTokens = response.data;
+        // Update Redux store with new tokens
+        dispatch(
+          authActions.setTokens({
+            accessToken: newTokens.access_token,
+            refreshToken: newTokens.refresh_token,
+            accessTokenExpiresAt: newTokens.access_token_expires_at,
+            refreshTokenExpiresAt: newTokens.refresh_token_expires_at,
+          })
+        );
+        // Update cookies
+        setAuthCookies({
+          accessToken: newTokens.access_token,
+          refreshToken: newTokens.refresh_token,
+          accessTokenExpiresAt: newTokens.access_token_expires_at,
+          refreshTokenExpiresAt: newTokens.refresh_token_expires_at,
+        });
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error('Failed to refresh tokens:', err);
+      return false;
+    }
+  }, [dispatch]);
+
   // Hydrate auth state from cookies on mount
   useEffect(() => {
     const accessToken = getCookie('accessToken');
@@ -22,13 +54,10 @@ export const useAuth = () => {
     const accessTokenExpiresAt = getCookie('accessTokenExpiresAt');
     const refreshTokenExpiresAt = getCookie('refreshTokenExpiresAt');
 
-    if (
-      accessToken &&
-      refreshToken &&
-      accessTokenExpiresAt &&
-      refreshTokenExpiresAt &&
-      !isTokenExpired(accessTokenExpiresAt)
-    ) {
+    // If we have a valid refresh token
+    if (refreshToken && refreshTokenExpiresAt && !isTokenExpired(refreshTokenExpiresAt)) {
+      // If access token exists and is valid, hydrate directly
+      if (accessToken && accessTokenExpiresAt && !isTokenExpired(accessTokenExpiresAt)) {
       dispatch(
         authActions.hydrateAuth({
           accessToken,
@@ -37,6 +66,10 @@ export const useAuth = () => {
           refreshTokenExpiresAt,
         })
       );
+      } else {
+        // Access token expired or missing, try to refresh
+        refreshTokens(refreshToken);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

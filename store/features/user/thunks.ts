@@ -170,9 +170,10 @@ export const deleteFavoriteThunk = createAsyncThunk(
   async ({ clientId, category }: { clientId: number; category: string }, { dispatch, rejectWithValue }) => {
     try {
       const response = await apiService.deleteFavorite(clientId, category);
-      
+
       if (response.success) {
-        dispatch(userActions.removeFavorite(clientId));
+        // Refetch favorites after deleting (consistent with addFavoriteThunk)
+        dispatch(getFavoritesThunk());
         return clientId;
       } else {
         dispatch(userActions.setError(response.error || 'Failed to delete favorite'));

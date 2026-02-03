@@ -13,7 +13,7 @@ export const TicketDetailCard = styled.div`
 export const CardHeader = styled.div`
   display: flex;
   gap: 20px;
-  margin-bottom: 24px;
+  margin-bottom: 2px;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -21,8 +21,8 @@ export const CardHeader = styled.div`
 `;
 
 export const ImageContainer = styled.div`
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
   border-radius: 12px;
   overflow: hidden;
   flex-shrink: 0;
@@ -84,21 +84,21 @@ export const StatusBadge = styled.div<{ $status: string }>`
   border-radius: 8px;
   display: inline-block;
   width: fit-content;
+  color: ${({ $status }) => ($status === 'pending' ? COLORS.black : COLORS.white)};
   background: ${({ $status }) => {
     switch ($status) {
-      case 'confirmed':
       case 'in_process':
-        return COLORS.brandOrangeMid;
+        return COLORS.brandGradient;
       case 'pending':
-        return COLORS.secondary;
-      case 'cancelled':
-        return COLORS.accentRed;
+        return '#868686';
+      case 'canceled':
+      case 'rejected':
+        return '#DD0000';
       case 'completed':
       case 'approved':
-      case 'finished':
-        return '#4CAF50';
+        return '#27AE35';
       default:
-        return COLORS.secondary;
+        return '#868686';
     }
   }};
 `;
@@ -191,7 +191,7 @@ export const ServicesList = styled.div`
 
 export const ServiceItem = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: 12px;
   align-items: center;
   padding: 8px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -203,6 +203,9 @@ export const ServiceItem = styled.div`
 
 // Employee Section
 export const EmployeeSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   margin-bottom: 24px;
 `;
 
@@ -210,15 +213,12 @@ export const EmployeeCard = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
 `;
 
 export const EmployeeImage = styled.div`
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
+  width: 55px;
+  height: 55px;
+  border-radius: 14px;
   background: ${COLORS.secondaryLight};
   overflow: hidden;
 

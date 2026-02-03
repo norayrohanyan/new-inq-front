@@ -1,5 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -374,12 +375,8 @@ export const SummaryActions = styled.div`
   gap: 1rem;
   align-items: center;
 
-  @media (max-width: 768px) {
-    justify-content: stretch;
-    
-    button {
-      flex: 1;
-    }
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    justify-content: end;
   }
 `;
 
@@ -537,13 +534,9 @@ export const TextArea = styled.textarea`
 export const ActionsContainer = styled.div`
   display: flex;
   gap: 1rem;
-  justify-content: center;
+  justify-content: flex-end;
   width: 100%;
-  max-width: 600px;
-
-  @media (max-width: 768px) {
-    flex-direction: column-reverse;
-  }
+  max-width: 800px;
 `;
 
 /* Success Screen */

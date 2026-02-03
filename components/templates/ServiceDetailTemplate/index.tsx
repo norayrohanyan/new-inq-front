@@ -3,11 +3,14 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import Masonry from 'react-responsive-masonry';
+import AdBanner from '@/components/AdBanner';
 import CompanyInfo from '@/components/CompanyInfo';
 import CompanyTabs from '@/components/CompanyTabs';
 import ServiceCard from '@/components/ServiceCard';
 import EmployeeCard from '@/components/EmployeeCard';
 import ImageGallery from '@/components/ImageGallery';
+import ReviewCard, { ReviewsGrid } from '@/components/ReviewCard';
+import Pagination from '@/components/Pagination';
 import Text from '@/components/Text';
 import * as Styled from './styled';
 
@@ -46,6 +49,20 @@ export interface ServiceDetailData {
   }>;
   
   portfolio?: string[];
+
+  reviews?: Array<{
+    id: number;
+    rating: number;
+    comment: string;
+    user_name: string;
+  }>;
+
+  reviewsPagination?: {
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+  };
 }
 
 interface ServiceDetailTemplateProps {
@@ -55,11 +72,14 @@ interface ServiceDetailTemplateProps {
     hasServices?: boolean;
     hasEmployees?: boolean;
     hasPortfolio?: boolean;
+    hasReviews?: boolean;
     hasBookingFlow?: boolean;
   };
   onServiceBook?: (serviceId: number) => void;
   onEmployeeBook?: (employeeId: number) => void;
+  onReviewsPageChange?: (page: number) => void;
   isLoading?: boolean;
+  isLoadingReviews?: boolean;
 }
 
 export default function ServiceDetailTemplate({
@@ -68,7 +88,9 @@ export default function ServiceDetailTemplate({
   features,
   onServiceBook,
   onEmployeeBook,
+  onReviewsPageChange,
   isLoading,
+  isLoadingReviews,
 }: ServiceDetailTemplateProps) {
   const t = useTranslations();
   const [activeTab, setActiveTab] = React.useState('services');
@@ -88,9 +110,13 @@ export default function ServiceDetailTemplate({
     if (features.hasPortfolio && data.portfolio && data.portfolio.length > 0) {
       tabsList.push({ id: 'portfolio', label: t('company.portfolio') });
     }
+
+    if (features.hasReviews) {
+      tabsList.push({ id: 'reviews', label: t('company.reviews') });
+    }
     
     return tabsList;
-  }, [data.services, data.employees, data.portfolio, features, t]);
+  }, [data.services, data.employees, data.portfolio, data.reviews, features, t]);
 
   // Set default active tab to first available tab
   React.useEffect(() => {
@@ -137,18 +163,7 @@ export default function ServiceDetailTemplate({
     <Styled.PageContainer>
       {/* Banner Section */}
       <Styled.BannerSection>
-        {data.bannerUrls?.desktopImage ? (
-          <Styled.BannerImage
-            src={data.bannerUrls.desktopImage}
-            alt={data.name}
-          />
-        ) : (
-          <Styled.BannerPlaceholder>
-            <Text type="h3" color="secondarySemiLight">
-              {data.name}
-            </Text>
-          </Styled.BannerPlaceholder>
-        )}
+        <AdBanner pageName="detail_page" height="300px" mobileHeight="200px" />
       </Styled.BannerSection>
 
       {/* Main Content - Two Column Layout */}
@@ -159,9 +174,9 @@ export default function ServiceDetailTemplate({
             <CompanyTabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab}>
               {activeTab === 'services' && data.services && (
                 <Masonry 
-                  columnsCount={2} 
+                  columnsCount={1} 
                   gutter="0.5rem"
-                  columnsCountBreakPoints={{ 350: 1, 750: 2 }}
+                  columnsCountBreakPoints={{ 0: 1, 900: 2 }}
                 >
                   {data.services.map((service) => (
                     <ServiceCard
@@ -197,6 +212,47 @@ export default function ServiceDetailTemplate({
                 <Styled.PortfolioSection>
                   <ImageGallery images={data.portfolio} alt={data.name} />
                 </Styled.PortfolioSection>
+              )}
+
+              {activeTab === 'reviews' && (
+                <>
+                  {isLoadingReviews ? (
+                    <Styled.LoadingContainer>
+                      <Text type="body" color="white">
+                        {t('common.loading')}
+                      </Text>
+                    </Styled.LoadingContainer>
+                  ) : data.reviews && data.reviews.length > 0 ? (
+                    <>
+                      <ReviewsGrid>
+                        {data.reviews.map((review) => (
+                          <ReviewCard
+                            key={review.id}
+                            userName={review.user_name}
+                            rating={review.rating}
+                            comment={review.comment}
+                          />
+                        ))}
+                      </ReviewsGrid>
+                      {data.reviewsPagination && data.reviewsPagination.last_page > 1 && (
+                        <Pagination
+                          currentPage={data.reviewsPagination.current_page}
+                          totalPages={data.reviewsPagination.last_page}
+                          onPageChange={(page) => onReviewsPageChange?.(page)}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <Styled.EmptyState>
+                      <Text type="h3" color="white">
+                        {t('company.noReviews')}
+                      </Text>
+                      <Text type="body" customColor="rgba(255, 255, 255, 0.7)">
+                        {t('company.beFirstToReview')}
+                      </Text>
+                    </Styled.EmptyState>
+                  )}
+                </>
               )}
             </CompanyTabs>
           </Styled.LeftColumn>
