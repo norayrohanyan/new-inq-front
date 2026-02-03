@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { LocationIcon } from '@/components/icons';
 import * as Styled from '../styled';
+import Text from '@/components/Text';
 
 interface INearMeControlsProps {
   searchTerm: string;
@@ -16,12 +16,12 @@ interface INearMeControlsProps {
 }
 
 const RADIUS_OPTIONS = [
-  { value: 1000, label: '1 km' },
-  { value: 2000, label: '2 km' },
-  { value: 5000, label: '5 km' },
-  { value: 10000, label: '10 km' },
-  { value: 25000, label: '25 km' },
-  { value: 50000, label: '50 km' },
+  { value: '1000', label: '1 km' },
+  { value: '2000', label: '2 km' },
+  { value: '5000', label: '5 km' },
+  { value: '10000', label: '10 km' },
+  { value: '25000', label: '25 km' },
+  { value: '50000', label: '50 km' },
 ];
 
 export const NearMeControls: React.FC<INearMeControlsProps> = ({
@@ -33,17 +33,13 @@ export const NearMeControls: React.FC<INearMeControlsProps> = ({
   return (
     <Styled.ControlsSection>
       <Styled.RadiusControls>
-        <Styled.RadiusLabel>Radius:</Styled.RadiusLabel>
-        <Styled.RadiusSelect
-          value={radius}
-          onChange={(e) => onRadiusChange(Number(e.target.value))}
-        >
-          {RADIUS_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </Styled.RadiusSelect>
+        <Text type="body" color="white">{t('nearMe.radius')}</Text>
+        <Styled.RadiusDropdown
+          options={RADIUS_OPTIONS}
+          value={radius.toString()}
+          onChange={(value) => onRadiusChange(Number(value))}
+          variant="filled"
+        />
       </Styled.RadiusControls>
     </Styled.ControlsSection>
   );

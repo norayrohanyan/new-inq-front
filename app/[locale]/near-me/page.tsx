@@ -3,12 +3,13 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { 
-  nearMeSelectors, 
-  nearMeActions, 
+import {
+  nearMeSelectors,
+  nearMeActions,
   getCompaniesNearMeThunk,
 } from '@/store';
-import { NearMeCategoriesChips, NearMeControls } from './components';
+import { NearMeControls } from './components';
+import { CategoriesChips } from '@/components/CategoriesChips';
 import * as Styled from './styled';
 
 // Dynamic import for Map component (Leaflet needs client-side only)
@@ -148,7 +149,7 @@ export default function NearMePage() {
 
   return (
     <Styled.PageContainer>
-      <NearMeCategoriesChips
+      <CategoriesChips
         selectedCategory={selectedCategory}
         onCategoryChange={handleCategoryChange}
       />

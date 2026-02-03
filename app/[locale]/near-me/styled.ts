@@ -1,5 +1,8 @@
 import styled, { keyframes } from 'styled-components';
 import { COLORS } from '@/consts/colors';
+import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
+import Dropdown from '@/components/CustomDropdown';
+import { DropdownButton } from '@/components/CustomDropdown/styled';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -20,55 +23,6 @@ export const PageContainer = styled.div`
   margin: 0 auto;
 `;
 
-// Categories Section
-export const CategoriesSection = styled.div`
-  padding: 1.5rem 4rem;
-
-  @media (max-width: 768px) {
-    padding: 1rem;
-  }
-`;
-
-export const CategoriesGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-  background: ${COLORS.darkBgSemi};
-  padding: 1.5rem 2rem;
-  border-radius: 24px;
-
-  @media (max-width: 768px) {
-    gap: 0.5rem;
-    padding: 1rem;
-  }
-`;
-
-export const CategoryChip = styled.button<{ $active: boolean }>`
-  padding: 0.75rem 1.5rem;
-  border-radius: 50px;
-  border: ${({ $active }) => ($active ? 'none' : `1px solid ${COLORS.borderColor}`)};
-  background: ${({ $active }) => ($active ? COLORS.brandGradient : 'transparent')};
-  color: ${COLORS.white};
-  font-size: 0.85rem;
-  font-weight: ${({ $active }) => ($active ? '600' : '500')};
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-
-  &:hover {
-    background: ${({ $active }) =>
-      $active ? COLORS.brandGradient : 'rgba(255, 255, 255, 0.1)'};
-    border-color: ${({ $active }) => ($active ? 'transparent' : COLORS.brandOrangeMid)};
-  }
-
-  @media (max-width: 768px) {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.8rem;
-  }
-`;
-
 // Controls Section
 export const ControlsSection = styled.div`
   padding: 0 4rem 1rem 4rem;
@@ -77,41 +31,26 @@ export const ControlsSection = styled.div`
   justify-content: space-between;
   gap: 1.5rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     flex-direction: column;
     padding: 0 1rem 1rem 1rem;
+    align-items: start;
   }
 `;
 
-export const SearchWrapper = styled.div`
-  position: relative;
-  flex: 1;
-  max-width: 500px;
-
-  @media (max-width: 768px) {
-    width: 100%;
-    max-width: none;
-  }
-`;
 
 export const RadiusControls = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
   background: ${COLORS.darkBgSemi};
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem;
+  padding-left: 1.5rem;
   border-radius: 50px;
 
-  @media (max-width: 768px) {
-    width: 100%;
-    justify-content: center;
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    justify-content: start;
   }
-`;
-
-export const RadiusLabel = styled.span`
-  color: ${COLORS.secondarySemiLight};
-  font-size: 0.85rem;
-  white-space: nowrap;
 `;
 
 export const RadiusSelect = styled.select`
@@ -198,13 +137,7 @@ export const MapContainer = styled.div`
   }
 
   .leaflet-popup-close-button {
-    color: ${COLORS.white} !important;
-    font-size: 24px !important;
-    padding: 8px !important;
-    
-    &:hover {
-      color: ${COLORS.brandOrangeMid} !important;
-    }
+    display: none;
   }
 
   .leaflet-control-zoom {
@@ -476,4 +409,9 @@ export const RetryButton = styled.button`
     border-color: transparent;
     color: ${COLORS.white};
   }
+`;
+
+// Custom Dropdown
+export const RadiusDropdown = styled(Dropdown)`
+  z-index: 1000;
 `;
