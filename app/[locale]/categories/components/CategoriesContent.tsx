@@ -15,6 +15,7 @@ import Spinner from '@/components/Spinner';
 import CompanyServiceCard from '@/components/CompanyServiceCard';
 import Pagination from '@/components/Pagination';
 import { useIsMobile, useInfiniteScroll } from '@/hooks';
+import { transformFiltersForAPI } from '@/utils/filters';
 import * as Styled from '../styled';
 
 interface ICategoriesContentProps {
@@ -75,7 +76,7 @@ export const CategoriesContent: React.FC<ICategoriesContentProps> = ({
       search: searchTerm,
       page: pageToFetch,
       per_page: 10,
-      filters: filters, // Only backend filters trigger API call
+      filters: transformFiltersForAPI(filters as Record<string, string>, showCompanies),
     };
 
     if (showCompanies) {
