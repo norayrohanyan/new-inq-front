@@ -221,20 +221,6 @@ export const NearMeMap: React.FC<INearMeMapProps> = ({
               <strong>Your location</strong>
             </Popup>
           </Marker>
-
-          <Circle
-            center={[
-              userLocation.latitude,
-              userLocation.longitude,
-            ]}
-            radius={radius}
-            pathOptions={{
-              color: '#FE7F3B',
-              fillColor: '#FE7F3B',
-              fillOpacity: 0.1,
-              weight: 2,
-            }}
-          />
         </>
       )}
 

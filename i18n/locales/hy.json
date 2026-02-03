@@ -165,5 +165,24 @@
     "aboutUs": "Մեր մասին",
     "categories": "Կատեգորիաներ",
     "language": "Լեզու"
+  },
+  "nearMe": {
+    "searchPlaceholder": "Որոնել վայրեր...",
+    "radius": "Շառավիղ",
+    "enableLocation": "Միացնել տեղադրությունը",
+    "gettingLocation": "Տեղադրության որոշում...",
+    "locationActive": "Տեղադրությունը ակտիվ է",
+    "useMyLocation": "Օգտագործել իմ տեղադրությունը",
+    "foundPlaces": "Գտնվել է {count} վայր",
+    "within": "{distance}կմ շառավղում",
+    "enableLocationAccess": "Միացրեք տեղադրության հասանելիությունը՝ մոտակայքում վայրեր գտնելու համար",
+    "yourLocation": "Ձեր տեղադրությունը",
+    "openNow": "Հիմա բաց է",
+    "closed": "Փակ է",
+    "viewDetails": "Մանրամասներ",
+    "away": "հեռու",
+    "noPlacesFound": "Վայրեր չգտնվեցին",
+    "loadingMap": "Քարտեզի բեռնում...",
+    "loadingPlaces": "Մոտակա վայրերի բեռնում..."
   }
 }

@@ -66,7 +66,6 @@ export default function NearMePage() {
       params.radius = radius;
     }
 
-    console.log('🔍 Fetching companies with params:', params);
     dispatch(getCompaniesNearMeThunk(params));
   }, [dispatch, selectedCategory, userLocation, radius]);
 
