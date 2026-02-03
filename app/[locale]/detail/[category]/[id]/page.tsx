@@ -334,7 +334,6 @@ export default function UnifiedDetailPage() {
     );
   }
 
-  // No data available - errors handled globally by Redux toast
   return null;
 }
 

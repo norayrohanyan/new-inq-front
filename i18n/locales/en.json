@@ -311,6 +311,25 @@
     "submit": "Submit",
     "reviewSuccess": "Thank you for your review!"
   },
+  "nearMe": {
+    "searchPlaceholder": "Search places...",
+    "radius": "Radius",
+    "enableLocation": "Enable Location",
+    "gettingLocation": "Getting location...",
+    "locationActive": "Location active",
+    "useMyLocation": "Use my location",
+    "foundPlaces": "Found {count} places",
+    "within": "within {distance}km",
+    "enableLocationAccess": "Enable location access to find places near you",
+    "yourLocation": "Your Location",
+    "openNow": "Open Now",
+    "closed": "Closed",
+    "viewDetails": "View Details",
+    "away": "away",
+    "noPlacesFound": "No places found",
+    "loadingMap": "Loading map...",
+    "loadingPlaces": "Loading nearby places..."
+  },
   "errors": {
     "categoryNotFound": "Category not found",
     "pageNotFound": {

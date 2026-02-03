@@ -20,6 +20,7 @@ import { IAd } from '@/store/types/ads';
 import { clearAuthCookies, setAuthCookies, getCookie } from '@/utils/cookies';
 import { getStoreInstance } from './apiWithStore';
 import { authActions } from '@/store';
+import { INearMeCompany, INearMeParams } from '@/store/types/nearMe';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost';
 
@@ -835,6 +836,23 @@ export const apiService = {
       return handleError(error);
     }
   },
+
+    /**
+   * Get companies near me by category
+   * Returns companies with location information, optionally filtered by radius
+   */
+    async getCompaniesNearMe(params: INearMeParams): Promise<IApiResponse<INearMeCompany[]>> {
+      try {
+        const { category, ...queryParams } = params;
+        const { data } = await api.get<IApiResponse<INearMeCompany[]>>(
+          `/api/${category}/companies/near-me`,
+          { params: queryParams }
+        );
+        return data;
+      } catch (error) {
+        return handleError(error);
+      }
+    },
 
   /**
    * Get advertisements for a specific page

@@ -7,7 +7,7 @@ export const HeaderContainer = styled.header`
   background: ${COLORS.darkBg};
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 1001;
 `;
 
 export const Nav = styled.nav`
@@ -194,11 +194,11 @@ export const MobileMenuOverlay = styled.div<{ $isOpen: boolean }>`
   right: 0;
   bottom: 0;
   background: ${COLORS.darkBg};
-  z-index: 999;
   transform: translateY(${({ $isOpen }) => ($isOpen ? '0' : '-100%')});
   opacity: ${({ $isOpen }) => ($isOpen ? '1' : '0')};
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   overflow-y: auto;
+  z-index: 9999;
 `;
 
 export const CloseButton = styled.button`

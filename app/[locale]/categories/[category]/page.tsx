@@ -12,11 +12,11 @@ import {
 } from '@/store';
 import {
   CategoriesBanner,
-  CategoriesChips,
   CategoriesToggle,
   CategoriesSearch,
   CategoriesContent,
 } from '../components';
+import { CategoriesChips } from '@/components/CategoriesChips';
 import FilterSidebar from '@/components/FilterSidebar';
 import FilterButton from '@/components/FilterButton';
 import FilterChips, { FilterChip } from '@/components/FilterChips';

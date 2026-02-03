@@ -63,8 +63,8 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             {t('booking').toUpperCase()}
           </Styled.MobileNavLink>
           <Styled.MobileNavLink 
-            href={`/${locale}/button-demo`} 
-            $isActive={isActivePath(pathname, locale, `/${locale}/button-demo`)}
+            href={`/${locale}/near-me`} 
+            $isActive={isActivePath(pathname, locale, `/${locale}/near-me`)}
             onClick={onClose}
           >
             {t('nearMe').toUpperCase()}

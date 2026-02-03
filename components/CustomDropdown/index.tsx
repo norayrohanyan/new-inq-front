@@ -18,6 +18,7 @@ export interface CustomDropdownProps {
   error?: boolean;
   /** Visual variant of the dropdown */
   variant?: 'default' | 'filled';
+  className?: string;
 }
 
 export default function CustomDropdown({
@@ -28,6 +29,7 @@ export default function CustomDropdown({
   required = false,
   error = false,
   variant = 'default',
+  className,
 }: CustomDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -51,7 +53,7 @@ export default function CustomDropdown({
   };
 
   return (
-    <Styled.DropdownContainer ref={dropdownRef}>
+    <Styled.DropdownContainer ref={dropdownRef} className={className}>
       <Styled.DropdownButton
         onClick={() => setIsOpen(!isOpen)}
         $isOpen={isOpen}

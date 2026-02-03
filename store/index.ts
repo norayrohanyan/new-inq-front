@@ -14,6 +14,7 @@ export { servicesActions, servicesSelectors } from './features/services';
 export { companyDetailsActions, companyDetailsSelectors } from './features/companyDetails';
 export { errorsActions, errorsSelectors } from './features/errors';
 export { filtersActions, filtersSelectors } from './features/filters';
+export { nearMeActions, nearMeSelectors } from './features/nearMe';
 
 // Export auth thunks
 export {
@@ -73,6 +74,8 @@ export {
   getServicesFiltersThunk,
 } from './features/filters/thunks';
 
+// Export near me thunks
+export { getCompaniesNearMeThunk } from './features/nearMe/thunks';
 // Export ads actions, selectors, and thunks
 export { adsActions, adsSelectors } from './features/ads';
 export { getAdsThunk } from './features/ads/thunks';

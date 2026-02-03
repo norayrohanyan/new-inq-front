@@ -112,7 +112,7 @@ export default function Header() {
         <Styled.NavLinks>
           <Styled.NavLink href={`/${locale}`} $isActive={isActivePath(pathname, locale, `/${locale}`)}>{t('home').toUpperCase()}</Styled.NavLink>
           <Styled.NavLink href={`/${locale}/categories`} $isActive={isActivePath(pathname, locale, `/${locale}/categories`)}>{t('booking').toUpperCase()}</Styled.NavLink>
-          <Styled.NavLink href={`/${locale}/button-demo`} $isActive={isActivePath(pathname, locale, `/${locale}/button-demo`)}>{t('nearMe').toUpperCase()}</Styled.NavLink>
+          <Styled.NavLink href={`/${locale}/near-me`} $isActive={isActivePath(pathname, locale, `/${locale}/button-demo`)}>{t('nearMe').toUpperCase()}</Styled.NavLink>
           <Styled.NavLink href={`/${locale}/about`} $isActive={isActivePath(pathname, locale, `/${locale}/about`)}>{t('aboutUs').toUpperCase()}</Styled.NavLink>
         </Styled.NavLinks>
 

@@ -284,6 +284,25 @@
     "submit": "Отправить",
     "reviewSuccess": "Спасибо за ваш отзыв!"
   },
+  "nearMe": {
+    "searchPlaceholder": "Поиск мест...",
+    "radius": "Радиус",
+    "enableLocation": "Включить местоположение",
+    "gettingLocation": "Определение местоположения...",
+    "locationActive": "Местоположение активно",
+    "useMyLocation": "Использовать мое местоположение",
+    "foundPlaces": "Найдено {count} мест",
+    "within": "в радиусе {distance} км",
+    "enableLocationAccess": "Включите доступ к местоположению, чтобы найти места рядом с вами",
+    "yourLocation": "Ваше местоположение",
+    "openNow": "Открыто сейчас",
+    "closed": "Закрыто",
+    "viewDetails": "Подробнее",
+    "away": "отсюда",
+    "noPlacesFound": "Места не найдены",
+    "loadingMap": "Загрузка карты...",
+    "loadingPlaces": "Загрузка ближайших мест..."
+  },
   "errors": {
     "categoryNotFound": "Категория не найдена",
     "pageNotFound": {
