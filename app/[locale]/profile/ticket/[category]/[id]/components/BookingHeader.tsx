@@ -3,6 +3,7 @@ import Text from '@/components/Text';
 import { StarIcon } from '@/components/icons';
 import { ICompany } from '@/types/user';
 import * as Styled from '../styled';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface IBookingHeaderProps {
   title: string;
@@ -22,7 +23,7 @@ export const BookingHeader = ({
   getStatusText,
 }: IBookingHeaderProps) => {
   const t = useTranslations();
-
+  const isMobile = useIsMobile();
   return (
     <Styled.CardHeader>
       <Styled.ImageContainer>
@@ -33,14 +34,12 @@ export const BookingHeader = ({
         )}
       </Styled.ImageContainer>
       <Styled.HeaderInfo>
-        <Styled.TitleRow>
-          <Text type="h3" color="white" fontWeight="600">
-            {title}
-          </Text>
-        </Styled.TitleRow>
+        <Text type={isMobile ? 'h6' : 'h3'} color="white" fontWeight="600">
+          {title}
+        </Text>
         <Styled.RatingBadge>
-          <StarIcon width="16" height="16" />
-          <Text type="body" color="white">
+          <StarIcon width={isMobile ? 12 : 16} height={isMobile ? 12 : 16} />
+          <Text type={isMobile ? 'caption' : 'body'} color="white">
             {rating}
           </Text>
         </Styled.RatingBadge>
@@ -52,26 +51,26 @@ export const BookingHeader = ({
         {company && (
           <Styled.CompanyInfo>
             <Styled.InfoRow>
-              <Text type="p" color="white">
+              <Text type={isMobile ? 'caption' : 'p'} color="white">
                 {t('ticketDetail.company')}:
               </Text>
-              <Text type="p" customColor="#999999">
+              <Text type={isMobile ? 'caption' : 'p'} customColor="#999999">
                 {company.name}
               </Text>
             </Styled.InfoRow>
             <Styled.InfoRow>
-              <Text type="p" color="white">
+              <Text type={isMobile ? 'caption' : 'p'} color="white">
                 {t('ticketDetail.address')}:
               </Text>
-              <Text type="p" customColor="#999999">
+              <Text type={isMobile ? 'caption' : 'p'} customColor="#999999">
                 {company.address}
               </Text>
             </Styled.InfoRow>
             <Styled.InfoRow>
-              <Text type="p" color="white">
+              <Text type={isMobile ? 'caption' : 'p'} color="white">
                 {t('ticketDetail.phoneNumber')}:
               </Text>
-              <Text type="p" customColor="#999999">
+              <Text type={isMobile ? 'caption' : 'p'} customColor="#999999">
                 {company.phones?.[0]}
               </Text>
             </Styled.InfoRow>

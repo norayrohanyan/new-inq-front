@@ -2,17 +2,17 @@ import * as Styled from '../styled';
 import { StarIcon } from '@/components/icons';
 
 // Star icon for rating
-export const RatingStar = ({ 
-  filled, 
-  onClick, 
-  clickable 
-}: { 
-  filled: boolean; 
-  onClick?: () => void; 
+export const RatingStar = ({
+  filled,
+  onClick,
+  clickable
+}: {
+  filled: boolean;
+  onClick?: () => void;
   clickable?: boolean;
 }) => (
   <Styled.StarButton $active={filled} $clickable={clickable} onClick={onClick} type="button">
-    <StarIcon fill={filled ? '#FEB245' : '#999999'} stroke={filled ? '#FEB245' : '#999999'} width="14" height="14" />
+    <StarIcon fill='#FEB245' outlined={!filled} width="14" height="14" />
   </Styled.StarButton>
 );
 

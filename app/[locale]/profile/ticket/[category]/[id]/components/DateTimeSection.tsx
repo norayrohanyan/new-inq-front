@@ -1,5 +1,6 @@
 import Text from '@/components/Text';
 import * as Styled from '../styled';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface IDateTimeSectionProps {
   startLabel: string;
@@ -38,16 +39,17 @@ export const DateTimeSection = ({
   startDateTime,
   endDateTime,
 }: IDateTimeSectionProps) => {
+  const isMobile = useIsMobile();
   return (
     <Styled.DateTimeGrid>
       <Styled.DateTimeBlock>
-        <Text type="h5" color="white" fontWeight="500">
+        <Text type={isMobile ? 'h6' : 'h5'} color="white" fontWeight="500">
           {startLabel}
         </Text>
-        <Text type="body" customColor="#999999">
+        <Text type={isMobile ? 'caption' : 'body'} customColor="#999999">
           {formatDate(startDateTime)}
         </Text>
-        <Text type="body" customColor="#999999">
+        <Text type={isMobile ? 'caption' : 'body'} customColor="#999999">
           {formatTime(startDateTime)}
         </Text>
         <Text type="caption" customColor="#999999">
@@ -55,13 +57,13 @@ export const DateTimeSection = ({
         </Text>
       </Styled.DateTimeBlock>
       <Styled.DateTimeBlock>
-        <Text type="h5" color="white" fontWeight="500">
+        <Text type={isMobile ? 'h6' : 'h5'} color="white" fontWeight="500">
           {endLabel}
         </Text>
-        <Text type="body" customColor="#999999">
+        <Text type={isMobile ? 'caption' : 'body'} customColor="#999999">
           {formatDate(endDateTime)}
         </Text>
-        <Text type="body" customColor="#999999">
+        <Text type={isMobile ? 'caption' : 'body'} customColor="#999999">
           {formatTime(endDateTime)}
         </Text>
         <Text type="caption" customColor="#999999">

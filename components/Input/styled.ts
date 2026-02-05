@@ -22,7 +22,7 @@ export const IconWrapper = styled.span`
   }
 `;
 
-export const EyeIconWrapper = styled.button`
+export const EyeIconWrapper = styled.div`
   position: absolute;
   right: 0.75rem;
   display: flex;
