@@ -39,11 +39,9 @@ export const ReviewSection = ({
             />
           ))}
         </Styled.StarRating>
-        <Styled.ExistingReview>
-          <Text type="body" color="white">
-            {existingReview.comment}
-          </Text>
-        </Styled.ExistingReview>
+        <Text type="body" color="white">
+          {existingReview.comment}
+        </Text>
       </Styled.ReviewSection>
     );
   }
@@ -74,6 +72,7 @@ export const ReviewSection = ({
           placeholder={t('ticketDetail.commentPlaceholder')}
           value={comment}
           onChange={(e) => onCommentChange(e.target.value)}
+          maxLength={500}
         />
       </Styled.CommentSection>
     </Styled.ReviewSection>

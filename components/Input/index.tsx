@@ -22,7 +22,7 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>(
       [ref]
     );
 
-    const togglePasswordVisibility = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const togglePasswordVisibility = (e: React.MouseEvent<HTMLDivElement>) => {
       e.preventDefault();
       e.stopPropagation();
       setShowPassword((prev) => !prev);
@@ -39,7 +39,7 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>(
           {...props}
         />
         {isPasswordType && (
-          <Styled.EyeIconWrapper onClick={togglePasswordVisibility}>
+          <Styled.EyeIconWrapper onClick={(e: React.MouseEvent<HTMLDivElement>) => togglePasswordVisibility(e)}>
             {showPassword ? (
               <EyeOffIcon width="20" height="20" />
             ) : (

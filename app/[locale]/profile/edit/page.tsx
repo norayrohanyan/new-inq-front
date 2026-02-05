@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { authSelectors, authActions, getCurrentUserThunk } from '@/store';
 import { apiService } from '@/services/api';
@@ -22,6 +23,8 @@ import * as Styled from './styled';
 
 export default function ProfileEditPage() {
   const t = useTranslations();
+  const locale = useLocale();
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useAppSelector(authSelectors.user);
   const isAuthenticated = useAppSelector(authSelectors.isAuthenticated);
@@ -44,6 +47,7 @@ export default function ProfileEditPage() {
   // Modal state
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [isPasswordChangeSuccess, setIsPasswordChangeSuccess] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showSmsModal, setShowSmsModal] = useState(false);
@@ -120,6 +124,25 @@ export default function ProfileEditPage() {
     }
   };
 
+  const handleSuccessModalClose = async () => {
+    if (isPasswordChangeSuccess) {
+      // Password was changed successfully, log out the user
+      try {
+        await apiService.logout();
+      } catch (error) {
+        console.error('Logout error:', error);
+      } finally {
+        dispatch(authActions.logout());
+        setShowSuccessModal(false);
+        setIsPasswordChangeSuccess(false);
+        router.push(`/${locale}/login`);
+      }
+    } else {
+      // Regular success (profile or phone update)
+      setShowSuccessModal(false);
+    }
+  };
+
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordLoading(true);
@@ -150,6 +173,7 @@ export default function ProfileEditPage() {
         setNewPassword('');
         setConfirmPassword('');
         setSuccessMessage(t('profile.edit.passwordUpdated'));
+        setIsPasswordChangeSuccess(true);
         setShowSuccessModal(true);
       } else {
         setErrorMessage(response.error || t('common.error'));
@@ -278,14 +302,14 @@ export default function ProfileEditPage() {
       {/* Success Modal */}
       <ModalDialog
         isOpen={showSuccessModal}
-        onClose={() => setShowSuccessModal(false)}
+        onClose={handleSuccessModalClose}
         icon={<SuccessIcon width={80} height={80} />}
         title={successMessage}
         type="success"
         buttons={
           <Button
             variant="primary"
-            onClick={() => setShowSuccessModal(false)}
+            onClick={handleSuccessModalClose}
             fullWidth
           >
             {t('common.ok') || 'OK'}

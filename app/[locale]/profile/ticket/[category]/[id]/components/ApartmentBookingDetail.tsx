@@ -6,6 +6,7 @@ import { GuestInformation } from './GuestInformation';
 import { DateTimeSection } from './DateTimeSection';
 import { AreaIcon, BedroomIcon, LevelIcon } from './Icons';
 import * as Styled from '../styled';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface IApartmentBookingDetailProps {
   booking: IApartmentBookingDetail;
@@ -17,6 +18,7 @@ export const ApartmentBookingDetail = ({
   getStatusText 
 }: IApartmentBookingDetailProps) => {
   const t = useTranslations();
+  const isMobile = useIsMobile();
 
   const title = booking.apartment?.is_apartment 
     ? t('ticketDetail.apartment') 
@@ -43,33 +45,33 @@ export const ApartmentBookingDetail = ({
       />
 
       <Styled.ApartmentInfo>
-        <Text type="h5" color="white" fontWeight="500">
+        <Text type={isMobile ? 'h6' : 'h5'} color="white" fontWeight="500">
           {t('ticketDetail.apartmentInformation')}
         </Text>
         <Styled.InfoRow style={{ marginTop: '12px' }}>
-          <Text type="p" color="white">
+          <Text type={isMobile ? 'caption' : 'p'} color="white">
             {t('ticketDetail.apartmentAddress')}:
           </Text>
-          <Text type="p" customColor="#999999">
+          <Text type={isMobile ? 'caption' : 'p'} customColor="#999999">
             {booking.apartment?.address}
           </Text>
         </Styled.InfoRow>
         <Styled.ApartmentDetails>
           <Styled.DetailItem>
             <AreaIcon />
-            <Text type="body" color="white">
+            <Text type={isMobile ? 'caption' : 'body'} color="white">
               {booking.apartment?.total_square} m²
             </Text>
           </Styled.DetailItem>
           <Styled.DetailItem>
             <BedroomIcon />
-            <Text type="body" color="white">
+            <Text type={isMobile ? 'caption' : 'body'} color="white">
               {booking.apartment?.room_count} {t('ticketDetail.bedrooms')}
             </Text>
           </Styled.DetailItem>
           <Styled.DetailItem>
             <LevelIcon />
-            <Text type="body" color="white">
+            <Text type={isMobile ? 'caption' : 'body'} color="white">
               {t('ticketDetail.level')} {booking.apartment?.level}
             </Text>
           </Styled.DetailItem>

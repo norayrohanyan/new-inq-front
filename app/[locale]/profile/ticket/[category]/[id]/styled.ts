@@ -14,10 +14,6 @@ export const CardHeader = styled.div`
   display: flex;
   gap: 20px;
   margin-bottom: 2px;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
 `;
 
 export const ImageContainer = styled.div`
@@ -30,11 +26,6 @@ export const ImageContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @media (max-width: 768px) {
-    width: 100%;
-    height: 200px;
-  }
 `;
 
 export const Image = styled.img`
@@ -71,12 +62,6 @@ export const RatingBadge = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-
-  svg {
-    color: ${COLORS.brandOrangeMid};
-    width: 16px;
-    height: 16px;
-  }
 `;
 
 export const StatusBadge = styled.div<{ $status: string }>`
@@ -147,11 +132,6 @@ export const DateTimeGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   margin-bottom: 24px;
-
-  @media (max-width: 500px) {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
 `;
 
 export const DateTimeBlock = styled.div`
@@ -295,6 +275,10 @@ export const ReviewSection = styled.div`
   margin-top: 24px;
   padding-top: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
 `;
 
 export const ReviewHeader = styled.div`
@@ -339,19 +323,12 @@ export const CommentTextarea = styled.textarea`
   color: white;
   font-size: 14px;
   font-family: inherit;
-  resize: vertical;
+  resize: none;
   margin-top: 8px;
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.4);
   }
-`;
-
-export const ExistingReview = styled.div`
-  margin-top: 8px;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
 `;
 
 export const SubmitButton = styled.button`
