@@ -7,6 +7,7 @@ export { useToggle } from './useToggle';
 export { useLocalStorage } from './useLocalStorage';
 export { useEventListener } from './useEventListener';
 export { useInfiniteScroll } from './useInfiniteScroll';
+export { usePageCache } from './usePageCache';
 
 // App-specific hooks with localStorage
 export { useAuth } from './useAuth';

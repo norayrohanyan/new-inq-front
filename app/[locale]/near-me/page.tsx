@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect, useMemo } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import {
@@ -35,23 +35,14 @@ export default function NearMePage() {
   const error = useAppSelector(nearMeSelectors.error);
   const selectedCategory = useAppSelector(nearMeSelectors.selectedCategory);
   const userLocation = useAppSelector(nearMeSelectors.userLocation);
+  const selectedLocation = useAppSelector(nearMeSelectors.selectedLocation);
   const radius = useAppSelector(nearMeSelectors.radius);
   const locationPermission = useAppSelector(nearMeSelectors.locationPermission);
+
+  const activeLocation = selectedLocation ?? userLocation;
   
   // Local state
-  const [searchTerm, setSearchTerm] = useState('');
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
-
-  // Filter companies by search term
-  const filteredCompanies = useMemo(() => {
-    if (!searchTerm.trim()) return companies;
-    const term = searchTerm.toLowerCase();
-    return companies.filter(
-      (company) =>
-        company.name.toLowerCase().includes(term) ||
-        company.address.toLowerCase().includes(term)
-    );
-  }, [companies, searchTerm]);
 
   // Fetch companies when category, location, or radius changes
   useEffect(() => {
@@ -59,15 +50,14 @@ export default function NearMePage() {
       category: selectedCategory,
     };
 
-    // Temporarily disabled location filtering to show all companies
-    if (userLocation) {
-      params.latitude = userLocation.latitude;
-      params.longitude = userLocation.longitude;
+    if (activeLocation && isFinite(radius)) {
+      params.latitude = activeLocation.latitude;
+      params.longitude = activeLocation.longitude;
       params.radius = radius;
     }
 
     dispatch(getCompaniesNearMeThunk(params));
-  }, [dispatch, selectedCategory, userLocation, radius]);
+  }, [dispatch, selectedCategory, activeLocation, radius]);
 
   // Automatically get user location on mount
   useEffect(() => {
@@ -77,16 +67,29 @@ export default function NearMePage() {
   // Handlers
   const handleCategoryChange = useCallback((slug: string) => {
     dispatch(nearMeActions.setSelectedCategory(slug));
-    setSearchTerm('');
   }, [dispatch]);
-
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchTerm(value);
-  }, []);
 
   const handleRadiusChange = useCallback((newRadius: number) => {
     dispatch(nearMeActions.setRadius(newRadius));
   }, [dispatch]);
+
+  const handleMapClick = useCallback((location: { latitude: number; longitude: number }) => {
+    dispatch(nearMeActions.setSelectedLocation(location));
+    dispatch(nearMeActions.setLocationPermission('granted'));
+  }, [dispatch]);
+
+  const handleLocate = useCallback((location: { latitude: number; longitude: number }) => {
+    const isSame =
+      userLocation &&
+      Math.abs(userLocation.latitude - location.latitude) < 0.0001 &&
+      Math.abs(userLocation.longitude - location.longitude) < 0.0001;
+
+    if (isSame && !selectedLocation) return;
+
+    dispatch(nearMeActions.setUserLocation(location));
+    dispatch(nearMeActions.setSelectedLocation(null));
+    dispatch(nearMeActions.setLocationPermission('granted'));
+  }, [dispatch, userLocation, selectedLocation]);
 
   const handleGetLocation = useCallback(() => {
     if (!navigator.geolocation) {
@@ -102,6 +105,7 @@ export default function NearMePage() {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         }));
+        dispatch(nearMeActions.setSelectedLocation(null));
         dispatch(nearMeActions.setLocationPermission('granted'));
         setIsLoadingLocation(false);
       },
@@ -137,14 +141,14 @@ export default function NearMePage() {
       category: selectedCategory,
     };
 
-    if (userLocation) {
-      params.latitude = userLocation.latitude;
-      params.longitude = userLocation.longitude;
+    if (activeLocation && isFinite(radius)) {
+      params.latitude = activeLocation.latitude;
+      params.longitude = activeLocation.longitude;
       params.radius = radius;
     }
 
     dispatch(getCompaniesNearMeThunk(params));
-  }, [dispatch, selectedCategory, userLocation, radius]);
+  }, [dispatch, selectedCategory, activeLocation, radius]);
 
   return (
     <Styled.PageContainer>
@@ -154,16 +158,15 @@ export default function NearMePage() {
       />
 
       <NearMeControls
-        searchTerm={searchTerm}
-        onSearchChange={handleSearchChange}
         radius={radius}
         onRadiusChange={handleRadiusChange}
+        onPlaceSelect={handleMapClick}
       />
 
-      {filteredCompanies.length > 0 && (
+      {companies.length > 0 && (
         <Styled.ResultsInfo>
-          Found <Styled.ResultsCount>{filteredCompanies.length}</Styled.ResultsCount> places
-          {userLocation && ` within ${radius / 1000}km`}
+          Found <Styled.ResultsCount>{companies.length}</Styled.ResultsCount> places
+          {activeLocation && isFinite(radius) && ` within ${radius / 1000}km`}
         </Styled.ResultsInfo>
       )}
 
@@ -189,10 +192,12 @@ export default function NearMePage() {
             </Styled.MapOverlay>
           ) : (
             <NearMeMap
-              companies={filteredCompanies}
-              userLocation={userLocation}
+              companies={companies}
+              activeLocation={activeLocation}
               radius={radius}
               isLoading={isLoading}
+              onMapClick={handleMapClick}
+              onLocate={handleLocate}
             />
           )}
         </Styled.MapContainer>

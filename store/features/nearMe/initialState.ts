@@ -6,6 +6,7 @@ export const nearMeInitialState: INearMeState = {
   error: null,
   selectedCategory: 'beauty_salon',
   userLocation: null,
-  radius: 5000, // 5km default
+  selectedLocation: null,
+  radius: Infinity,
   locationPermission: null,
 };

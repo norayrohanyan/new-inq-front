@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
+import { debounce } from 'lodash';
 import { ICategorySwitch } from '@/types/categories';
 import * as Styled from '../styled';
 
@@ -71,7 +72,7 @@ export const CategoriesToggle: React.FC<ICategoriesToggleProps> = ({
       <Styled.ToggleLabel $active={isLeftActive}>
         {leftLabel}
       </Styled.ToggleLabel>
-      <Styled.ToggleSwitch onClick={onToggleChange}>
+      <Styled.ToggleSwitch onClick={useMemo(() => debounce(onToggleChange, 300, { leading: true, trailing: false }), [onToggleChange])}>
         <Styled.ToggleKnob $active={isLeftActive} />
       </Styled.ToggleSwitch>
       <Styled.ToggleLabel $active={isRightActive}>

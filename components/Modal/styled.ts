@@ -71,7 +71,8 @@ export const DialogContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  min-width: 400px;
+  min-width: 300px;
+  max-width: 400px;
   text-align: center;
 
   @media (max-width: 768px) {

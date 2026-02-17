@@ -20,6 +20,12 @@ export const nearMeReducers = {
   ) => {
     state.userLocation = action.payload;
   },
+  setSelectedLocation: (
+    state: INearMeState,
+    action: PayloadAction<{ latitude: number; longitude: number } | null>
+  ) => {
+    state.selectedLocation = action.payload;
+  },
   setRadius: (state: INearMeState, action: PayloadAction<number>) => {
     state.radius = action.payload;
   },

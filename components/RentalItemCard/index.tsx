@@ -8,6 +8,8 @@ import { StarIcon, LocationIcon } from '@/components/icons';
 import { ShareButton } from '@/components/ShareButton';
 import * as Styled from './styled';
 import { getDetailUrl } from '@/utils/url';
+import { useIsMobile, useIsTablet } from '@/hooks/useIsMobile';
+import { TABLET_SIZE_BREAKPOINT } from '@/consts';
 
 interface RentalItemCardProps {
   id: number;
@@ -41,6 +43,11 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
   const t = useTranslations();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const isTablet = useIsTablet();
+  const isMobile = useIsMobile();
+
+  const buttonText = isTablet && !isMobile ? 'More' : 'More information »';
+
   const hasDiscount = price !== totalPrice;
   const isApartment = category === 'apartment_rental';
 
@@ -64,7 +71,7 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
   return (
     <Styled.Card>
       {/* Image Section - Simple, no carousel */}
-      <div style={{ display: 'flex', gap: '1rem', flex: 1 }}>
+      <div style={{ display: 'flex', gap: '1rem', flex: 1, minWidth: 0, overflow: 'hidden' }}>
 
         <Styled.ImageSection>
           <Styled.ImageWrapper>
@@ -138,7 +145,7 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
 
         <Styled.ActionButton onClick={handleMoreInfo}>
           <Text type="body" color="white" fontWeight="600">
-            More information »
+            {buttonText}
           </Text>
         </Styled.ActionButton>
       </div>

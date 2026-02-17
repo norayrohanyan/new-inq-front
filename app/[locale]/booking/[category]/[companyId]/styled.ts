@@ -42,7 +42,7 @@ export const StepsContainer = styled.div`
 
 export const StepWrapper = styled.div`
   display: flex;
-  align-items: center;
+  align-items: baseline;
   flex: 1;
   
   &:last-child {
@@ -67,7 +67,7 @@ export const StepIcon = styled.div<{ $active: boolean; $completed: boolean }>`
     $active ? 'linear-gradient(92.57deg, #F6572F 0%, #FE7F3B 49.5%, #FEB245 100%)' : 
     COLORS.darkBgSemi};
   border: 2px solid ${({ $active, $completed }) =>
-    $completed || $active ? 'transparent' : COLORS.borderColor};
+    $completed || $active ? 'none' : COLORS.borderColor};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,7 +165,7 @@ export const Checkbox = styled.div<{ $checked: boolean }>`
   width: 24px;
   height: 24px;
   border-radius: 6px;
-  border: 2px solid ${({ $checked }) => $checked ? COLORS.brandOrangeMid : COLORS.borderColor};
+  border: 2px solid ${({ $checked }) => $checked ? 'none' : COLORS.borderColor};
   background: ${({ $checked }) => $checked ? COLORS.brandGradient : 'transparent'};
   display: flex;
   align-items: center;
@@ -387,7 +387,7 @@ export const DateTimeContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-  max-width: 800px;
+  max-width: 700px;
 `;
 
 export const TimeSlotsSection = styled.div`
@@ -423,8 +423,9 @@ export const TimeSlotGrid = styled.div`
 export const TimeSlotButton = styled.button<{ $selected: boolean }>`
   padding: 1rem 1.5rem;
   border-radius: 12px;
-  border: 2px solid ${({ $selected }) => $selected ? COLORS.brandOrangeMid : COLORS.borderColor};
+  border: 0.5px solid ${({ $selected }) => $selected ? 'none' : COLORS.borderColor};
   background: ${({ $selected }) => $selected ? COLORS.brandGradient : COLORS.darkBgSemi};
+  : COLORS.darkBgSemi};
   cursor: pointer;
   transition: all 0.3s ease;
 
@@ -448,16 +449,9 @@ export const BookingInfoContainer = styled.div`
 `;
 
 export const InfoCard = styled.div`
-  background: ${COLORS.darkBgSemi};
-  border-radius: 24px;
-  padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
-  @media (max-width: 768px) {
-    padding: 1.5rem;
-  }
 `;
 
 export const InfoRow = styled.div`
@@ -486,6 +480,19 @@ export const CheckboxRow = styled.div`
   padding: 0.5rem 0;
 `;
 
+export const GuestSection = styled.div<{ $expanded: boolean }>`
+  display: grid;
+  grid-template-rows: ${({ $expanded }) => ($expanded ? '1fr' : '0fr')};
+  transition: grid-template-rows 0.3s ease;
+
+  > div {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+`;
+
 export const Input = styled.input`
   width: 100%;
   padding: 1rem 1.5rem;
@@ -510,14 +517,18 @@ export const Input = styled.input`
 export const TextArea = styled.textarea`
   width: 100%;
   padding: 1rem 1.5rem;
-  background: ${COLORS.darkBgSemi};
+  background: transparent;
   border: 1px solid ${COLORS.borderColor};
   border-radius: 12px;
   color: ${COLORS.white};
   font-size: 1rem;
   font-family: inherit;
-  resize: vertical;
   transition: all 0.3s ease;
+  resize: none;
+  min-height: 150px;
+  max-height: 300px;
+
+  margin-top: 1rem;
 
   &::placeholder {
     color: ${COLORS.secondarySemiLight};

@@ -10,7 +10,6 @@ import { getFavoritesThunk } from '@/store/features/user/thunks';
 export const useFavorites = () => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(authSelectors.isAuthenticated);
-
   useEffect(() => {
     // Only fetch favorites if user is authenticated
     if (isAuthenticated) {

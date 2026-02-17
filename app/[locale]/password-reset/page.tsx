@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
@@ -23,8 +23,12 @@ export default function PasswordResetPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [resetToken, setResetToken] = useState<string | null>(null);
+  const verifiedRef = useRef(false);
 
   useEffect(() => {
+    if (verifiedRef.current) return;
+
     const hash = searchParams.get('hash');
 
     if (!hash) {
@@ -33,6 +37,7 @@ export default function PasswordResetPage() {
       return;
     }
 
+    verifiedRef.current = true;
     verifyResetLink(hash);
   }, [searchParams]);
 
@@ -42,6 +47,9 @@ export default function PasswordResetPage() {
       const result = await dispatch(verifyLinkThunk(hash));
 
       if (verifyLinkThunk.fulfilled.match(result)) {
+        const tokens = result.payload.tokens;
+        const token = 'token' in tokens ? tokens.token : tokens.access_token;
+        setResetToken(token);
         setStatus('form');
       } else {
         setStatus('error');
@@ -67,7 +75,7 @@ export default function PasswordResetPage() {
       return;
     }
 
-    const result = await dispatch(updatePasswordThunk(password));
+    const result = await dispatch(updatePasswordThunk({ password, token: resetToken! }));
 
     if (updatePasswordThunk.fulfilled.match(result)) {
       setStatus('success');

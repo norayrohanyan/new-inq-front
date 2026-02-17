@@ -7,6 +7,7 @@ import { useGlobalError } from '@/hooks/useGlobalError';
 import { COLORS } from '@/consts/colors';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
+import Input from '@/components/Input';
 import Calendar from '@/components/Calendar';
 import * as Styled from './styled';
 
@@ -133,10 +134,9 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
             check_out: checkOut.split('T')[0], // Format: Y-m-d
             guests_count: guestsCount,
             comment,
-            guest: {
-              phone: bookingForSomeoneElse ? guestPhone : '00000000', //TODO: make backend to accept empty string
-              name: bookingForSomeoneElse ? guestName : '#####', //TODO: make backend to accept empty string
-            },
+            ...(bookingForSomeoneElse && {
+              guest: { phone: guestPhone, name: guestName },
+            }),
           })
         ).unwrap();
       } else if (type === 'car') {
@@ -146,10 +146,9 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
             pickup_time: pickupTime.split('T')[0], // Format: Y-m-d
             return_time: returnTime.split('T')[0], // Format: Y-m-d
             comment,
-            guest: {
-              phone: bookingForSomeoneElse ? guestPhone : '00000000',
-              name: bookingForSomeoneElse ? guestName : '#####' //TODO: make backend to accept empty string
-            },
+            ...(bookingForSomeoneElse && {
+              guest: { phone: guestPhone, name: guestName },
+            }),
           })
         ).unwrap();
       }
@@ -442,22 +441,21 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
             <Text type="body" color="white">
               {t('company.guestPhone')}
             </Text>
-            <Styled.TextArea
+            <Input
+              type="tel"
+              prefix="+374"
               value={guestPhone}
               onChange={(e) => {
-                setGuestPhone(e.target.value);
+                const digits = e.target.value.replace(/\D/g, '');
+                setGuestPhone(digits);
                 if (errors.guestPhone) {
                   setErrors((prev) => ({ ...prev, guestPhone: undefined }));
                 }
               }}
-              placeholder="12345678"
-              rows={1}
+              placeholder="XX XXX XXX"
+              inputMode="numeric"
+              error={errors.guestPhone}
             />
-            {errors.guestPhone && (
-              <Text type="caption" customColor={COLORS.accentRed}>
-                {errors.guestPhone}
-              </Text>
-            )}
           </Styled.InputGroup>
         </>
       )}

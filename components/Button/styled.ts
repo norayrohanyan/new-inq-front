@@ -28,9 +28,11 @@ const getVariantStyles = ($variant: ButtonVariant) => {
       `;
     case 'secondary':
       return css`
-        background: ${COLORS.darkBg};
+        background:
+          linear-gradient(${COLORS.darkBg}, ${COLORS.darkBg}) padding-box,
+          ${COLORS.brandGradient} border-box;
         color: ${COLORS.white};
-        border: 2px solid ${COLORS.brandOrangeMid};
+        border: 1px solid transparent;
 
         &:hover:not(:disabled) {
           background: ${COLORS.brandOrangeMid};

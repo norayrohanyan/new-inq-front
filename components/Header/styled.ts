@@ -7,13 +7,13 @@ export const HeaderContainer = styled.header`
   background: ${COLORS.darkBg};
   position: sticky;
   top: 0;
-  z-index: 1001;
+  z-index: 9999;
 `;
 
 export const Nav = styled.nav`
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -198,7 +198,7 @@ export const MobileMenuOverlay = styled.div<{ $isOpen: boolean }>`
   opacity: ${({ $isOpen }) => ($isOpen ? '1' : '0')};
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   overflow-y: auto;
-  z-index: 9999;
+  z-index: 1002;
 `;
 
 export const CloseButton = styled.button`

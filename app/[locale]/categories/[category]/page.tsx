@@ -21,7 +21,7 @@ import FilterSidebar from '@/components/FilterSidebar';
 import FilterButton from '@/components/FilterButton';
 import FilterChips, { FilterChip } from '@/components/FilterChips';
 import * as Styled from '../styled';
-import { useIsMobile } from '@/hooks';
+import { useIsMobile, useFavorites } from '@/hooks';
 
 export default function CategoryPage() {
   const params = useParams();
@@ -48,6 +48,8 @@ export default function CategoryPage() {
   const companiesFilters = useAppSelector(filtersSelectors.companiesFilters);
   const servicesFilters = useAppSelector(filtersSelectors.servicesFilters);
   const filters = showCompanies ? companiesFilters : servicesFilters;
+
+  useFavorites();
   
   // Auto-set the correct toggle state based on category
   useEffect(() => {

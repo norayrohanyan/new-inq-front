@@ -60,6 +60,14 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
       const current = prev[sectionKey] || [];
       const isSelected = current.includes(optionValue);
 
+      // Subcategory is single-select
+      if (sectionKey === 'subcategory') {
+        return {
+          ...prev,
+          [sectionKey]: isSelected ? [] : [optionValue],
+        };
+      }
+
       return {
         ...prev,
         [sectionKey]: isSelected
@@ -135,7 +143,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 <Text type="h6" color="white">
                   {t(`filters.${key}`)}
                 </Text>
-                <Styled.ExpandIcon expanded={expandedSections[key]}>+</Styled.ExpandIcon>
+                <Styled.ExpandIcon $expanded={expandedSections[key]}>+</Styled.ExpandIcon>
               </Styled.SectionHeader>
 
               {expandedSections[key] && (
@@ -145,7 +153,19 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({
                     const optionId = String(option.id);
                     const isSelected = selectedFilters[key]?.includes(optionId) || false;
 
-                    return (
+                    return key === 'subcategory' ? (
+                      <Styled.RadioOption
+                        key={option.id}
+                        onClick={() => handleFilterToggle(key, optionId)}
+                      >
+                        <Styled.RadioButton checked={isSelected}>
+                          {isSelected && <Styled.RadioInner />}
+                        </Styled.RadioButton>
+                        <Text type="body" color="white">
+                          {option.name}
+                        </Text>
+                      </Styled.RadioOption>
+                    ) : (
                       <Styled.CheckboxOption
                         key={option.id}
                         onClick={() => handleFilterToggle(key, optionId)}

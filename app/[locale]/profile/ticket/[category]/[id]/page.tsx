@@ -79,8 +79,6 @@ function TicketDetailContent() {
   };
 
   const handleSubmitReview = async () => {
-    if (rating === 0) return;
-
     setIsSubmittingReview(true);
     try {
       await apiService.submitReview({
@@ -252,7 +250,7 @@ function TicketDetailContent() {
             {isFromHistory && !hasExistingReview && !reviewSubmitted && (
               <Styled.SubmitButton
                 onClick={handleSubmitReview}
-                disabled={isSubmittingReview || rating === 0}
+                disabled={isSubmittingReview}
               >
                 {isSubmittingReview ? t('common.loading') : t('ticketDetail.submit')}
               </Styled.SubmitButton>

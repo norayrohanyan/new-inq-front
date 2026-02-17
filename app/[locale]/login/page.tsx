@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { authSelectors, loginThunk } from '@/store';
+import { authSelectors, authActions, loginThunk } from '@/store';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Button from '@/components/Button';
@@ -24,6 +24,10 @@ export default function LoginPage() {
 
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    dispatch(authActions.clearError());
+  }, [dispatch]);
 
   // Get the return URL from query params (where user wanted to go before login)
   const returnUrl = searchParams.get('returnUrl');

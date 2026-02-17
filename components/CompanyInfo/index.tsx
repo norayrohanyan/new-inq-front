@@ -3,11 +3,32 @@ import { useTranslations } from 'next-intl';
 import { AnimatePresence } from 'framer-motion';
 import Text from '@/components/Text';
 import Button from '@/components/Button';
-import { PhoneIcon, LocationIcon, StarIcon, FacebookIcon, InstagramIcon, LinkedinIcon } from '@/components/icons';
+import {
+  PhoneIcon,
+  LocationIcon,
+  StarIcon,
+  FacebookIcon,
+  InstagramIcon,
+  LinkedinIcon,
+  WebsiteIcon,
+  YoutubeIcon,
+  TelegramIcon,
+  WhatsappIcon,
+} from '@/components/icons';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { ShareButton } from '@/components/ShareButton';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import * as Styled from './styled';
+
+const EXTERNAL_LINK_ICONS: Record<string, React.FC<{ width?: number; height?: number }>> = {
+  website: WebsiteIcon,
+  instagram: InstagramIcon,
+  facebook: FacebookIcon,
+  youtube: YoutubeIcon,
+  telegram: TelegramIcon,
+  whatsapp: WhatsappIcon,
+  linkedin: LinkedinIcon,
+};
 
 interface ICompanyInfoProps {
   companyId: number;
@@ -125,80 +146,65 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
             >
         {/* Two Column Section: Phone & Social (left) + Work Hours (right) */}
         <Styled.TwoColumnSection>
-        {/* Phone and Social Section */}
-        <Styled.PhoneAndSocialSection>
-          {/* Phones */}
-          {phones && phones.length > 0 && (
-            <Styled.PhoneSection>
-              {phones.map((phone, index) => (
-                <Styled.PhoneRow key={index}>
-                  <PhoneIcon width={18} height={18} />
-                  <Text type="caption" color="white">
-                    {phone}
-                  </Text>
-                </Styled.PhoneRow>
-              ))}
-            </Styled.PhoneSection>
-          )}
+          {/* Phone and Social Section */}
+          <Styled.PhoneAndSocialSection>
 
-          {/* Social Media Links */}
-          {externalLinks && Object.keys(externalLinks).length > 0 && (
-            <Styled.SocialSection>
-              {externalLinks.facebook && (
-                <Styled.SocialButton href={externalLinks.facebook} target="_blank">
-                  <FacebookIcon width={12} height={12} />
-                </Styled.SocialButton>
-              )}
-              {externalLinks.instagram && (
-                <Styled.SocialButton href={externalLinks.instagram} target="_blank">
-                  <InstagramIcon width={12} height={12} />
-                </Styled.SocialButton>
-              )}
-              {externalLinks.linkedin && (
-                <Styled.SocialButton href={externalLinks.linkedin} target="_blank">
-                  <LinkedinIcon width={12} height={12} />
-                </Styled.SocialButton>
-              )}
-              {externalLinks.twitter && (
-                <Styled.SocialButton href={externalLinks.twitter} target="_blank">
-                  <FacebookIcon width={12} height={12} />
-                </Styled.SocialButton>
-              )}
-              {externalLinks.youtube && (
-                <Styled.SocialButton href={externalLinks.youtube} target="_blank">
-                  <FacebookIcon width={12} height={12} />
-                </Styled.SocialButton>
-              )}
-            </Styled.SocialSection>
-          )}
-        </Styled.PhoneAndSocialSection>
+              {/* Social Media Links */}
+            {externalLinks && Object.keys(externalLinks).length > 0 && (
+              <Styled.SocialSection>
+                {Object.entries(externalLinks).map(([key, url]) => {
+                  const Icon = EXTERNAL_LINK_ICONS[key];
+                  if (!Icon || !url) return null;
+                  return (
+                    <Styled.SocialButton key={key} href={url} target="_blank" rel="noopener noreferrer">
+                      <Icon width={12} height={12} />
+                    </Styled.SocialButton>
+                  );
+                })}
+              </Styled.SocialSection>
+            )}
 
-        {/* Work Hours */}
-        <Styled.WorkHoursSection>
-          {daysOfWeek.map((day) => {
-            const hours = workHours[day as keyof typeof workHours];
-            let displayHours = t('company.closed');
+            {/* Phones */}
+            {phones && phones.length > 0 && (
+              <Styled.PhoneSection>
+                {phones.map((phone, index) => (
+                  <Styled.PhoneRow key={index}>
+                    <PhoneIcon width={18} height={18} />
+                    <Text type="caption" color="white">
+                      {phone}
+                    </Text>
+                  </Styled.PhoneRow>
+                ))}
+              </Styled.PhoneSection>
+            )}
+          </Styled.PhoneAndSocialSection>
 
-            if (hours) {
-              if (Array.isArray(hours) && hours.length > 0) {
-                displayHours = hours.join(', ');
-              } else if (typeof hours === 'string') {
-                displayHours = hours;
+          {/* Work Hours */}
+          <Styled.WorkHoursSection>
+            {daysOfWeek.map((day) => {
+              const hours = workHours[day as keyof typeof workHours];
+              let displayHours = t('company.closed');
+
+              if (hours) {
+                if (Array.isArray(hours) && hours.length > 0) {
+                  displayHours = hours.join(', ');
+                } else if (typeof hours === 'string') {
+                  displayHours = hours;
+                }
               }
-            }
 
-            return (
-              <Styled.WorkHourRow key={day}>
-                <Text type="caption" color="white" fontWeight="600">
-                  {day}
-                </Text>
-                <Text type="caption" color="white">
-                  {displayHours}
-                </Text>
-              </Styled.WorkHourRow>
-            );
-          })}
-        </Styled.WorkHoursSection>
+              return (
+                <Styled.WorkHourRow key={day}>
+                  <Text type="caption" color="white" fontWeight="600">
+                    {day}
+                  </Text>
+                  <Text type="caption" color="white">
+                    {displayHours}
+                  </Text>
+                </Styled.WorkHourRow>
+              );
+            })}
+          </Styled.WorkHoursSection>
         </Styled.TwoColumnSection>
 
         {/* Map */}

@@ -4,10 +4,15 @@ declare module 'react-responsive-masonry' {
   export interface MasonryProps {
     columnsCount?: number;
     gutter?: string;
+    children?: ReactNode;
+  }
+
+  export interface ResponsiveMasonryProps {
     columnsCountBreakPoints?: Record<number, number>;
     children?: ReactNode;
   }
 
+  export function ResponsiveMasonry(props: ResponsiveMasonryProps): JSX.Element;
   export default function Masonry(props: MasonryProps): JSX.Element;
 }
 

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import Masonry from 'react-responsive-masonry';
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import AdBanner from '@/components/AdBanner';
 import CompanyInfo from '@/components/CompanyInfo';
 import CompanyTabs from '@/components/CompanyTabs';
@@ -23,7 +23,7 @@ export interface ServiceDetailData {
   address?: string;
   phones?: string[];
   workHours?: string | Record<string, string[] | null>;
-  externalLinks?: Record<string, string> | any[];
+  externalLinks?: Record<string, string>;
   bannerUrls?: {
     desktopImage?: string;
     mobileImage?: string;
@@ -93,20 +93,18 @@ export default function ServiceDetailTemplate({
   isLoadingReviews,
 }: ServiceDetailTemplateProps) {
   const t = useTranslations();
-  const [activeTab, setActiveTab] = React.useState('services');
-
   // Build tabs array based on available data and features
   const tabs = React.useMemo(() => {
     const tabsList: Array<{ id: string; label: string }> = [];
-    
+
     if (features.hasServices && data.services && data.services.length > 0) {
       tabsList.push({ id: 'services', label: t('company.services') });
     }
-    
+
     if (features.hasEmployees && data.employees && data.employees.length > 0) {
       tabsList.push({ id: 'employees', label: t('company.employees') });
     }
-    
+
     if (features.hasPortfolio && data.portfolio && data.portfolio.length > 0) {
       tabsList.push({ id: 'portfolio', label: t('company.portfolio') });
     }
@@ -114,16 +112,11 @@ export default function ServiceDetailTemplate({
     if (features.hasReviews) {
       tabsList.push({ id: 'reviews', label: t('company.reviews') });
     }
-    
+
     return tabsList;
   }, [data.services, data.employees, data.portfolio, data.reviews, features, t]);
 
-  // Set default active tab to first available tab
-  React.useEffect(() => {
-    if (tabs.length > 0 && !tabs.find((tab) => tab.id === activeTab)) {
-      setActiveTab(tabs[0].id);
-    }
-  }, [tabs, activeTab]);
+  const [selectedTab, setSelectedTab] = React.useState('services');
 
   if (isLoading) {
     return (
@@ -171,28 +164,26 @@ export default function ServiceDetailTemplate({
         {/* Left Column - Tabs Content */}
         {tabs.length > 0 && (
           <Styled.LeftColumn>
-            <CompanyTabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab}>
-              {activeTab === 'services' && data.services && (
-                <Masonry 
-                  columnsCount={1} 
-                  gutter="0.5rem"
-                  columnsCountBreakPoints={{ 0: 1, 900: 2 }}
-                >
-                  {data.services.map((service) => (
-                    <ServiceCard
-                      key={service.id}
-                      id={service.id}
-                      name={service.name}
-                      description={service.description}
-                      price={service.price}
-                      duration={service.duration}
-                      onBook={handleServiceBook}
-                    />
-                  ))}
-                </Masonry>
+            <CompanyTabs tabs={tabs} activeTab={selectedTab} onTabChange={setSelectedTab}>
+              {selectedTab === 'services' && data.services && (
+                <ResponsiveMasonry columnsCountBreakPoints={{ 0: 1, 768: 2 }}>
+                  <Masonry gutter="0.5rem">
+                    {data.services.map((service) => (
+                      <ServiceCard
+                        key={service.id}
+                        id={service.id}
+                        name={service.name}
+                        description={service.description}
+                        price={service.price}
+                        duration={service.duration}
+                        onBook={handleServiceBook}
+                      />
+                    ))}
+                  </Masonry>
+                </ResponsiveMasonry>
               )}
 
-              {activeTab === 'employees' && data.employees && (
+              {selectedTab === 'employees' && data.employees && (
                 <Styled.EmployeesGrid>
                   {data.employees.map((employee) => (
                     <EmployeeCard
@@ -208,13 +199,13 @@ export default function ServiceDetailTemplate({
                 </Styled.EmployeesGrid>
               )}
 
-              {activeTab === 'portfolio' && data.portfolio && (
+              {selectedTab === 'portfolio' && data.portfolio && (
                 <Styled.PortfolioSection>
                   <ImageGallery images={data.portfolio} alt={data.name} />
                 </Styled.PortfolioSection>
               )}
 
-              {activeTab === 'reviews' && (
+              {selectedTab === 'reviews' && (
                 <>
                   {isLoadingReviews ? (
                     <Styled.LoadingContainer>
@@ -290,11 +281,7 @@ export default function ServiceDetailTemplate({
                     Saturday: null,
                   }
             }
-            externalLinks={
-              Array.isArray(data.externalLinks) 
-                ? {} 
-                : (data.externalLinks as Record<string, string> | undefined)
-            }
+            externalLinks={data.externalLinks}
           />
         </Styled.RightColumn>
       </Styled.MainContent>

@@ -9,6 +9,7 @@ export const Card = styled.div`
   border-radius: 20px;
   padding: 1.5rem;
   position: relative;
+  overflow: hidden;
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     flex-direction: column;
@@ -118,7 +119,7 @@ export const ActionSection = styled.div`
   align-items: flex-end;
   justify-content: space-between;
   gap: 1rem;
-  min-width: 240px;
+  flex-shrink: 0;
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     align-items: start;

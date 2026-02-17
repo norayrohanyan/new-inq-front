@@ -25,16 +25,16 @@ export const PageContainer = styled.div`
 
 // Controls Section
 export const ControlsSection = styled.div`
-  padding: 0 4rem 1rem 4rem;
+  padding: 0 4rem;
+  margin-bottom: 2rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 1.5rem;
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
-    flex-direction: column;
     padding: 0 1rem 1rem 1rem;
     align-items: start;
+    flex-direction: column;
   }
 `;
 
@@ -44,12 +44,15 @@ export const RadiusControls = styled.div`
   align-items: center;
   gap: 1rem;
   background: ${COLORS.darkBgSemi};
-  padding: 0.5rem;
   padding-left: 1.5rem;
   border-radius: 50px;
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
-    justify-content: start;
+    width: 100%;
+
+    > p {
+      flex: 1;
+    }
   }
 `;
 
@@ -137,7 +140,22 @@ export const MapContainer = styled.div`
   }
 
   .leaflet-popup-close-button {
-    display: none;
+    color: ${COLORS.white} !important;
+    font-size: 20px !important;
+    width: 28px !important;
+    height: 28px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    top: 8px !important;
+    right: 8px !important;
+    padding: 0 !important;
+    border-radius: 50%;
+    transition: background 0.2s ease;
+
+    &:hover {
+      color: ${COLORS.brandOrangeMid} !important;
+    }
   }
 
   .leaflet-control-zoom {
@@ -193,6 +211,7 @@ export const MapContainer = styled.div`
   .leaflet-control-locate-location-arrow {
     background-color: ${COLORS.white} !important;
   }
+
 `;
 
 export const MapOverlay = styled.div`
@@ -236,6 +255,26 @@ export const MapOverlayButton = styled.button`
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(254, 127, 59, 0.4);
+  }
+`;
+
+export const MapLoadingOverlay = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1000;
+  background: ${COLORS.darkBgSemi};
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  .spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid ${COLORS.brandOrangeMid};
+    border-radius: 50%;
+    animation: ${spin} 1s linear infinite;
   }
 `;
 
@@ -414,4 +453,19 @@ export const RetryButton = styled.button`
 // Custom Dropdown
 export const RadiusDropdown = styled(Dropdown)`
   z-index: 1000;
+  width: 100%;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    width: auto;
+    flex: 1;
+  }
+  
+  ${DropdownButton} {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    justify-content: end;
+  }
 `;
+

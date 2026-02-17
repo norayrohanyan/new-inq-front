@@ -2,6 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 import Text from '@/components/Text';
+import Input from '@/components/Input';
+import { getLocalNumber } from '@/utils/phone';
 import * as Styled from '../styled';
 import { useBookingContext } from './BookingContext';
 
@@ -25,11 +27,12 @@ export const BookingInfoStep = () => {
     setComments,
   } = useBookingContext();
 
+  const handleGuestPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digits = getLocalNumber(e.target.value).slice(0, 8);
+    setGuestPhone(digits);
+  };
+
   return (
-    <>
-      <Text type="h2" color="white" fontWeight="700" align="center">
-        {t('booking.bookingInfo')}
-      </Text>
       <Styled.BookingInfoContainer>
         <Styled.InfoCard>
           <Text type="h4" color="white" fontWeight="700">
@@ -107,32 +110,33 @@ export const BookingInfoStep = () => {
             </Text>
           </Styled.CheckboxRow>
 
-          {bookingForOther && (
-            <>
-              <Styled.Input
+          <Styled.GuestSection $expanded={bookingForOther}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <Input
                 type="text"
                 placeholder={t('company.guestName')}
                 value={guestName}
                 onChange={(e) => setGuestName(e.target.value)}
               />
-              <Styled.Input
+              <Input
                 type="tel"
-                placeholder={t('company.guestPhone')}
+                prefix="+374"
+                placeholder="XX XXX XXX"
                 value={guestPhone}
-                onChange={(e) => setGuestPhone(e.target.value)}
+                onChange={handleGuestPhoneChange}
+                inputMode="numeric"
               />
-            </>
-          )}
+              <Styled.TextArea
+                placeholder={t('company.comments')}
+                value={comments}
+                onChange={(e) => setComments(e.target.value)}
+                rows={4}
+              />
+            </div>
+          </Styled.GuestSection>
 
-          <Styled.TextArea
-            placeholder={t('company.comments')}
-            value={comments}
-            onChange={(e) => setComments(e.target.value)}
-            rows={4}
-          />
         </Styled.FormContainer>
       </Styled.BookingInfoContainer>
-    </>
   );
 };
 

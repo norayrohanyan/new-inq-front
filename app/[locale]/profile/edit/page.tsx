@@ -15,7 +15,6 @@ import {
   LockIcon,
   SuccessIcon,
   ErrorIcon,
-  SmsIcon,
 } from '@/components/icons';
 import { ProfileLayout } from '../components';
 import { getLocalNumber } from '@/utils/phone';
@@ -50,7 +49,6 @@ export default function ProfileEditPage() {
   const [isPasswordChangeSuccess, setIsPasswordChangeSuccess] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [showSmsModal, setShowSmsModal] = useState(false);
 
   // Fetch user data from server when authenticated but user data not loaded
   useEffect(() => {
@@ -111,7 +109,10 @@ export default function ProfileEditPage() {
 
       if (response.success) {
         dispatch(authActions.updateUser({ phone }));
-        setShowSmsModal(true);
+        sessionStorage.setItem('registerPhone', phone);
+        sessionStorage.setItem('smsVerificationType', '3');
+        sessionStorage.setItem('smsTimerExpiresAt', String(Date.now() + 150 * 1000));
+        router.push(`/${locale}/check-sms`);
       } else {
         setErrorMessage(response.error || t('common.error'));
         setShowErrorModal(true);
@@ -335,13 +336,6 @@ export default function ProfileEditPage() {
         }
       />
 
-      {/* SMS Verification Modal */}
-      <ModalDialog
-        isOpen={showSmsModal}
-        onClose={() => setShowSmsModal(false)}
-        icon={<SmsIcon />}
-        title={t('auth.checkYourSms')}
-      />
     </ProfileLayout>
   );
 }

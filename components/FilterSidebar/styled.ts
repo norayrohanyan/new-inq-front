@@ -109,12 +109,12 @@ export const SectionHeader = styled.div`
   }
 `;
 
-export const ExpandIcon = styled.span<{ expanded?: boolean }>`
+export const ExpandIcon = styled.span<{ $expanded?: boolean }>`
   color: ${COLORS.brandOrangeMid};
   font-size: 24px;
   font-weight: 300;
   transition: transform 0.2s ease;
-  transform: rotate(${({ expanded }) => (expanded ? '45deg' : '0deg')});
+  transform: rotate(${({ $expanded }) => ($expanded ? '45deg' : '0deg')});
 `;
 
 export const OptionsContainer = styled.div`
