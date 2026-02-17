@@ -157,7 +157,7 @@ export default function UnifiedDetailPage() {
       address: companyDetails.address,
       phones: companyDetails.phones || [],
       workHours: companyDetails.work_hours,
-      externalLinks: companyDetails.external_links || [],
+      externalLinks: companyDetails.external_links || {},
       bannerUrls: companyDetails.banner_urls
         ? {
             desktopImage: companyDetails.banner_urls.desktop_image,
