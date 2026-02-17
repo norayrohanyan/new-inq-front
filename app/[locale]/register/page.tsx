@@ -1,20 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { authSelectors, registerThunk } from '@/store';
+import { authSelectors, authActions, registerThunk } from '@/store';
 import Link from 'next/link';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
 import Input from '@/components/Input';
-import { PhoneIcon, LockIcon, SmsIcon } from '@/components/icons';
-import ModalDialog from '@/components/Modal/ModalDialog';
+import { PhoneIcon, LockIcon } from '@/components/icons';
 import * as Styled from './styled';
 
 export default function RegisterPage() {
   const t = useTranslations();
   const locale = useLocale();
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(authSelectors.isLoading);
   const error = useAppSelector(authSelectors.error);
@@ -24,7 +25,11 @@ export default function RegisterPage() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showSmsModal, setShowSmsModal] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
+
+  useEffect(() => {
+    dispatch(authActions.clearError());
+  }, [dispatch]);
 
   // Handle phone input - only allow digits, max 8
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,8 +41,10 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationError(null);
 
     if (password !== confirmPassword) {
+      setValidationError(t('auth.passwordsDoNotMatch'));
       return;
     }
 
@@ -52,12 +59,10 @@ export default function RegisterPage() {
     );
 
     if (registerThunk.fulfilled.match(result)) {
-      setShowSmsModal(true);
-      setFirstName('');
-      setLastName('');
-      setPhone('');
-      setPassword('');
-      setConfirmPassword('');
+      const timerSeconds = result.payload?.next_request_seconds ?? 150;
+      sessionStorage.setItem('registerPhone', phone);
+      sessionStorage.setItem('smsTimerExpiresAt', String(Date.now() + timerSeconds * 1000));
+      router.push(`/${locale}/check-sms`);
     }
   };
 
@@ -119,9 +124,9 @@ export default function RegisterPage() {
             required
           />
 
-          {error && (
+          {(error || validationError) && (
             <Text type="small" color="accentRed" align="center">
-              {error}
+              {validationError || error}
             </Text>
           )}
 
@@ -138,13 +143,6 @@ export default function RegisterPage() {
         </Styled.Form>
       </Styled.RegisterCard>
 
-      {/* SMS Verification Modal */}
-      <ModalDialog
-        isOpen={showSmsModal}
-        onClose={() => setShowSmsModal(false)}
-        icon={<SmsIcon />}
-        title={t('auth.checkYourSms')}
-      />
     </Styled.PageContainer>
   );
 }

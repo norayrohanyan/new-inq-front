@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { COLORS } from '@/consts/colors';
-import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
+import { MOBILE_SIZE_BREAKPOINT, TABLET_SIZE_BREAKPOINT } from '@/consts';
 
 export const PageContainer = styled.div`
   width: 100%;
@@ -52,10 +52,12 @@ export const TabsContainer = styled.div`
   padding: 8px;
   background: ${COLORS.darkBgSemi};
   border-radius: 50px;
+  max-width: 466px;
   width: fit-content;
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     width: 100%;
+    max-width: 430px;
     justify-content: flex-start;
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -78,7 +80,6 @@ export const PricingCardsGrid = styled.div`
   width: 100%;
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
-    grid-template-columns: 1fr;
     gap: 20px;
   }
 `;

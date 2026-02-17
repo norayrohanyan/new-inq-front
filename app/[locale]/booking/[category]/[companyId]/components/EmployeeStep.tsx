@@ -21,15 +21,18 @@ export const EmployeeStep = () => {
     handleContinue,
     canContinue,
     canGoBack,
+    companyDetails,
   } = useBookingContext();
+
+  const isIndividual = companyDetails?.is_individual;
 
   return (
     <>
       {/* Show pre-selected employee banner if exists */}
-      {preSelectedEmployeeId && selectedEmployee && (
+      {!isIndividual && preSelectedEmployeeId && selectedEmployee && (
         <Styled.PreSelectedBanner>
           <Styled.PreSelectedEmployee>
-            <Styled.EmployeeAvatar 
+            <Styled.EmployeeAvatar
               src={selectedEmployee.imageUrl || '/images/default-avatar.png'}
               alt={selectedEmployee.name}
             />
@@ -46,6 +49,7 @@ export const EmployeeStep = () => {
       )}
 
       <Styled.EmployeeGrid>
+        {!isIndividual && (
         <div>
           <Text type="h3" color="white" fontWeight="700" style={{ marginBottom: '1.5rem' }}>
             {preSelectedEmployeeId ? t('booking.chooseAnotherEmployee') : t('booking.chooseEmployee')}
@@ -58,7 +62,7 @@ export const EmployeeStep = () => {
                 onClick={() => handleEmployeeSelect(employee)}
               >
                 <Styled.Checkbox $checked={selectedEmployee?.id === employee.id} />
-                <Styled.EmployeeAvatar 
+                <Styled.EmployeeAvatar
                   src={employee.imageUrl || employee.avatar || '/images/default-avatar.png'}
                   alt={employee.name}
                 />
@@ -69,6 +73,7 @@ export const EmployeeStep = () => {
             ))}
           </Styled.EmployeeList>
         </div>
+        )}
 
         {additionalServices && additionalServices.length > 0 && (
           <div>

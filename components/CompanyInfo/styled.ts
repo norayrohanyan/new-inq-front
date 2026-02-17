@@ -4,17 +4,18 @@ import { COLORS } from '@/consts/colors';
 import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 export const InfoContainer = styled.div`
-  width: fit-content;
+  width: 100%;
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   position: sticky;
   top: 100px;
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     position: static;
+    max-width: 100%;
     padding: 0;
   }
 `;
@@ -48,8 +49,8 @@ export const HeaderSection = styled.div`
 `;
 
 export const LogoWrapper = styled.div`
-  width: 150px;
-  height: 150px;
+  width: 80px;
+  height: 80px;
   background: ${COLORS.darkBg};
   border-radius: 16px;
   overflow: hidden;
@@ -62,11 +63,6 @@ export const LogoWrapper = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  @media (max-width: 768px) {
-    width: 80px;
-    height: 80px;
   }
 `;
 
@@ -126,37 +122,24 @@ export const ActionButton = styled.button`
 `;
 
 export const TwoColumnSection = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  align-items: stretch;
-
-  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
-    gap: 0.75rem;
-  }
+  display: flex;
+  gap: 1rem;
 `;
 
 export const PhoneAndSocialSection = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-
-  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
-    gap: 0.75rem;
-  }
+  gap: 1rem;
+  min-width: 140px;
 `;
 
 export const PhoneSection = styled.div`
   background: ${COLORS.darkBgSemi};
-  border-radius: 16px;
-  padding: 1rem 1.5rem;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-  }
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 `;
 
 export const PhoneRow = styled.div`
@@ -173,11 +156,11 @@ export const PhoneRow = styled.div`
 
 export const SocialSection = styled.div`
   background: ${COLORS.darkBgSemi};
-  border-radius: 16px;
-  padding: 1rem 1.5rem;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 `;
 
 export const SocialRow = styled.div`
@@ -211,11 +194,13 @@ export const SocialButton = styled.a`
 
 export const WorkHoursSection = styled.div`
   background: ${COLORS.darkBgSemi};
-  border-radius: 16px;
-  padding: 1rem 1.5rem;
-  display: grid;
-  grid-template-rows: repeat(7, 1fr);
-  gap: 0.5rem;
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 export const WorkHourRow = styled.div`
@@ -239,9 +224,9 @@ export const WorkHourRow = styled.div`
 
 export const MapPlaceholder = styled.div`
   width: 100%;
-  height: 300px;
+  height: 180px;
   background: ${COLORS.darkBg};
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
   display: flex;
   align-items: center;

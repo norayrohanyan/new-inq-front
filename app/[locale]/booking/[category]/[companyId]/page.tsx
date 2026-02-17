@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useCallback } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { createBeautyBookingThunk, authSelectors } from '@/store';
+import { createBeautyBookingThunk, authSelectors, companyDetailsActions } from '@/store';
 import { getCategoryTemplate } from '@/consts/categoryTemplates';
 import Text from '@/components/Text';
 import * as Styled from './styled';
@@ -33,10 +33,10 @@ export default function BookingPage() {
 
   const category = params.category as string;
   const companyIdParam = params.companyId as string;
-  
+
   // Check if coming from service selection
   const isFromService = companyIdParam === '0' || companyIdParam === 'service';
-  
+
   // URL params
   const preSelectedServiceId = searchParams.get('serviceId');
   const preSelectedEmployeeId = searchParams.get('employeeId');
@@ -47,10 +47,9 @@ export default function BookingPage() {
 
   // Auth check
   const isAuthenticated = useAppSelector(authSelectors.isAuthenticated);
-  
+
   useEffect(() => {
     if (!isAuthenticated) {
-      // Save current URL as returnUrl so user is redirected back after login
       const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
       router.push(`/${locale}/login?returnUrl=${currentUrl}`);
     }
@@ -127,7 +126,7 @@ export default function BookingPage() {
           price: service.price || 0,
           duration: (service as any).duration,
         }]);
-        
+
         if (!preSelectedEmployeeId && hasEmployees) {
           bookingState.setCurrentStep('employee');
         } else {
@@ -139,21 +138,28 @@ export default function BookingPage() {
     bookingState.setIsInitialized(true);
   }, [bookingData.services, bookingData.employees, preSelectedServiceId, preSelectedEmployeeId, bookingState.isInitialized, hasEmployees]);
 
-  // Handlers
-  const handleCompanySelect = (company: ICompanyByService) => {
+  // Cleanup Redux state on unmount to prevent stale data on next visit
+  useEffect(() => {
+    return () => {
+      dispatch(companyDetailsActions.clearCompanyDetails());
+    };
+  }, [dispatch]);
+
+  // Handlers wrapped in useCallback for stable references
+  const handleCompanySelect = useCallback((company: ICompanyByService) => {
     bookingState.setSelectedCompanyId(company.id);
     bookingState.setCurrentStep('service');
-  };
+  }, [bookingState.setSelectedCompanyId, bookingState.setCurrentStep]);
 
-  const handleEmployeeSelect = (employee: any) => {
+  const handleEmployeeSelect = useCallback((employee: any) => {
     bookingState.handleEmployeeSelect(employee, preSelectedEmployeeId);
-  };
+  }, [bookingState.handleEmployeeSelect, preSelectedEmployeeId]);
 
-  const handleSubmitBooking = async () => {
+  const handleSubmitBooking = useCallback(async () => {
     if (!bookingState.selectedDate || !bookingState.selectedTime) return;
 
     bookingState.setIsSubmitting(true);
-    
+
     try {
       const bookingDataPayload = {
         company_id: companyId,
@@ -165,7 +171,7 @@ export default function BookingPage() {
           guest: { name: bookingState.guestName.trim(), phone: bookingState.guestPhone.trim() }
         }),
       };
-      
+
       const result = await dispatch(createBeautyBookingThunk(bookingDataPayload)).unwrap();
       if (result) bookingState.setCurrentStep('success');
     } catch (error: any) {
@@ -174,32 +180,43 @@ export default function BookingPage() {
     } finally {
       bookingState.setIsSubmitting(false);
     }
-  };
+  }, [
+    companyId, bookingState.selectedDate, bookingState.selectedTime,
+    bookingState.selectedServices, bookingState.selectedEmployee,
+    bookingState.comments, bookingState.bookingForOther,
+    bookingState.guestName, bookingState.guestPhone, dispatch,
+  ]);
 
-  const handleContinue = () => {
+  const handleContinue = useCallback(() => {
     navigation.handleContinue(handleSubmitBooking);
-  };
+  }, [navigation.handleContinue, handleSubmitBooking]);
+
+  // Back handler: reset current step state before navigating back
+  const handleBack = useCallback(() => {
+    bookingState.resetStepState(bookingState.currentStep);
+    navigation.handleBack();
+  }, [bookingState.currentStep, bookingState.resetStepState, navigation.handleBack]);
 
   // Context value
   const contextValue = useMemo(() => ({
     // Step
     currentStep: bookingState.currentStep,
     setCurrentStep: bookingState.setCurrentStep,
-    
+
     // Company
     isFromService,
     selectedCompanyId: bookingState.selectedCompanyId,
     companiesByService: bookingData.companiesByService,
     isLoadingCompanies: bookingData.isLoadingCompanies,
     handleCompanySelect,
-    
+
     // Services
     services: bookingData.services,
     additionalServices: bookingData.additionalServices,
     selectedServices: bookingState.selectedServices,
     handleServiceToggle: bookingState.handleServiceToggle,
     preSelectedServiceId,
-    
+
     // Employees
     employees: bookingData.employees,
     availableEmployees: bookingData.availableEmployees,
@@ -207,16 +224,16 @@ export default function BookingPage() {
     handleEmployeeSelect,
     preSelectedEmployeeId,
     hasEmployees,
-    
-    // DateTime
+
+    // DateTime - handleDateChange auto-clears time when date changes
     selectedDate: bookingState.selectedDate,
-    setSelectedDate: bookingState.setSelectedDate,
+    setSelectedDate: bookingState.handleDateChange,
     selectedTime: bookingState.selectedTime,
     setSelectedTime: bookingState.setSelectedTime,
     beautyTimeSlots: bookingData.beautyTimeSlots,
     isLoadingTimeSlots: bookingData.isLoadingTimeSlots,
     availableIntervals: bookingData.availableIntervals,
-    
+
     // Guest
     bookingForOther: bookingState.bookingForOther,
     setBookingForOther: bookingState.setBookingForOther,
@@ -226,34 +243,38 @@ export default function BookingPage() {
     setGuestPhone: bookingState.setGuestPhone,
     comments: bookingState.comments,
     setComments: bookingState.setComments,
-    
+
     // Calculations
     totalPrice: bookingState.totalPrice,
     totalDuration: bookingState.totalDuration,
-    
+
     // Navigation
     handleContinue,
-    handleBack: navigation.handleBack,
+    handleBack,
     canContinue: navigation.canContinue,
     canGoBack: navigation.canGoBack,
     isSubmitting: bookingState.isSubmitting,
-    
+
     // Details
     companyDetails: bookingData.companyDetails,
     templateConfig,
   }), [
     bookingState.currentStep, isFromService, bookingState.selectedCompanyId,
-    bookingData.companiesByService, bookingData.isLoadingCompanies,
+    bookingData.companiesByService, bookingData.isLoadingCompanies, handleCompanySelect,
     bookingData.services, bookingData.additionalServices, bookingState.selectedServices,
-    preSelectedServiceId, bookingData.employees, bookingData.availableEmployees,
-    bookingState.selectedEmployee, preSelectedEmployeeId, hasEmployees,
-    bookingState.selectedDate, bookingState.selectedTime,
+    bookingState.handleServiceToggle, preSelectedServiceId,
+    bookingData.employees, bookingData.availableEmployees,
+    bookingState.selectedEmployee, handleEmployeeSelect, preSelectedEmployeeId, hasEmployees,
+    bookingState.selectedDate, bookingState.handleDateChange, bookingState.selectedTime,
     bookingData.beautyTimeSlots, bookingData.isLoadingTimeSlots, bookingData.availableIntervals,
     bookingState.bookingForOther, bookingState.guestName, bookingState.guestPhone, bookingState.comments,
     bookingState.totalPrice, bookingState.totalDuration,
-    navigation.handleBack, navigation.canContinue, navigation.canGoBack,
+    handleContinue, handleBack, navigation.canContinue, navigation.canGoBack,
     bookingState.isSubmitting, bookingData.companyDetails, templateConfig,
   ]);
+
+  // Block rendering for unauthenticated users
+  if (!isAuthenticated) return null;
 
   // Loading states
   if (bookingData.isLoading && !bookingData.companyDetails && !isFromService) {
@@ -273,26 +294,25 @@ export default function BookingPage() {
     return null;
   }
 
-  // Success screen
-  if (bookingState.currentStep === 'success') {
-    return <SuccessScreen />;
-  }
-
   return (
     <BookingContext.Provider value={contextValue}>
-      <Styled.PageContainer>
-        <StepsProgress />
-        
-        <Styled.ContentArea>
-          {bookingState.currentStep === 'company' && <CompanyStep />}
-          {bookingState.currentStep === 'service' && <ServiceStep />}
-          {bookingState.currentStep === 'employee' && <EmployeeStep />}
-          {bookingState.currentStep === 'datetime' && <DateTimeStep />}
-          {bookingState.currentStep === 'info' && <BookingInfoStep />}
-        </Styled.ContentArea>
+      {bookingState.currentStep === 'success' ? (
+        <SuccessScreen />
+      ) : (
+        <Styled.PageContainer>
+          <StepsProgress />
 
-        <ActionButtons />
-      </Styled.PageContainer>
+          <Styled.ContentArea>
+            {bookingState.currentStep === 'company' && <CompanyStep />}
+            {bookingState.currentStep === 'service' && <ServiceStep />}
+            {bookingState.currentStep === 'employee' && <EmployeeStep />}
+            {bookingState.currentStep === 'datetime' && <DateTimeStep />}
+            {bookingState.currentStep === 'info' && <BookingInfoStep />}
+          </Styled.ContentArea>
+
+          <ActionButtons />
+        </Styled.PageContainer>
+      )}
     </BookingContext.Provider>
   );
 }

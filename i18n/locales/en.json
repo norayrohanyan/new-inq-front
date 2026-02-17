@@ -84,7 +84,7 @@
     "finish": "Finish",
     "thankYou": "Thank you for your booking",
     "confirmationMessage": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sem leo, laoreet sed tincidunt id, dictum cursus mauris.",
-    "backToHome": "Back to Home",
+    "backToHome": "Back to Companies",
     "viewBooking": "View booking",
     "availableTimes": "Available times",
     "noAvailableTimes": "No available times for the selected date",
@@ -123,6 +123,8 @@
     "recoveryComplete": "Account recovery complete!",
     "passwordsDoNotMatch": "Passwords do not match",
     "passwordTooShort": "Password must be at least 8 characters",
+    "checkSmsDescription": "We sent a verification link to your phone. Please check your SMS.",
+    "sendLinkAgain": "Send link again",
     "passwordChangedSuccess": "Your password has been changed successfully. Please login with your new password."
   },
   "categories": {
@@ -275,6 +277,7 @@
     "airConditioner": "Air Conditioner"
   },
   "ticketDetail": {
+    "category": "Category",
     "company": "Company",
     "address": "Address",
     "phoneNumber": "Phone number",
@@ -305,6 +308,7 @@
     "cancelError": "Failed to cancel booking. Please try again.",
     "cancelSuccess": "Booking cancelled successfully",
     "rateYourExperience": "Rate your experience:",
+    "rating": "Rating",
     "comments": "Comments",
     "comment": "Comment",
     "commentPlaceholder": "Add any special requests for the here...",
@@ -314,6 +318,7 @@
   "nearMe": {
     "searchPlaceholder": "Search places...",
     "radius": "Radius",
+    "all": "All",
     "enableLocation": "Enable Location",
     "gettingLocation": "Getting location...",
     "locationActive": "Location active",

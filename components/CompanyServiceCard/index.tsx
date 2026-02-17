@@ -124,14 +124,15 @@ const CompanyServiceCard: React.FC<ICompanyServiceCardProps> = ({
       </Styled.InfoWrapper>
       <Styled.ActionButtons onClick={(e) => e.stopPropagation()}>
         <ShareButton size="small" url={shareUrl} />
-        <FavoriteButton
+        {isCompany && (<FavoriteButton
           companyId={data.id}
-          category={category}
-          size="small"
-        />
+            category={category}
+            size="small"
+          />
+        )}
       </Styled.ActionButtons>
     </Styled.CardContainer>
   );
-};
+}
 
 export default CompanyServiceCard;

@@ -73,6 +73,47 @@ export const StyledInput = styled.input<{ $hasIcon?: boolean; $hasEyeIcon?: bool
   }
 `;
 
+export const PrefixWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: border-color 0.3s;
+  width: 100%;
+
+  &:focus-within {
+    border-bottom-color: ${COLORS.brandOrangeMid};
+  }
+`;
+
+export const PrefixText = styled.span`
+  color: ${COLORS.white};
+  font-size: 1rem;
+  padding: 1rem 0.5rem 1rem 0;
+  white-space: nowrap;
+`;
+
+export const PrefixInput = styled.input`
+  flex: 1;
+  padding: 1rem 0;
+  background: transparent;
+  border: none;
+  color: ${COLORS.white};
+  font-size: 1rem;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
 export const ErrorText = styled.span`
   position: absolute;
   bottom: -1.5rem;

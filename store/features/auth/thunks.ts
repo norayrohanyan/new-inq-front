@@ -61,6 +61,28 @@ export const registerThunk = createAsyncThunk(
   }
 );
 
+export const sendVerificationLinkThunk = createAsyncThunk(
+  'auth/sendVerificationLink',
+  async ({ phone, type }: { phone: string; type: number }, { dispatch, rejectWithValue }) => {
+    try {
+      dispatch(authActions.setLoading(true));
+      const response = await apiService.sendVerificationLink(phone, type);
+
+      if (response.success) {
+        dispatch(authActions.setLoading(false));
+        return response.data;
+      } else {
+        dispatch(authActions.setError(response.error || 'Failed to send verification link'));
+        return rejectWithValue(response.error);
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send verification link';
+      dispatch(authActions.setError(errorMessage));
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 export const verifyLinkThunk = createAsyncThunk(
   'auth/verifyLink',
   async (hash: string, { dispatch, rejectWithValue }) => {
@@ -83,16 +105,8 @@ export const verifyLinkThunk = createAsyncThunk(
             })
           );
         } else {
-          // Password reset token - store access token temporarily for password update
-          const resetTokens = tokens as IResetTokens;
-          dispatch(
-            authActions.setTokens({
-              accessToken: resetTokens.token,
-              refreshToken: '', // No refresh token for password reset
-              accessTokenExpiresAt: resetTokens.token_expires_at,
-              refreshTokenExpiresAt: '', // No refresh token expiry
-            })
-          );
+          // Password reset token - handled directly by the password-reset page
+          dispatch(authActions.setLoading(false));
         }
 
         return response.data;
@@ -163,10 +177,10 @@ export const forgotPasswordThunk = createAsyncThunk(
  */
 export const updatePasswordThunk = createAsyncThunk(
   'auth/updatePassword',
-  async (password: string, { dispatch, rejectWithValue }) => {
+  async ({ password, token }: { password: string; token: string }, { dispatch, rejectWithValue }) => {
     try {
       dispatch(authActions.setLoading(true));
-      const response = await apiService.updatePassword(password);
+      const response = await apiService.updatePassword(password, token);
       
       if (response.success) {
         dispatch(authActions.setLoading(false));

@@ -7,11 +7,12 @@ import {
   Marker,
   Popup,
   useMap,
-  Circle,
+  useMapEvents,
 } from 'react-leaflet';
 import L from 'leaflet';
 import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
+import { isServiceCategory } from '@/consts/categoryTemplates';
 
 import 'leaflet/dist/leaflet.css';
 
@@ -61,28 +62,33 @@ const createCustomIcon = (isOpen?: boolean) => {
   });
 };
 
-const userLocationIcon = L.divIcon({
-  className: 'user-location-marker',
+const locationIcon = L.divIcon({
+  className: 'map-click-marker',
   html: `
     <div style="
-      width: 30px;
-      height: 30px;
-      background: #3866FF;
-      border: 4px solid white;
-      border-radius: 50%;
-      box-shadow: 0 4px 16px rgba(56, 102, 255, 0.8);
-      animation: pulse 2s ease-in-out infinite;
-    "></div>
-    <style>
-      @keyframes pulse {
-        0% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.2); opacity: 0.7; }
-        100% { transform: scale(1); opacity: 1; }
-      }
-    </style>
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #FE7F3B 0%, #FE7F3Bdd 100%);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      border: 3px solid white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    ">
+      <div style="
+        width: 12px;
+        height: 12px;
+        background: white;
+        border-radius: 50%;
+        transform: rotate(45deg);
+      "></div>
+    </div>
   `,
-  iconSize: [30, 30],
-  iconAnchor: [15, 15],
+  iconSize: [36, 36],
+  iconAnchor: [18, 36],
+  popupAnchor: [0, -36],
 });
 
 /* =========================
@@ -105,11 +111,19 @@ function MapUpdater({
   return null;
 }
 
-function LocateControl() {
+function MapClickHandler({ onClick }: { onClick: (location: { latitude: number; longitude: number }) => void }) {
+  useMapEvents({
+    click(e) {
+      onClick({ latitude: e.latlng.lat, longitude: e.latlng.lng });
+    },
+  });
+  return null;
+}
+
+function LocateControl({ onLocate }: { onLocate?: (location: { latitude: number; longitude: number }) => void }) {
   const map = useMap();
 
   useEffect(() => {
-    // ✅ this now exists because import is correct
     const locate = (L.control as any).locate({
       position: 'topleft',
       strings: {
@@ -120,16 +134,23 @@ function LocateControl() {
       },
       flyTo: true,
       keepCurrentZoomLevel: false,
-      drawMarker: false, // Don't draw the locate control's marker
-      drawCircle: false, // Don't draw the accuracy circle
+      drawMarker: false,
+      drawCircle: false,
     });
 
     locate.addTo(map);
 
+    const handleLocationFound = (e: L.LocationEvent) => {
+      onLocate?.({ latitude: e.latlng.lat, longitude: e.latlng.lng });
+    };
+
+    map.on('locationfound', handleLocationFound);
+
     return () => {
+      map.off('locationfound', handleLocationFound);
       locate.remove();
     };
-  }, [map]);
+  }, [map, onLocate]);
 
   return null;
 }
@@ -140,9 +161,11 @@ function LocateControl() {
 
 interface INearMeMapProps {
   companies: INearMeCompany[];
-  userLocation: { latitude: number; longitude: number } | null;
+  activeLocation: { latitude: number; longitude: number } | null;
   radius: number;
   isLoading: boolean;
+  onMapClick?: (location: { latitude: number; longitude: number }) => void;
+  onLocate?: (location: { latitude: number; longitude: number }) => void;
 }
 
 /* =========================
@@ -151,9 +174,11 @@ interface INearMeMapProps {
 
 export const NearMeMap: React.FC<INearMeMapProps> = ({
   companies,
-  userLocation,
+  activeLocation,
   radius,
   isLoading,
+  onMapClick,
+  onLocate,
 }) => {
   const router = useRouter();
   const locale = useLocale();
@@ -162,19 +187,23 @@ export const NearMeMap: React.FC<INearMeMapProps> = ({
   const defaultCenter: [number, number] = [40.1792, 44.4991];
 
   const center = useMemo<[number, number]>(() => {
-    if (userLocation) {
-      return [userLocation.latitude, userLocation.longitude];
+    if (activeLocation) {
+      return [activeLocation.latitude, activeLocation.longitude];
     }
     if (companies.length > 0) {
       return [companies[0].latitude, companies[0].longitude];
     }
     return defaultCenter;
-  }, [userLocation, companies]);
+  }, [activeLocation, companies]);
 
   const handleViewDetails = (company: INearMeCompany) => {
-    router.push(
-      `/${locale}/categories/${company.category}/company/${company.id}`
-    );
+    mapRef.current?.closePopup();
+
+    const path = isServiceCategory(company.category)
+      ? `/${locale}/detail/${company.category}/${company.id}`
+      : `/${locale}/categories/${company.category}/company/${company.id}`;
+
+    setTimeout(() => router.push(path), 0);
   };
 
   const formatDistance = (meters?: number) => {
@@ -183,16 +212,13 @@ export const NearMeMap: React.FC<INearMeMapProps> = ({
     return `${(meters / 1000).toFixed(1)}km`;
   };
 
-  if (isLoading) {
-    return (
-      <Styled.LoadingContainer>
-        <div className="spinner" />
-        <Styled.LoadingText>Loading nearby places...</Styled.LoadingText>
-      </Styled.LoadingContainer>
-    );
-  }
-
   return (
+    <div style={{ position: 'relative', height: '100%', width: '100%' }}>
+      {isLoading && (
+        <Styled.MapLoadingOverlay>
+          <div className="spinner" />
+        </Styled.MapLoadingOverlay>
+      )}
     <MapContainer
       center={center}
       zoom={13}
@@ -206,22 +232,18 @@ export const NearMeMap: React.FC<INearMeMapProps> = ({
       />
 
       <MapUpdater center={center} zoom={13} />
-      <LocateControl />
+      <LocateControl onLocate={onLocate} />
+      {onMapClick && <MapClickHandler onClick={onMapClick} />}
 
-      {userLocation && (
-        <>
-          <Marker
-            position={[
-              userLocation.latitude,
-              userLocation.longitude,
-            ]}
-            icon={userLocationIcon}
-          >
-            <Popup>
-              <strong>Your location</strong>
-            </Popup>
-          </Marker>
-        </>
+      {activeLocation && (
+        <Marker
+          position={[activeLocation.latitude, activeLocation.longitude]}
+          icon={locationIcon}
+        >
+          <Popup>
+            <strong>Your location</strong>
+          </Popup>
+        </Marker>
       )}
 
       {companies.map((company) => (
@@ -287,5 +309,6 @@ export const NearMeMap: React.FC<INearMeMapProps> = ({
         </Marker>
       ))}
     </MapContainer>
+    </div>
   );
 };

@@ -1,7 +1,18 @@
-import { redirect } from 'next/navigation';
+import StyledComponentsRegistry from '@/lib/registry';
+import StoreProvider from '@/lib/StoreProvider';
+import NotFoundPage from '@/components/NotFoundPage/NotFoundPage';
+import { COLORS } from '@/consts/colors';
 
 export default function RootNotFound() {
-  redirect('/en/not-found-page');
+  return (
+    <html lang="en">
+      <body style={{ background: COLORS.darkBg }}>
+        <StyledComponentsRegistry>
+          <StoreProvider>
+            <NotFoundPage />
+          </StoreProvider>
+        </StyledComponentsRegistry>
+      </body>
+    </html>
+  );
 }
-
-

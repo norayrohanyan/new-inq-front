@@ -101,6 +101,26 @@ export const TextArea = styled.textarea`
   &::placeholder {
     color: ${COLORS.secondarySemiLight};
   }
+
+  scrollbar-width: thin;
+  scrollbar-color: ${COLORS.brandOrangeMid} transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${COLORS.brandOrangeMid};
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${COLORS.brandOrangeStart};
+  }
 `;
 
 export const GuestCounter = styled.div`

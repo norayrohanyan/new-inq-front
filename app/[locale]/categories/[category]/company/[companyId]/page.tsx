@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import {
@@ -10,13 +10,16 @@ import {
   getCompanyReviewsThunk,
   companyDetailsSelectors,
 } from '@/store';
+import { isRentalCategory } from '@/consts/categoryTemplates';
 import Text from '@/components/Text';
 import AdBanner from '@/components/AdBanner';
 import RentalItemCard from '@/components/RentalItemCard';
+import ServiceCard from '@/components/ServiceCard';
 import CompanyInfo from '@/components/CompanyInfo';
 import CompanyTabs from '@/components/CompanyTabs';
 import Pagination from '@/components/Pagination';
 import ReviewCard, { ReviewsGrid } from '@/components/ReviewCard';
+import SearchInput from '@/components/SearchInput';
 import * as ParentStyled from '../../../styled';
 import * as Styled from './styled';
 
@@ -26,8 +29,10 @@ export default function CompanyInventoryPage() {
   const t = useTranslations();
   const dispatch = useAppDispatch();
 
+  const router = useRouter();
   const category = params.category as string;
   const companyId = Number(params.companyId);
+  const isRental = isRentalCategory(category);
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [activeTab, setActiveTab] = useState<string>('items');
@@ -63,6 +68,7 @@ export default function CompanyInventoryPage() {
   const getCategoryLabel = () => {
     if (category === 'apartment_rental') return t('categories.apartments');
     if (category === 'car_rental') return t('categories.cars');
+    if (!isRental) return t('categories.services');
     return t('categories.items');
   };
 
@@ -113,15 +119,12 @@ export default function CompanyInventoryPage() {
               <>
                 {/* Search Section */}
                 <Styled.SearchSection>
-                  <ParentStyled.SearchWrapper>
-                    <ParentStyled.SearchIcon>🔍</ParentStyled.SearchIcon>
-                    <ParentStyled.SearchInput
-                      type="text"
-                      placeholder={t('common.search')}
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                    />
-                  </ParentStyled.SearchWrapper>
+                  <SearchInput
+                    type="text"
+                    placeholder={t('common.search')}
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
                 </Styled.SearchSection>
 
                 {/* Items List */}
@@ -134,22 +137,36 @@ export default function CompanyInventoryPage() {
                   </ParentStyled.LoadingContainer>
                 ) : filteredServices.length > 0 ? (
                   <Styled.ItemsList>
-                    {filteredServices.map((item: any) => (
-                      <RentalItemCard
-                        key={item.id}
-                        id={item.id}
-                        name={item.name}
-                        rating={item.rating?.toString() || '0.0'}
-                        address={item.address || ''}
-                        totalSquare={item.total_square}
-                        bedrooms={item.bedrooms}
-                        price={item.price || 0}
-                        totalPrice={item.total_price || item.price || 0}
-                        currency={item.currency || 'AMD'}
-                        imageUrls={item.image_urls || []}
-                        category={category}
-                      />
-                    ))}
+                    {filteredServices.map((item: any) =>
+                      isRental ? (
+                        <RentalItemCard
+                          key={item.id}
+                          id={item.id}
+                          name={item.name}
+                          rating={item.rating?.toString() || '0.0'}
+                          address={item.address || ''}
+                          totalSquare={item.total_square}
+                          bedrooms={item.bedrooms}
+                          price={item.price || 0}
+                          totalPrice={item.total_price || item.price || 0}
+                          currency={item.currency || 'AMD'}
+                          imageUrls={item.image_urls || []}
+                          category={category}
+                        />
+                      ) : (
+                        <ServiceCard
+                          key={item.id}
+                          id={item.id}
+                          name={item.name}
+                          description={item.description}
+                          price={item.price}
+                          duration={item.duration}
+                          onBook={(serviceId) => {
+                            router.push(`/${locale}/booking/${category}/${companyId}?serviceId=${serviceId}`);
+                          }}
+                        />
+                      )
+                    )}
                   </Styled.ItemsList>
                 ) : (
                   <ParentStyled.EmptyState>
@@ -157,7 +174,7 @@ export default function CompanyInventoryPage() {
                       No items found
                     </Text>
                     <Text type="body" customColor="rgba(255, 255, 255, 0.7)">
-                      This company currently has no {category === 'car_rental' ? 'cars' : 'apartments'} listed.
+                      This company currently has no {getCategoryLabel().toLowerCase()} listed.
                     </Text>
                   </ParentStyled.EmptyState>
                 )}
@@ -243,11 +260,7 @@ export default function CompanyInventoryPage() {
                       Saturday: null,
                     }
               }
-              externalLinks={
-                Array.isArray(companyDetails.external_links) 
-                  ? {} 
-                  : (companyDetails.external_links as Record<string, string> | undefined)
-              }
+              externalLinks={companyDetails.external_links}
             />
           )}
         </Styled.RightColumn>

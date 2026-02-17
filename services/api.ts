@@ -4,6 +4,7 @@ import {
   ILoginRequest,
   ILoginResponse,
   IRegisterRequest,
+  IRegisterResponse,
   ILinkVerifyResponse,
 } from '@/types/auth';
 import { ICategory } from '@/types/categories';
@@ -54,8 +55,12 @@ const processQueue = (error: unknown, token: string | null = null) => {
 // Request interceptor - add auth token to requests
 api.interceptors.request.use(
   (config) => {
-    // Get token from cookies
     if (typeof window !== 'undefined') {
+      // Set locale from URL path
+      const locale = window.location.pathname.split('/')[1] || 'en';
+      config.headers['Accept-Language'] = locale;
+
+      // Get token from cookies
       const accessToken = getCookie('accessToken');
       if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
@@ -207,9 +212,9 @@ export const apiService = {
   /**
    * User registration
    */
-  async register(userData: IRegisterRequest): Promise<IApiResponse<null>> {
+  async register(userData: IRegisterRequest): Promise<IApiResponse<IRegisterResponse>> {
     try {
-      const { data } = await api.post<IApiResponse<null>>(
+      const { data } = await api.post<IApiResponse<IRegisterResponse>>(
         '/api/register',
         userData
       );
@@ -553,6 +558,22 @@ export const apiService = {
   },
 
   /**
+   * Send verification link via SMS
+   * Types: 1 = REGISTER, 2 = PASSWORD_FORGET, 3 = EDIT_PHONE
+   */
+  async sendVerificationLink(phone: string, type: number): Promise<IApiResponse<IRegisterResponse>> {
+    try {
+      const { data } = await api.post<IApiResponse<IRegisterResponse>>(
+        '/api/link-verify/send',
+        { phone, type }
+      );
+      return data;
+    } catch (error) {
+      return handleError(error);
+    }
+  },
+
+  /**
    * Forgot password
    */
   async forgotPassword(phone: string, url: string): Promise<IApiResponse<null>> {
@@ -570,9 +591,10 @@ export const apiService = {
   /**
    * Update password
    */
-  async updatePassword(password: string): Promise<IApiResponse<null>> {
+  async updatePassword(password: string, token?: string): Promise<IApiResponse<null>> {
     try {
-      const { data } = await api.patch<IApiResponse<null>>('/api/password', { password });
+      const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+      const { data } = await api.patch<IApiResponse<null>>('/api/password', { password }, config);
       return data;
     } catch (error) {
       return handleError(error);
@@ -730,7 +752,7 @@ export const apiService = {
     check_out: string;
     guests_count: number;
     comment: string;
-    guest: {
+    guest?: {
       phone: string;
       name: string;
     };
@@ -779,7 +801,7 @@ export const apiService = {
     pickup_time: string;
     return_time: string;
     comment: string;
-    guest: {
+    guest?: {
       phone: string;
       name: string;
     };

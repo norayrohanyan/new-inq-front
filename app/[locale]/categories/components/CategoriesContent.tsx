@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useCallback, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useTranslations, useLocale } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { ICategorySwitch } from '@/types/categories';
 import {
@@ -10,11 +11,13 @@ import {
   companiesActions,
   servicesActions,
 } from '@/store';
+import { isRentalCategory } from '@/consts/categoryTemplates';
 import Text from '@/components/Text';
 import Spinner from '@/components/Spinner';
 import CompanyServiceCard from '@/components/CompanyServiceCard';
+import ServiceCard from '@/components/ServiceCard';
 import Pagination from '@/components/Pagination';
-import { useIsMobile, useInfiniteScroll } from '@/hooks';
+import { useIsMobile, useInfiniteScroll, usePageCache } from '@/hooks';
 import { transformFiltersForAPI } from '@/utils/filters';
 import * as Styled from '../styled';
 
@@ -40,12 +43,19 @@ export const CategoriesContent: React.FC<ICategoriesContentProps> = ({
   filters,
 }) => {
   const t = useTranslations();
+  const router = useRouter();
+  const locale = useLocale();
   const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
+  const isRental = isRentalCategory(selectedCategory || '');
 
   // Mobile "Load More" accumulated data state
   const [accumulatedData, setAccumulatedData] = useState<any[]>([]);
   const [mobileCurrentPage, setMobileCurrentPage] = useState(1);
+
+  // Page cache — auto-clears when key params change
+  const cacheKey = `${selectedCategory}-${showCompanies}-${searchTerm}-${JSON.stringify(filters)}`;
+  const pageCache = usePageCache(cacheKey);
 
   // Companies selectors
   const companies = useAppSelector(companiesSelectors.companies);
@@ -65,11 +75,26 @@ export const CategoriesContent: React.FC<ICategoriesContentProps> = ({
     setMobileCurrentPage(1);
   }, [selectedCategory, showCompanies, searchTerm, filters]);
 
-  // Fetch data when dependencies change (filters only, not sort)
+  // Fetch data when dependencies change (debounced to handle rapid toggling)
   useEffect(() => {
     if (!selectedCategory) return;
 
     const pageToFetch = isMobile ? mobileCurrentPage : currentPage;
+
+    // Use cached data if available (desktop only)
+    const cached = !isMobile ? pageCache.get(pageToFetch) : null;
+    if (cached) {
+      if (showCompanies) {
+        dispatch(companiesActions.setCompanies(cached.data));
+        dispatch(companiesActions.setCurrentPage(pageToFetch));
+        dispatch(companiesActions.setTotalPages(cached.totalPages));
+      } else {
+        dispatch(servicesActions.setServices(cached.data));
+        dispatch(servicesActions.setCurrentPage(pageToFetch));
+        dispatch(servicesActions.setTotalPages(cached.totalPages));
+      }
+      return;
+    }
 
     const params: any = {
       category: selectedCategory,
@@ -85,6 +110,17 @@ export const CategoriesContent: React.FC<ICategoriesContentProps> = ({
       dispatch(getServicesThunk(params));
     }
   }, [selectedCategory, showCompanies, searchTerm, currentPage, mobileCurrentPage, filters, dispatch, isMobile]);
+
+  // Cache page data after Redux state updates from a successful fetch
+  useEffect(() => {
+    if (isMobile) return;
+    const data = showCompanies ? companies : services;
+    const total = showCompanies ? companiesTotalPages : servicesTotalPages;
+    const isLoading = showCompanies ? isLoadingCompanies : isLoadingServices;
+    if (!isLoading && data.length > 0 && total > 0) {
+      pageCache.set(currentPage, data, total);
+    }
+  }, [companies, services, companiesTotalPages, servicesTotalPages, isLoadingCompanies, isLoadingServices, currentPage, showCompanies, isMobile]);
 
   // Accumulate data for mobile "Load More" mode
   useEffect(() => {
@@ -244,13 +280,24 @@ export const CategoriesContent: React.FC<ICategoriesContentProps> = ({
   return (
     <>
       <Styled.CardsGrid>
-        {currentData.map((item: any) => (
-          <CompanyServiceCard 
-            key={item.id} 
-            data={item} 
-            category={selectedCategory || ''} 
-          />
-        ))}
+        {currentData.map((item: any) =>
+          !showCompanies && !isRental ? (
+            <ServiceCard
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              onBook={(serviceId) => {
+                router.push(`/${locale}/booking/${selectedCategory}/0?serviceId=${serviceId}`);
+              }}
+            />
+          ) : (
+            <CompanyServiceCard
+              key={item.id}
+              data={item}
+              category={selectedCategory || ''}
+            />
+          )
+        )}
       </Styled.CardsGrid>
 
       {isMobile ? (

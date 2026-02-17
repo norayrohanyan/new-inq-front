@@ -276,7 +276,7 @@ export const createApartmentBookingThunk = createAsyncThunk(
       check_out: string;
       guests_count: number;
       comment: string;
-      guest: {
+      guest?: {
         phone: string;
         name: string;
       };
@@ -306,7 +306,7 @@ export const createCarBookingThunk = createAsyncThunk(
       pickup_time: string;
       return_time: string;
       comment: string;
-      guest: {
+      guest?: {
         phone: string;
         name: string;
       };

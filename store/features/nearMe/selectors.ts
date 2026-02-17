@@ -6,6 +6,7 @@ export const nearMeSelectors = {
   error: (state: RootState) => state.nearMe.error,
   selectedCategory: (state: RootState) => state.nearMe.selectedCategory,
   userLocation: (state: RootState) => state.nearMe.userLocation,
+  selectedLocation: (state: RootState) => state.nearMe.selectedLocation,
   radius: (state: RootState) => state.nearMe.radius,
   locationPermission: (state: RootState) => state.nearMe.locationPermission,
 };

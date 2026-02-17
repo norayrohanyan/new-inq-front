@@ -28,6 +28,10 @@ export interface INearMeState {
     latitude: number;
     longitude: number;
   } | null;
+  selectedLocation: {
+    latitude: number;
+    longitude: number;
+  } | null;
   radius: number;
   locationPermission: 'granted' | 'denied' | 'prompt' | null;
 }

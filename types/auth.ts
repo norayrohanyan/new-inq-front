@@ -31,6 +31,11 @@ export interface IRegisterRequest {
   url: string;
 }
 
+export interface IRegisterResponse {
+  next_request_seconds: number;
+  link_sent: boolean;
+}
+
 export interface ILoginResponse {
   token_type: string;
   access_token: string;

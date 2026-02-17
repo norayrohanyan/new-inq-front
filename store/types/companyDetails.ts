@@ -34,6 +34,7 @@ export interface ICompanyDetails {
     desktop_image: string;
     mobile_image: string;
   };
+  is_individual?: boolean;
 }
 
 export interface IEmployee {

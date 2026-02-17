@@ -3,20 +3,20 @@ import { COLORS } from '@/consts/colors';
 import { MOBILE_SIZE_BREAKPOINT } from '@/consts';
 
 interface BannerContainerProps {
-  height: string;
-  mobileHeight: string;
+  $height: string;
+  $mobileHeight: string;
 }
 
 export const BannerContainer = styled.div<BannerContainerProps>`
   width: 100%;
-  height: ${props => props.height};
+  height: ${props => props.$height};
   background: linear-gradient(168.23deg, #F6572F 15.26%, #FE7F3B 49.45%, #FEB245 84.33%);
   border-radius: 30px;
   overflow: hidden;
   position: relative;
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
-    height: ${props => props.mobileHeight};
+    height: ${props => props.$mobileHeight};
   }
 `;
 

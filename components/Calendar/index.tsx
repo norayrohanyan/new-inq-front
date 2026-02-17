@@ -103,8 +103,9 @@ const Calendar: React.FC<ICalendarProps> = ({
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       
-      const isDisabled = 
-        !intervals[dateString]?.available ||
+      const hasIntervals = Object.keys(intervals).length > 0;
+      const isDisabled =
+        (hasIntervals && !intervals[dateString]?.available) ||
         (minDate && date < minDate) ||
         (maxDate && date > maxDate);
 
@@ -182,15 +183,17 @@ const Calendar: React.FC<ICalendarProps> = ({
     <Styled.CalendarContainer>
       {/* Header */}
       <Styled.CalendarHeader>
-        <Styled.MonthNavButton type="button" onClick={handlePrevMonth} disabled={isLoading}>
-          ‹
-        </Styled.MonthNavButton>
         <Text type="h5" color="white" fontWeight="600">
           {monthYearText} {isLoading && '...'}
         </Text>
-        <Styled.MonthNavButton type="button" onClick={handleNextMonth} disabled={isLoading}>
-          ›
-        </Styled.MonthNavButton>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Styled.MonthNavButton type="button" onClick={handlePrevMonth} disabled={isLoading}>
+            ‹
+          </Styled.MonthNavButton>
+          <Styled.MonthNavButton type="button" onClick={handleNextMonth} disabled={isLoading}>
+            ›
+          </Styled.MonthNavButton>
+        </div>
       </Styled.CalendarHeader>
 
       {/* Days of week */}

@@ -25,3 +25,7 @@ export { StarIcon } from './starIcon';
 export { TelegramIcon } from './telegram';
 export { BedIcon } from './bed';
 export { EyeIcon, EyeOffIcon } from './eye';
+export { WebsiteIcon } from './website';
+export { YoutubeIcon } from './youtube';
+export { WhatsappIcon } from './whatsapp';
+export { SearchIcon } from './search';

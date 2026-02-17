@@ -119,7 +119,7 @@ export const DropdownList = styled.div<{ $isOpen: boolean; $variant?: 'default' 
 `;
 
 export const DropdownOption = styled.div<{ $isSelected: boolean }>`
-  padding: 1rem 1.25rem;
+  padding: 1rem 1.25rem; 
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: 'Montserrat', sans-serif;

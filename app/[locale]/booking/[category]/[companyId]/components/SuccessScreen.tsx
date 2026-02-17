@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import Text from '@/components/Text';
@@ -10,6 +11,10 @@ export const SuccessScreen = () => {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Styled.PageContainer>
@@ -30,10 +35,10 @@ export const SuccessScreen = () => {
         </Text>
 
         <Styled.SuccessButtons>
-          <Button variant="secondary" onClick={() => router.push(`/${locale}`)}>
+          <Button variant="secondary" onClick={() => router.push(`/${locale}/categories`)}>
             {t('booking.backToHome')}
           </Button>
-          <Button variant="primary" onClick={() => router.push(`/${locale}/profile`)}>
+          <Button variant="primary" onClick={() => router.push(`/${locale}/profile?tab=tickets`)}>
             {t('booking.viewBooking')}
           </Button>
         </Styled.SuccessButtons>

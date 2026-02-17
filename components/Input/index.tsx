@@ -6,7 +6,7 @@ import { IInputProps } from './types';
 import { EyeIcon, EyeOffIcon } from '@/components/icons';
 
 const Input = React.forwardRef<HTMLInputElement, IInputProps>(
-  ({ icon, error, fullWidth = true, type, ...props }, ref) => {
+  ({ icon, prefix, error, fullWidth = true, type, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
     const isPasswordType = type === 'password';
     const inputType = isPasswordType && showPassword ? 'text' : type;
@@ -27,6 +27,22 @@ const Input = React.forwardRef<HTMLInputElement, IInputProps>(
       e.stopPropagation();
       setShowPassword((prev) => !prev);
     };
+
+    if (prefix) {
+      return (
+        <Styled.InputWrapper $fullWidth={fullWidth}>
+          <Styled.PrefixWrapper>
+            <Styled.PrefixText>{prefix}</Styled.PrefixText>
+            <Styled.PrefixInput
+              ref={setRef}
+              type={inputType}
+              {...props}
+            />
+          </Styled.PrefixWrapper>
+          {error && <Styled.ErrorText>{error}</Styled.ErrorText>}
+        </Styled.InputWrapper>
+      );
+    }
 
     return (
       <Styled.InputWrapper $fullWidth={fullWidth}>

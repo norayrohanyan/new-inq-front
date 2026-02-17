@@ -86,7 +86,7 @@ export const AdBanner: React.FC<AdBannerProps> = ({
 
   if (isLoading) {
     return (
-      <Styled.BannerContainer height={height} mobileHeight={mobileHeight}>
+      <Styled.BannerContainer $height={height} $mobileHeight={mobileHeight}>
         <Styled.LoadingPlaceholder>
           <Styled.Spinner />
         </Styled.LoadingPlaceholder>
@@ -96,7 +96,7 @@ export const AdBanner: React.FC<AdBannerProps> = ({
 
   if (!ads || ads.length === 0) {
     return (
-      <Styled.BannerContainer height={height} mobileHeight={mobileHeight}>
+      <Styled.BannerContainer $height={height} $mobileHeight={mobileHeight}>
         <Styled.PlaceholderContent>
           <Text type={isMobile ? 'h4' : 'h1'} color="white">PLACE YOUR<br />AD HERE</Text>
           <Styled.SkeletonContainer>
@@ -125,8 +125,8 @@ export const AdBanner: React.FC<AdBannerProps> = ({
 
   return (
     <Styled.BannerContainer
-      height={height}
-      mobileHeight={mobileHeight}
+      $height={height}
+      $mobileHeight={mobileHeight}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

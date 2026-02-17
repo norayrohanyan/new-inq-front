@@ -1,24 +1,28 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { authSelectors, forgotPasswordThunk } from '@/store';
+import { authSelectors, authActions, forgotPasswordThunk } from '@/store';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
-import { PhoneIcon, SmsIcon } from '@/components/icons';
-import ModalDialog from '@/components/Modal/ModalDialog';
+import { PhoneIcon } from '@/components/icons';
 import * as Styled from './styled';
 
 export default function AccountRecoveryPage() {
   const t = useTranslations();
   const locale = useLocale();
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(authSelectors.isLoading);
   const error = useAppSelector(authSelectors.error);
 
   const [phone, setPhone] = useState('');
-  const [showSmsModal, setShowSmsModal] = useState(false);
+
+  useEffect(() => {
+    dispatch(authActions.clearError());
+  }, [dispatch]);
 
   // Handle phone input - only allow digits, max 8
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +43,10 @@ export default function AccountRecoveryPage() {
     );
 
     if (forgotPasswordThunk.fulfilled.match(result)) {
-      setShowSmsModal(true);
+      sessionStorage.setItem('registerPhone', phone);
+      sessionStorage.setItem('smsVerificationType', '2');
+      sessionStorage.setItem('smsTimerExpiresAt', String(Date.now() + 150 * 1000));
+      router.push(`/${locale}/check-sms`);
     }
   };
 
@@ -82,13 +89,6 @@ export default function AccountRecoveryPage() {
         </Styled.Form>
       </Styled.RecoveryCard>
 
-      {/* SMS Modal */}
-      <ModalDialog
-        isOpen={showSmsModal}
-        onClose={() => setShowSmsModal(false)}
-        icon={<SmsIcon />}
-        title={t('auth.checkYourSms')}
-      />
     </Styled.PageContainer>
   );
 }

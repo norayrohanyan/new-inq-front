@@ -63,7 +63,7 @@ export const ToggleSearchSection = styled.div`
   justify-content: space-between;
   gap: 1.5rem;
 
-  @media (max-width: ${TABLET_SIZE_BREAKPOINT}px) {
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     flex-direction: column;
     padding: 0 1rem 1rem 1rem;
     align-items: stretch;
@@ -125,47 +125,6 @@ export const ToggleKnob = styled.div<{ $active: boolean }>`
   left: ${({ $active }) => ($active ? '2px' : '22px')};
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-`;
-
-export const SearchWrapper = styled.div`
-  position: relative;
-  flex: 1;
-  max-width: 600px;
-
-  @media (max-width: 968px) {
-    width: 100%;
-  }
-`;
-
-export const SearchIcon = styled.span`
-  position: absolute;
-  left: 1.25rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.1rem;
-  color: ${COLORS.secondarySemiLight};
-`;
-
-export const SearchInput = styled.input`
-  width: 100%;
-  padding: 0.75rem 1.25rem 0.75rem 3.25rem;
-  border-radius: 50px;
-  border: 1px solid ${COLORS.borderColor};
-  background: transparent;
-  color: ${COLORS.white};
-  font-size: 0.95rem;
-
-  &::placeholder {
-    color: ${COLORS.secondarySemiLight};
-  }
-
-  &:focus {
-    outline: none;
-    border-color: ${COLORS.brandOrangeMid};
-    background: rgba(255, 255, 255, 0.02);
-  }
-
-  transition: all 0.3s ease;
 `;
 
 // Content Section

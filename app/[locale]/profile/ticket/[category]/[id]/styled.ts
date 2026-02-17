@@ -56,8 +56,15 @@ export const TitleRow = styled.div`
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-`;
+  color: ${COLORS.white};
 
+  transition: all 0.3s ease;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+`;
+  
 export const RatingBadge = styled.div`
   display: flex;
   align-items: center;
@@ -311,6 +318,9 @@ export const StarButton = styled.button<{ $active?: boolean; $clickable?: boolea
 
 export const CommentSection = styled.div`
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 export const CommentTextarea = styled.textarea`
@@ -328,6 +338,26 @@ export const CommentTextarea = styled.textarea`
 
   &::placeholder {
     color: rgba(255, 255, 255, 0.4);
+  }
+
+  scrollbar-width: thin;
+  scrollbar-color: ${COLORS.brandOrangeMid} transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${COLORS.brandOrangeMid};
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${COLORS.brandOrangeStart};
   }
 `;
 

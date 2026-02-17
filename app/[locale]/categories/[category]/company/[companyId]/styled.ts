@@ -1,3 +1,4 @@
+import { MOBILE_SIZE_BREAKPOINT, TABLET_SIZE_BREAKPOINT } from '@/consts';
 import styled from 'styled-components';
 
 export const BannerContent = styled.div`
@@ -11,19 +12,18 @@ export const BannerSubtitle = styled.div`
 
 export const MainContentWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr 400px;
+  grid-template-columns: 1.5fr 1fr;
   gap: 2rem;
   padding: 0 4rem 2rem 4rem;
   max-width: 1600px;
   margin: 0 auto;
 
-  @media (max-width: 1200px) {
-    grid-template-columns: 1fr;
-    padding: 0 2rem 2rem 2rem;
-  }
-
-  @media (max-width: 768px) {
-    padding: 0 1rem 1.5rem 1rem;
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem 1rem;
+    width: 100%;
   }
 `;
 
@@ -31,10 +31,14 @@ export const LeftColumn = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-width: 0;
 `;
 
 export const RightColumn = styled.div`
-  @media (max-width: 1200px) {
+  min-width: 0;
+  overflow: hidden;
+
+  @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     order: -1;
   }
 `;

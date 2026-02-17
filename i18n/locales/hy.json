@@ -84,7 +84,7 @@
     "finish": "Ավարտել",
     "thankYou": "Շնորհակալություն ամրագրման համար",
     "confirmationMessage": "Ձեր ամրագրումը հաջողությամբ կատարվել է։",
-    "backToHome": "Գլխավոր էջ",
+    "backToHome": "Դեպի ընկերություններ",
     "viewBooking": "Դիտել ամրագրումը",
     "availableTimes": "Ազատ ժամեր",
     "noAvailableTimes": "Ազատ ժամ չկա",
@@ -123,7 +123,9 @@
     "recoveryComplete": "Հաշիվը վերականգնված է",
     "passwordsDoNotMatch": "Գաղտնաբառերը չեն համընկնում",
     "passwordTooShort": "Գաղտնաբառը շատ կարճ է",
-    "passwordChangedSuccess": "Գաղտնաբառը փոխված է։ Մուտք գործեք նորով։"
+    "passwordChangedSuccess": "Գաղտնաբառը փոխված է։ Մուտք գործեք նորով։",
+    "checkSmsDescription": "Մենք հաստատման հղում ուղարկել ենք ձեր հեռախոսին։ Ստուգեք SMS-ը։",
+    "sendLinkAgain": "Ուղարկել հղումը կրկին"
   },
   "categories": {
     "title": "Կատեգորիաներ",
@@ -169,6 +171,7 @@
   "nearMe": {
     "searchPlaceholder": "Որոնել վայրեր...",
     "radius": "Շառավիղ",
+    "all": "Բոլորը",
     "enableLocation": "Միացնել տեղադրությունը",
     "gettingLocation": "Տեղադրության որոշում...",
     "locationActive": "Տեղադրությունը ակտիվ է",

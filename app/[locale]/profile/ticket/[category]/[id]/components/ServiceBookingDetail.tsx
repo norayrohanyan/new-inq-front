@@ -1,7 +1,9 @@
 import { useTranslations } from 'next-intl';
+import { useRouter, useParams } from 'next/navigation';
 import Text from '@/components/Text';
 import { StarIcon } from '@/components/icons';
 import { IBeautyBookingDetail } from '@/types/user';
+import { isServiceCategory } from '@/consts/categoryTemplates';
 import { BookingHeader } from './BookingHeader';
 import { GuestInformation } from './GuestInformation';
 import { formatDate } from './DateTimeSection';
@@ -13,14 +15,31 @@ interface IServiceBookingDetailProps {
   categoryTitle?: string;
 }
 
-export const ServiceBookingDetail = ({ 
-  booking, 
+export const ServiceBookingDetail = ({
+  booking,
   getStatusText,
   categoryTitle,
 }: IServiceBookingDetailProps) => {
   const t = useTranslations();
+  const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
 
   const title = categoryTitle || t('ticketDetail.beautySalon');
+
+  const handleCompanyClick = () => {
+    if (booking.company?.id && booking.company?.category) {
+      const category = booking.company.category;
+
+      // Service categories (beauty, medical, etc.) use /detail route
+      if (isServiceCategory(category)) {
+        router.push(`/${locale}/detail/${category}/${booking.company.id}`);
+      } else {
+        // Rental categories use /categories/.../company route
+        router.push(`/${locale}/categories/${category}/company/${booking.company.id}`);
+      }
+    }
+  };
 
   return (
     <>
@@ -34,8 +53,13 @@ export const ServiceBookingDetail = ({
         </Styled.ImageContainer>
         <Styled.HeaderInfo>
           <Styled.TitleRow>
-            <Text type="h3" color="white" fontWeight="600">
-              {title}
+            <Text
+              type="h3"
+              color="white"
+              fontWeight="600"
+              onClick={handleCompanyClick}
+            >
+                {booking.company?.name}
             </Text>
           </Styled.TitleRow>
           <Styled.RatingBadge>
@@ -52,10 +76,10 @@ export const ServiceBookingDetail = ({
           <Styled.CompanyInfo>
             <Styled.InfoRow>
               <Text type="p" color="white">
-                {t('ticketDetail.company')}:
+                {t('ticketDetail.category')}:
               </Text>
               <Text type="p" customColor="#999999">
-                {booking.company?.name}
+                {title}
               </Text>
             </Styled.InfoRow>
             <Styled.InfoRow>

@@ -36,11 +36,10 @@ export const Sidebar = styled.aside<{ $isOpen: boolean; $isMobile: boolean }>`
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     position: fixed;
-    top: 0;
     left: 0;
     height: 100vh;
     width: 280px;
-    background: ${COLORS.darkBgSemi};
+    background: ${COLORS.darkBg};
     backdrop-filter: blur(10px);
     z-index: 1001;
     padding: 2rem 1rem;

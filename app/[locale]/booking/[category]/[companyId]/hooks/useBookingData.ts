@@ -66,34 +66,39 @@ export const useBookingData = ({
     return employees;
   }, [preSelectedEmployeeId, employees]);
 
-  // Additional services from selected employee
+  // Additional services from selected employee (or all services for individual companies)
   const additionalServices = useMemo(() => {
     if (!preSelectedServiceId) {
       return services;
     }
-    
+
+    // For individual companies, show all other services from the company
+    if (companyDetails?.is_individual) {
+      return services.filter((service: any) => service.id !== Number(preSelectedServiceId));
+    }
+
     if (!selectedEmployee) {
       return [];
     }
-    
+
     const employee = employees.find((emp: any) => emp.id === selectedEmployee.id) as any;
     if (!employee || !employee.services || !Array.isArray(employee.services)) {
       return [];
     }
-    
+
     const employeeServices = (employee.services as any[]).filter(
       (service: any) => service.id !== Number(preSelectedServiceId)
     );
-    
+
     const uniqueServices = new Map<number, any>();
     employeeServices.forEach((service: any) => {
       if (!uniqueServices.has(service.id)) {
         uniqueServices.set(service.id, service);
       }
     });
-    
+
     return Array.from(uniqueServices.values());
-  }, [preSelectedServiceId, selectedEmployee, employees, services]);
+  }, [preSelectedServiceId, selectedEmployee, employees, services, companyDetails?.is_individual]);
 
   // Fetch companies by service
   useEffect(() => {
@@ -145,6 +150,13 @@ export const useBookingData = ({
     }
   }, [companyId, category, preSelectedEmployeeId, preSelectedServiceId, dispatch, hasEmployees]);
 
+  // Fetch company services when company is individual (since employees fetch won't provide them)
+  useEffect(() => {
+    if (companyDetails?.is_individual && companyId && category && preSelectedServiceId) {
+      dispatch(getCompanyServicesThunk({ category, id: companyId }));
+    }
+  }, [companyDetails?.is_individual, companyId, category, preSelectedServiceId, dispatch]);
+
   // Fetch employees by service when moving to employee step
   useEffect(() => {
     if (currentStep === 'employee' && selectedServices.length > 0 && companyId && !preSelectedEmployeeId && !preSelectedServiceId) {
@@ -167,24 +179,6 @@ export const useBookingData = ({
       }));
     }
   }, [selectedDate, selectedServices, companyId, selectedEmployee, dispatch]);
-
-  // Generate calendar intervals
-  useEffect(() => {
-    if (currentStep === 'datetime' && companyId && selectedServices.length > 0) {
-      const intervals: Record<string, any> = {};
-      const today = new Date();
-      
-      for (let i = 0; i < 60; i++) {
-        const date = new Date(today);
-        date.setDate(date.getDate() + i);
-        const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-        const isAvailable = date.getDay() !== 0;
-        intervals[dateString] = { date: dateString, available: isAvailable, discounted: false };
-      }
-      
-      dispatch(companyDetailsActions.setIntervals(intervals));
-    }
-  }, [currentStep, companyId, selectedServices, dispatch]);
 
   return {
     // Company
