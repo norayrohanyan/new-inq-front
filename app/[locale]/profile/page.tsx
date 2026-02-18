@@ -204,59 +204,6 @@ function ProfileContent() {
                       {activeTab === 'favorite' && `Favorites`}
                       {activeTab === 'history' && `History`}
                     </Text>
-                    {activeTab === 'favorite' && (
-                      <Styled.SearchContainer>
-                        <Styled.SearchIcon>
-                          <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
-                              stroke="url(#paint0_linear_search)"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <path
-                              d="M21 21L16.65 16.65"
-                              stroke="url(#paint1_linear_search)"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                            <defs>
-                              <linearGradient
-                                id="paint0_linear_search"
-                                x1="3"
-                                y1="3"
-                                x2="19"
-                                y2="19"
-                                gradientUnits="userSpaceOnUse"
-                              >
-                                <stop stopColor="#FE7F3B" />
-                                <stop offset="1" stopColor="#FEB245" />
-                              </linearGradient>
-                              <linearGradient
-                                id="paint1_linear_search"
-                                x1="16.65"
-                                y1="16.65"
-                                x2="21"
-                                y2="21"
-                                gradientUnits="userSpaceOnUse"
-                              >
-                                <stop stopColor="#FE7F3B" />
-                                <stop offset="1" stopColor="#FEB245" />
-                              </linearGradient>
-                            </defs>
-                          </svg>
-                        </Styled.SearchIcon>
-                        <Styled.SearchInput type="text" placeholder={t('common.search')} />
-                      </Styled.SearchContainer>
-                    )}
                     {activeTab === 'tickets' || activeTab === 'history' ? (
                       <Styled.TicketsList>
                         {data.map((booking: any) => (

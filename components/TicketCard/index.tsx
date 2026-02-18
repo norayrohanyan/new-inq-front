@@ -119,7 +119,7 @@ const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick, onClick,
           </Text>
 
           <Styled.DetailsRow>
-            <ClockIcon />
+            <ClockIcon width="14" height="14" />
             <Text type="caption" color="white">
               {formatDate(booking.date)}, {formatTime(booking.date)}
             </Text>
@@ -127,7 +127,7 @@ const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick, onClick,
 
           {booking.company_phone && (
             <Styled.DetailsRow>
-              <PhoneIcon />
+              <PhoneIcon width="14" height="14" />
               <Text type="caption" color="white">
                 {booking.company_phone}
               </Text>

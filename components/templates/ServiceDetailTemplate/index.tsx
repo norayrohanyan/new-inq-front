@@ -24,6 +24,8 @@ export interface ServiceDetailData {
   phones?: string[];
   workHours?: string | Record<string, string[] | null>;
   externalLinks?: Record<string, string>;
+  latitude?: number;
+  longitude?: number;
   bannerUrls?: {
     desktopImage?: string;
     mobileImage?: string;
@@ -282,6 +284,8 @@ export default function ServiceDetailTemplate({
                   }
             }
             externalLinks={data.externalLinks}
+            latitude={data.latitude}
+            longitude={data.longitude}
           />
         </Styled.RightColumn>
       </Styled.MainContent>

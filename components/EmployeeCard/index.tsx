@@ -56,7 +56,7 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({
 
         <Styled.CardFooter>
           <Styled.RatingWrapper>
-            <StarIcon width={16} height={16} />
+            <StarIcon width={12} height={12} />
             <Text type="body" color="white">
               {rating}
             </Text>

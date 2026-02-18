@@ -76,6 +76,7 @@ export const ToggleFilterRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 1rem;
   width: 100%;
 `;
@@ -91,7 +92,7 @@ export const ToggleSection = styled.div`
   flex-shrink: 0;
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0.7rem;
   }
 `;
 

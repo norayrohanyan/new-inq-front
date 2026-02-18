@@ -73,7 +73,7 @@ export const NameProfessionWrapper = styled.div`
 export const RatingWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
 `;
 
 export const CardFooter = styled.div`

@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import Text from '@/components/Text';
 import Button from '@/components/Button';
 import * as Styled from '../styled';
+import { CheckedIcon } from '@/components/icons/CheckedIcon';
 
 export const SuccessScreen = () => {
   const router = useRouter();
@@ -20,10 +21,11 @@ export const SuccessScreen = () => {
     <Styled.PageContainer>
       <Styled.SuccessContainer>
         <Styled.SuccessIcon>
-          <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-            <circle cx="60" cy="60" r="58" stroke="currentColor" strokeWidth="4"/>
-            <path d="M35 60L52 77L85 44" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <CheckedIcon
+            width="120"
+            height="120"
+            fill="currentColor"
+          />
         </Styled.SuccessIcon>
         
         <Text type="h2" color="white" fontWeight="700" align="center">

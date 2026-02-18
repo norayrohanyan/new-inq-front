@@ -8,7 +8,7 @@ export const Overlay = styled.div<{ $isOpen: boolean }>`
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
-  z-index: 9998;
+  z-index: 9999;
   opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
   visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
   transition: opacity 0.3s ease, visibility 0.3s ease;

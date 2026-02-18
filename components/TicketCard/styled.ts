@@ -57,6 +57,12 @@ export const StatusBadge = styled.div<{ $status: string }>`
     }
   }};
   color: ${({ $status }) => ($status === 'pending' ? COLORS.black : COLORS.white)};
+
+  @media (max-width: 768px) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 `;
 
 export const MenuButton = styled.button`
@@ -133,12 +139,6 @@ export const DetailsRow = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    color: ${COLORS.brandOrangeMid};
-  }
 `;
 
 export const PriceSection = styled.div`

@@ -49,6 +49,8 @@ interface ICompanyInfoProps {
     Saturday: string | string[] | null;
   };
   externalLinks?: Record<string, string>;
+  latitude?: number;
+  longitude?: number;
 }
 
 const CompanyInfo: React.FC<ICompanyInfoProps> = ({
@@ -62,6 +64,8 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
   phones,
   workHours,
   externalLinks,
+  latitude,
+  longitude,
 }) => {
   const t = useTranslations();
   const isMobile = useIsMobile();
@@ -93,7 +97,7 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
             </Text>
           </Styled.AddressRow>
           <Styled.RatingRow>
-            <StarIcon width={16} height={16} />
+            <StarIcon width={12} height={12} />
             <Text type="caption" color="white" fontWeight="600">
               {rating}
             </Text>
@@ -208,11 +212,17 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
         </Styled.TwoColumnSection>
 
         {/* Map */}
-        <Styled.MapPlaceholder>
-          <Text type="body" color="secondarySemiLight">
-            Map
-          </Text>
-        </Styled.MapPlaceholder>
+        {latitude && longitude && (
+          <Styled.MapContainer>
+            <iframe
+              width="100%"
+              height="100%"
+              src={`https://www.google.com/maps?q=${latitude},${longitude}&hl=en&z=14&output=embed`}
+              title={`${name} location`}
+              loading="lazy"
+            />
+          </Styled.MapContainer>
+        )}
             </Styled.DetailsContent>
           )}
         </AnimatePresence>

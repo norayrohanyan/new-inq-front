@@ -20,8 +20,8 @@ const ReviewCard: React.FC<IReviewCardProps> = ({ userName, rating, comment }) =
       stars.push(
         <StarIcon 
           key={i} 
-          width="20" 
-          height="20" 
+          width="14" 
+          height="14" 
           filled={i <= rating} 
           outlined={i > rating}
         />
@@ -32,7 +32,7 @@ const ReviewCard: React.FC<IReviewCardProps> = ({ userName, rating, comment }) =
 
   return (
     <Styled.ReviewCardContainer>
-      <Text type="h4" color="white" fontWeight="500">
+      <Text type="h5" color="white" fontWeight="400">
         {userName}
       </Text>
 

@@ -3,7 +3,7 @@ import { COLORS } from '@/consts/colors';
 
 export const ReviewCardContainer = styled.div`
   background: ${COLORS.darkBgSemi};
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 24px;
   display: flex;
   flex-direction: column;

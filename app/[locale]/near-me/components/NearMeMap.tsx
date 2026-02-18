@@ -283,7 +283,7 @@ export const NearMeMap: React.FC<INearMeMapProps> = ({
 
                 {company.rating && (
                   <Styled.PopupInfoRow>
-                    <StarIcon width="14" height="14" />
+                    <StarIcon width="12" height="12" />
                     <Styled.PopupRating>
                       {typeof company.rating === 'number'
                         ? company.rating.toFixed(1)
@@ -294,7 +294,7 @@ export const NearMeMap: React.FC<INearMeMapProps> = ({
 
                 {company.distance && (
                   <Styled.PopupInfoRow>
-                    📍 {formatDistance(company.distance)} away
+                    <LocationIcon width="14" height="14" /> {formatDistance(company.distance)} away
                   </Styled.PopupInfoRow>
                 )}
               </Styled.PopupInfo>

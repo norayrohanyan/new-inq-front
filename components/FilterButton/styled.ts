@@ -22,7 +22,7 @@ export const FilterButtonContainer = styled.button`
   }
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0.7rem;
   }
 `;
 

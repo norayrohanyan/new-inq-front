@@ -222,15 +222,16 @@ export const WorkHourRow = styled.div`
   }
 `;
 
-export const MapPlaceholder = styled.div`
+export const MapContainer = styled.div`
   width: 100%;
   height: 180px;
   background: ${COLORS.darkBg};
-  border-radius: 12px;
+  border-radius: 30px;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+  iframe {
+    border: none;
+  }
 `;
 
 export const MobileToggleButton = styled.div`

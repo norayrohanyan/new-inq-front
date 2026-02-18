@@ -16,6 +16,9 @@ export const RatingStar = ({
   </Styled.StarButton>
 );
 
+
+// TODO add svgs in icons
+
 // Icons for apartment details
 export const AreaIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

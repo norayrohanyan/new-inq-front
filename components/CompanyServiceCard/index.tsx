@@ -92,7 +92,7 @@ const CompanyServiceCard: React.FC<ICompanyServiceCardProps> = ({
               </Text>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-              <StarIcon width={12} height={12} />
+              <StarIcon width={10} height={10} />
               <Text type="caption" color="white">
                 {(data as ICompany).rating}
               </Text>
