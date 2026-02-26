@@ -71,7 +71,8 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
   const isMobile = useIsMobile();
   const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
 
-  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const;
+  const dayTranslationKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const;
 
   return (
     <Styled.InfoContainer>
@@ -82,7 +83,7 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
             <img src={logo} alt={name} />
           ) : (
             <Text type="body" color="secondarySemiLight">
-              No Logo
+              {t('company.noLogo')}
             </Text>
           )}
         </Styled.LogoWrapper>
@@ -185,7 +186,7 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
 
           {/* Work Hours */}
           <Styled.WorkHoursSection>
-            {daysOfWeek.map((day) => {
+            {daysOfWeek.map((day, index) => {
               const hours = workHours[day as keyof typeof workHours];
               let displayHours = t('company.closed');
 
@@ -200,7 +201,7 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
               return (
                 <Styled.WorkHourRow key={day}>
                   <Text type="caption" color="white" fontWeight="600">
-                    {day}
+                    {t(`company.days.${dayTranslationKeys[index]}`)}
                   </Text>
                   <Text type="caption" color="white">
                     {displayHours}
@@ -218,7 +219,7 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
               width="100%"
               height="100%"
               src={`https://www.google.com/maps?q=${latitude},${longitude}&hl=en&z=14&output=embed`}
-              title={`${name} location`}
+              title={t('company.locationTitle', { name })}
               loading="lazy"
             />
           </Styled.MapContainer>

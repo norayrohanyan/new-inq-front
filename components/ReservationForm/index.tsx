@@ -471,7 +471,7 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
             {currency} {totalPrice.toLocaleString()}
             </Text>
             <Text type="h6" color="secondarySemiLight">
-                for {days} {days === 1 ? 'day' : 'days'}
+                {t('company.forDays', { count: days })}
             </Text>
         </div>
       </Styled.TotalSection>

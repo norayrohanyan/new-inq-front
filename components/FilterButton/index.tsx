@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { FilterIcon } from '@/components/icons/filter';
 import * as Styled from './styled';
-import { useIsMobile } from '@/hooks';
+import { useIsMobile, useResponsive } from '@/hooks';
 
 interface FilterButtonProps {
   onClick: () => void;
@@ -13,7 +13,7 @@ interface FilterButtonProps {
 
 export default function FilterButton({ onClick, label }: FilterButtonProps) {
   const t = useTranslations();
-  const isMobile = useIsMobile();
+  const isMobile = useResponsive(375);
 
   const labelText = label || (isMobile ? t('filters.filter') : t('filters.filterAndSort'));
   

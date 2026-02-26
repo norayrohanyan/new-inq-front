@@ -94,7 +94,7 @@ export const DiscoverSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 `;
 

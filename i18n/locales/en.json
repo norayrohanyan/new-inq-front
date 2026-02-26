@@ -19,9 +19,16 @@
     "linkCopied": "Link copied!",
     "loadMore": "Load more",
     "info": "Info",
-    "close": "Close"
+    "close": "Close",
+    "select": "SELECT",
+    "submitting": "Submitting...",
+    "somethingWentWrong": "Something went wrong. Please try again."
   },
   "home": {
+    "discoverTitle": "Discover",
+    "discoverHighlight": "different categories",
+    "discoverSubtitle": "to make your booking.",
+    "discoverDescription": "Find the service perfectly matching your booking requests fast and with ease using our list of partners and special algorithms.",
     "categories": {
       "searchNearMe": "Search near me",
       "beautySalon": {
@@ -215,7 +222,8 @@
       "highlight": "become our Partner?",
       "button": "Join us"
     },
-    "copyright": "All rights reserved."
+    "copyright": "All rights reserved.",
+    "copyrightNotice": "© 2024 InQ."
   },
   "company": {
     "reservation": "Reservation",
@@ -258,6 +266,17 @@
     "area": "Area",
     "rooms": "Rooms",
     "perDay": "(for 1 day)",
+    "noLogo": "No Logo",
+    "locationTitle": "{name} location",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
     "errors": {
       "guestNameRequired": "Guest name is required",
       "guestPhoneRequired": "Guest phone is required",
@@ -333,7 +352,12 @@
     "away": "away",
     "noPlacesFound": "No places found",
     "loadingMap": "Loading map...",
-    "loadingPlaces": "Loading nearby places..."
+    "loadingPlaces": "Loading nearby places...",
+    "geolocationNotSupported": "Geolocation is not supported by your browser",
+    "unableToGetLocation": "Unable to get your location.",
+    "permissionDenied": "Location permission was denied. Please enable it in your browser settings.",
+    "positionUnavailable": "Location information is unavailable.",
+    "locationTimeout": "Location request timed out."
   },
   "errors": {
     "categoryNotFound": "Category not found",
@@ -346,5 +370,58 @@
       "description": "The server encountered an internal error or misconfiguration and was unable to complete your request"
     },
     "returnHome": "Return"
+  },
+  "about": {
+    "title": "About Us",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sem leo, laoreet sed tincidunt id, dictum cursus mauris. Aliquam non faucibus dolor, quis ultricies dui. Suspendisse magna lacus, maximus ac elit at, sodales efficitur libero. Mauris a suscipit nisl. Vivamus a sapien a enim feugiat pharetra. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sem leo, laoreet sed tincidunt id, dictum cursus mauris. Aliquam non faucibus dolor, quis ultricies dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sem leo, laoreet sed tincidunt id, dictum cursus mauris.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sem leo, laoreet sed tincidunt id, dictum cursus mauris."
+  },
+  "tariffs": {
+    "title": "Tariffs",
+    "monthly": "Monthly",
+    "threeMonths": "3 Months",
+    "sixMonths": "6 Months",
+    "oneYear": "1 Year",
+    "payMonthly": "Pay monthly",
+    "tryForDays": "Try for 14 days",
+    "portfolio": "Portfolio",
+    "bookingHistoryDuration": "Booking history duration",
+    "analytics": "Analytics",
+    "employeeCount": "Employee count",
+    "bonusSocialMediaAd": "Bonus Social media ad",
+    "referralDiscount": "Referral discount"
+  },
+  "joinUs": {
+    "title": "Join us",
+    "description": "InQ – Your trusted partner for service booking and business management.",
+    "companyName": "Company name *",
+    "selectCategory": "Select a category *",
+    "tariffOptional": "Tariff (optional)",
+    "referralCodeOptional": "Referral code (optional)",
+    "thankYou": "Thank you!",
+    "successMessage": "Your request has been submitted successfully. We'll contact you soon.",
+    "submittingForm": "Submitting form...",
+    "validation": {
+      "companyNameRequired": "Company name is required",
+      "companyNameTooLong": "Company name is too long",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Phone number must be 8 digits starting with 1-9",
+      "categoryRequired": "Category is required",
+      "pleaseSelectCategory": "Please select a category"
+    },
+    "categories": {
+      "beautySalon": "Beauty Salon",
+      "apartmentRental": "Apartment Rental",
+      "carRental": "Car Rental",
+      "carWash": "Car Wash",
+      "animalCare": "Animal Care",
+      "medical": "Medical",
+      "photoStudio": "Photo Studio",
+      "gameZone": "Game Zone",
+      "carMaintenance": "Car Maintenance",
+      "coworking": "Coworking"
+    }
+  },
+  "ad": {
+    "placeYourAd": "PLACE YOUR AD HERE"
   }
 }

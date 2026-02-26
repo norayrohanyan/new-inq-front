@@ -52,7 +52,7 @@ export const TabsContainer = styled.div`
   padding: 8px;
   background: ${COLORS.darkBgSemi};
   border-radius: 50px;
-  max-width: 466px;
+  max-width: max-content;
   width: fit-content;
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {

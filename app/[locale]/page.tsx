@@ -63,15 +63,15 @@ export default function Home() {
         <Styled.DiscoverHeader>
           <div>
             <Styled.DiscoverTitle type="h2" color="white">
-              Discover <Styled.HighlightText>different categories</Styled.HighlightText>
+              {t('home.discoverTitle')} <Styled.HighlightText>{t('home.discoverHighlight')}</Styled.HighlightText>
             </Styled.DiscoverTitle>
             <Styled.DiscoverSubtitle type="h2" color="white">
-              to make your booking.
+              {t('home.discoverSubtitle')}
             </Styled.DiscoverSubtitle>
           </div>
         </Styled.DiscoverHeader>
         <Text type="body" color="secondarySemiLight">
-          Find the service perfectly matching your booking requests fast and with ease using our list of partners and special algorithms.
+          {t('home.discoverDescription')}
         </Text>
       </Styled.DiscoverSection>
 

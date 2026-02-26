@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, forwardRef } from 'react';
+import { useTranslations } from 'next-intl';
 import CustomDropdown from '@/components/CustomDropdown';
 import { CheckedIcon } from '@/components/icons/CheckedIcon';
 import * as Styled from './styled';
@@ -25,6 +26,8 @@ interface JoinUsFormProps {
 }
 
 const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff }, ref) => {
+  const t = useTranslations();
+
   const [formData, setFormData] = useState<FormData>({
     name: '',
     phone: '',
@@ -45,30 +48,30 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
   const [isSuccess, setIsSuccess] = useState(false);
 
   const categories = [
-    { value: 'beauty_salon', label: 'Beauty Salon' },
-    { value: 'apartment_rental', label: 'Apartment Rental' },
-    { value: 'car_rental', label: 'Car Rental' },
-    { value: 'car_wash', label: 'Car Wash' },
-    { value: 'animal_care', label: 'Animal Care' },
-    { value: 'medical', label: 'Medical' },
-    { value: 'photo_studio', label: 'Photo Studio' },
-    { value: 'game_zone', label: 'Game Zone' },
-    { value: 'car_maintenance', label: 'Car Maintenance' },
-    { value: 'coworking', label: 'Coworking' },
+    { value: 'beauty_salon', label: t('joinUs.categories.beautySalon') },
+    { value: 'apartment_rental', label: t('joinUs.categories.apartmentRental') },
+    { value: 'car_rental', label: t('joinUs.categories.carRental') },
+    { value: 'car_wash', label: t('joinUs.categories.carWash') },
+    { value: 'animal_care', label: t('joinUs.categories.animalCare') },
+    { value: 'medical', label: t('joinUs.categories.medical') },
+    { value: 'photo_studio', label: t('joinUs.categories.photoStudio') },
+    { value: 'game_zone', label: t('joinUs.categories.gameZone') },
+    { value: 'car_maintenance', label: t('joinUs.categories.carMaintenance') },
+    { value: 'coworking', label: t('joinUs.categories.coworking') },
   ];
 
   const validateField = (name: string, value: string): string | undefined => {
     switch (name) {
       case 'name':
-        if (!value.trim()) return 'Company name is required';
-        if (value.length > 50) return 'Company name is too long';
+        if (!value.trim()) return t('joinUs.validation.companyNameRequired');
+        if (value.length > 50) return t('joinUs.validation.companyNameTooLong');
         break;
       case 'phone':
-        if (!value.trim()) return 'Phone number is required';
-        if (!/^[1-9]\d{7}$/.test(value)) return 'Phone number must be 8 digits starting with 1-9';
+        if (!value.trim()) return t('joinUs.validation.phoneRequired');
+        if (!/^[1-9]\d{7}$/.test(value)) return t('joinUs.validation.phoneInvalid');
         break;
       case 'category':
-        if (!value.trim()) return 'Category is required';
+        if (!value.trim()) return t('joinUs.validation.categoryRequired');
         break;
     }
     return undefined;
@@ -148,7 +151,7 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong');
+        throw new Error(data.error || t('common.somethingWentWrong'));
       }
 
       // Success - show success message and reset form
@@ -171,7 +174,7 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
       if (error instanceof Error) {
         setErrors({ general: error.message });
       } else {
-        setErrors({ general: 'Something went wrong. Please try again.' });
+        setErrors({ general: t('common.somethingWentWrong') });
       }
     } finally {
       setIsSubmitting(false);
@@ -190,11 +193,11 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
 
   // Determine why button is disabled
   const getDisabledReason = (): string | null => {
-    if (isSubmitting) return 'Submitting form...';
-    if (!formData.name.trim()) return 'Company name is required';
-    if (!formData.category) return 'Please select a category';
-    if (!formData.phone.trim()) return 'Phone number is required';
-    if (!isPhoneValid(formData.phone)) return 'Phone number must be 8 digits starting with 1-9';
+    if (isSubmitting) return t('joinUs.submittingForm');
+    if (!formData.name.trim()) return t('joinUs.validation.companyNameRequired');
+    if (!formData.category) return t('joinUs.validation.pleaseSelectCategory');
+    if (!formData.phone.trim()) return t('joinUs.validation.phoneRequired');
+    if (!isPhoneValid(formData.phone)) return t('joinUs.validation.phoneInvalid');
     return null;
   };
 
@@ -203,9 +206,9 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
 
   return (
     <Styled.FormContainer ref={ref} id="join-us">
-      <Styled.FormTitle>Join us</Styled.FormTitle>
+      <Styled.FormTitle>{t('joinUs.title')}</Styled.FormTitle>
       <Styled.FormDescription>
-        InQ – Your trusted partner for service booking and business management.
+        {t('joinUs.description')}
       </Styled.FormDescription>
 
       <Styled.Form onSubmit={handleSubmit}>
@@ -217,7 +220,7 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
             name="name"
             required
             maxLength={50}
-            placeholder="Company name *"
+            placeholder={t('joinUs.companyName')}
             value={formData.name}
             onChange={handleInputChange}
             $hasError={!!errors.name}
@@ -239,7 +242,7 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
               }
               setFormData((prev) => ({ ...prev, category: value }));
             }}
-            placeholder="Select a category *"
+            placeholder={t('joinUs.selectCategory')}
             required
             error={!!errors.category}
           />
@@ -271,7 +274,7 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
             type="text"
             id="tariff"
             name="tariff"
-            placeholder="Tariff (optional)"
+            placeholder={t('joinUs.tariffOptional')}
             value={formData.tariff}
             onChange={handleInputChange}
           />
@@ -283,7 +286,7 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
             type="text"
             id="referral_code"
             name="referral_code"
-            placeholder="Referral code (optional)"
+            placeholder={t('joinUs.referralCodeOptional')}
             value={formData.referral_code}
             onChange={handleInputChange}
           />
@@ -302,9 +305,9 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
             <Styled.SuccessIconWrapper>
               <CheckedIcon width="64" height="64" />
             </Styled.SuccessIconWrapper>
-            <Styled.SuccessTitle>Thank you!</Styled.SuccessTitle>
+            <Styled.SuccessTitle>{t('joinUs.thankYou')}</Styled.SuccessTitle>
             <Styled.SuccessText>
-              Your request has been submitted successfully. We'll contact you soon.
+              {t('joinUs.successMessage')}
             </Styled.SuccessText>
           </Styled.SuccessMessage>
         )}
@@ -320,7 +323,7 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
               disabled={!isFormValid || isSubmitting}
               $isDisabled={!isFormValid || isSubmitting}
             >
-              {isSubmitting ? 'Submitting...' : 'Submit'}
+              {isSubmitting ? t('common.submitting') : t('common.submit')}
             </Styled.SubmitButton>
             {showTooltip && disabledReason && (
               <Styled.Tooltip>

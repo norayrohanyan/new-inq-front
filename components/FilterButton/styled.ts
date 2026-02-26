@@ -24,6 +24,10 @@ export const FilterButtonContainer = styled.button`
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     padding: 0.5rem 0.7rem;
   }
+
+  @media (max-width: 375px) {
+    width: 100%;
+  }
 `;
 
 export const FilterIconWrapper = styled.div`

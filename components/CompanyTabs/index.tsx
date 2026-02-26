@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import * as Styled from './styled';
 import Text from '@/components/Text';
 import CustomDropdown from '@/components/CustomDropdown';
@@ -26,6 +27,7 @@ const CompanyTabs: React.FC<ICompanyTabsProps> = ({
   children,
 }) => {
   const isMobile = useIsMobile();
+  const t = useTranslations();
 
   // Convert tabs to dropdown options format
   const dropdownOptions = useMemo(() => 
@@ -44,7 +46,7 @@ const CompanyTabs: React.FC<ICompanyTabsProps> = ({
           options={dropdownOptions}
           value={activeTab}
           onChange={onTabChange}
-          placeholder="SELECT"
+          placeholder={t('common.select')}
           variant="filled"
         />
       ) : (

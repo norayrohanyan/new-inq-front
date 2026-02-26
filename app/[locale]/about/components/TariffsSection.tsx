@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 
 import Text from '@/components/Text';
 import * as Styled from '../styled';
@@ -21,146 +22,98 @@ export default function TariffsSection({ onTariffSelect }: TariffsSectionProps) 
   const tabsContainerRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const isMobile = useIsMobile();
+  const t = useTranslations();
+
+  const baseFeatures = [
+    { text: t('tariffs.portfolio'), included: true },
+    { text: t('tariffs.bookingHistoryDuration'), included: true },
+    { text: t('tariffs.analytics'), included: true },
+    { text: t('tariffs.employeeCount'), included: true },
+  ];
+
+  const extendedFeatures = [
+    ...baseFeatures,
+    { text: t('tariffs.bonusSocialMediaAd'), included: true },
+    { text: t('tariffs.referralDiscount'), included: true },
+  ];
 
   const _pricingData = {
     monthly: [
       {
         icon: <MonthIcon width="35" height="35" />,
-        title: 'Monthly',
-        subtitle: 'Pay monthly',
+        title: t('tariffs.monthly'),
+        subtitle: t('tariffs.payMonthly'),
         price: 40000,
-        features: [
-          { text: 'Portfolio', included: true },
-          { text: 'Booking history duration', included: true },
-          { text: 'Analytics', included: true },
-          { text: 'Employee count', included: true },
-        ],
+        features: baseFeatures,
       },
     ],
     '3months': [
       {
         icon: <MonthIcon width="35" height="35" />,
-        title: 'Monthly',
-        subtitle: 'Pay monthly',
+        title: t('tariffs.monthly'),
+        subtitle: t('tariffs.payMonthly'),
         price: 40000,
-        features: [
-          { text: 'Portfolio', included: true },
-          { text: 'Booking history duration', included: true },
-          { text: 'Analytics', included: true },
-          { text: 'Employee count', included: true },
-        ],
+        features: baseFeatures,
       },
       {
         icon: <BoxIcon width="35" height="35" />,
-        title: '3 Months',
-        subtitle: 'Pay monthly',
+        title: t('tariffs.threeMonths'),
+        subtitle: t('tariffs.payMonthly'),
         price: 40000,
-        features: [
-          { text: 'Portfolio', included: true },
-          { text: 'Booking history duration', included: true },
-          { text: 'Analytics', included: true },
-          { text: 'Employee count', included: true },
-          { text: 'Bonus Social media ad', included: true },
-          { text: 'Referral discount', included: true },
-        ],
+        features: extendedFeatures,
       },
     ],
     '6months': [
       {
         icon: <MonthIcon width="35" height="35" />,
-        title: 'Monthly',
-        subtitle: 'Pay monthly',
+        title: t('tariffs.monthly'),
+        subtitle: t('tariffs.payMonthly'),
         price: 40000,
-        features: [
-          { text: 'Portfolio', included: true },
-          { text: 'Booking history duration', included: true },
-          { text: 'Analytics', included: true },
-          { text: 'Employee count', included: true },
-        ],
+        features: baseFeatures,
       },
       {
         icon: <BoxIcon width="35" height="35" />,
-        title: '3 Months',
-        subtitle: 'Pay monthly',
+        title: t('tariffs.threeMonths'),
+        subtitle: t('tariffs.payMonthly'),
         price: 40000,
-        features: [
-          { text: 'Portfolio', included: true },
-          { text: 'Booking history duration', included: true },
-          { text: 'Analytics', included: true },
-          { text: 'Employee count', included: true },
-          { text: 'Bonus Social media ad', included: true },
-          { text: 'Referral discount', included: true },
-        ],
+        features: extendedFeatures,
       },
       {
         icon: <BoxIcon width="35" height="35" />,
-        title: '6 Months',
-        subtitle: 'Pay monthly',
+        title: t('tariffs.sixMonths'),
+        subtitle: t('tariffs.payMonthly'),
         price: 40000,
-        features: [
-          { text: 'Portfolio', included: true },
-          { text: 'Booking history duration', included: true },
-          { text: 'Analytics', included: true },
-          { text: 'Employee count', included: true },
-          { text: 'Bonus Social media ad', included: true },
-          { text: 'Referral discount', included: true },
-        ],
+        features: extendedFeatures,
       },
     ],
     '1year': [
       {
         icon: <MonthIcon width="35" height="35" />,
-        title: 'Monthly',
-        subtitle: 'Pay monthly',
+        title: t('tariffs.monthly'),
+        subtitle: t('tariffs.payMonthly'),
         price: 40000,
-        features: [
-          { text: 'Portfolio', included: true },
-          { text: 'Booking history duration', included: true },
-          { text: 'Analytics', included: true },
-          { text: 'Employee count', included: true },
-        ],
+        features: baseFeatures,
       },
       {
         icon: <BoxIcon width="35" height="35" />,
-        title: '3 Months',
-        subtitle: 'Pay monthly',
+        title: t('tariffs.threeMonths'),
+        subtitle: t('tariffs.payMonthly'),
         price: 40000,
-        features: [
-          { text: 'Portfolio', included: true },
-          { text: 'Booking history duration', included: true },
-          { text: 'Analytics', included: true },
-          { text: 'Employee count', included: true },
-          { text: 'Bonus Social media ad', included: true },
-          { text: 'Referral discount', included: true },
-        ],
+        features: extendedFeatures,
       },
       {
         icon: <BoxIcon width="35" height="35" />,
-        title: '6 Months',
-        subtitle: 'Pay monthly',
+        title: t('tariffs.sixMonths'),
+        subtitle: t('tariffs.payMonthly'),
         price: 40000,
-        features: [
-          { text: 'Portfolio', included: true },
-          { text: 'Booking history duration', included: true },
-          { text: 'Analytics', included: true },
-          { text: 'Employee count', included: true },
-          { text: 'Bonus Social media ad', included: true },
-          { text: 'Referral discount', included: true },
-        ],
+        features: extendedFeatures,
       },
       {
         icon: <BoxIcon width="35" height="35" />,
-        title: '1 Year',
-        subtitle: 'Pay monthly',
+        title: t('tariffs.oneYear'),
+        subtitle: t('tariffs.payMonthly'),
         price: 40000,
-        features: [
-          { text: 'Portfolio', included: true },
-          { text: 'Booking history duration', included: true },
-          { text: 'Analytics', included: true },
-          { text: 'Employee count', included: true },
-          { text: 'Bonus Social media ad', included: true },
-          { text: 'Referral discount', included: true },
-        ],
+        features: extendedFeatures,
       },
     ],
   };
@@ -199,34 +152,34 @@ export default function TariffsSection({ onTariffSelect }: TariffsSectionProps) 
   return (
     <Styled.TariffsSection>
       <Text type="h2" color="white" align="start" fontWeight="500">
-        Tariffs
+        {t('tariffs.title')}
       </Text>
 
       <Styled.TabsContainer ref={tabsContainerRef}>
         <div ref={(el) => { tabRefs.current['monthly'] = el; }}>
           <TabButton
-            label="Monthly"
+            label={t('tariffs.monthly')}
             active={activePlan === 'monthly'}
             onClick={() => handleTabClick('monthly')}
           />
         </div>
         <div ref={(el) => { tabRefs.current['3months'] = el; }}>
           <TabButton
-            label="3 Moths"
+            label={t('tariffs.threeMonths')}
             active={activePlan === '3months'}
             onClick={() => handleTabClick('3months')}
           />
         </div>
         <div ref={(el) => { tabRefs.current['6months'] = el; }}>
           <TabButton
-            label="6 Moths"
+            label={t('tariffs.sixMonths')}
             active={activePlan === '6months'}
             onClick={() => handleTabClick('6months')}
           />
         </div>
         <div ref={(el) => { tabRefs.current['1year'] = el; }}>
           <TabButton
-            label="1 Year"
+            label={t('tariffs.oneYear')}
             active={activePlan === '1year'}
             onClick={() => handleTabClick('1year')}
           />
@@ -243,7 +196,7 @@ export default function TariffsSection({ onTariffSelect }: TariffsSectionProps) 
             subtitle={card.subtitle}
             price={card.price}
             features={card.features}
-            buttonText="Try for 14 days"
+            buttonText={t('tariffs.tryForDays')}
             highlighted={activePlan === '3months' && index === 1}
             onButtonClick={() => onTariffSelect?.(card.title)}
           />
