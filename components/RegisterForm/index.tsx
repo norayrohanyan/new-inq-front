@@ -121,7 +121,7 @@ export default function RegisterForm() {
         )}
         {success && (
           <Text type="small" customColor="#10B981" align="center">
-            Registration successful! Please check your phone for verification link.
+            {t('auth.registrationSuccess')}
           </Text>
         )}
         <Styled.Button type="submit" disabled={isLoading}>

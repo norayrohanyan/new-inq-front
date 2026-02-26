@@ -200,9 +200,9 @@ function ProfileContent() {
                 return fullData.length > 0 ? (
                   <Styled.TicketsContainer>
                     <Text type="h2" color="white" align={isMobile ? 'center' : 'left'}>
-                      {activeTab === 'tickets' && `Active Tickets`}
-                      {activeTab === 'favorite' && `Favorites`}
-                      {activeTab === 'history' && `History`}
+                      {activeTab === 'tickets' && t('profile.activeTickets')}
+                      {activeTab === 'favorite' && t('profile.favorite')}
+                      {activeTab === 'history' && t('profile.history')}
                     </Text>
                     {activeTab === 'tickets' || activeTab === 'history' ? (
                       <Styled.TicketsList>

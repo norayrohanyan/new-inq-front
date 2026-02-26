@@ -167,6 +167,7 @@ export const PriceContainer = styled.div`
 
 export const OldPrice = styled.div`
   text-decoration: line-through;
+  text-decoration-color: ${COLORS.white};
   opacity: 0.7;
 `;
 

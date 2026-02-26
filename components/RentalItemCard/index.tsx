@@ -4,12 +4,14 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import Text from '@/components/Text';
-import { StarIcon, LocationIcon } from '@/components/icons';
+import { StarIcon, LocationIcon, BedIcon } from '@/components/icons';
 import { ShareButton } from '@/components/ShareButton';
 import * as Styled from './styled';
 import { getDetailUrl } from '@/utils/url';
 import { useIsMobile, useIsTablet } from '@/hooks/useIsMobile';
 import { TABLET_SIZE_BREAKPOINT } from '@/consts';
+import { COLORS } from '@/consts/colors';
+import { SquareIcon } from '../icons/square';
 
 interface RentalItemCardProps {
   id: number;
@@ -46,7 +48,7 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
   const isTablet = useIsTablet();
   const isMobile = useIsMobile();
 
-  const buttonText = isTablet && !isMobile ? 'More' : 'More information »';
+  const buttonText = isTablet && !isMobile ? t('common.more') : t('common.moreInformation');
 
   const hasDiscount = price !== totalPrice;
   const isApartment = category === 'apartment_rental';
@@ -93,7 +95,7 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
           </Styled.InfoRow>
 
           <Styled.InfoRow>
-            <LocationIcon width={16} height={16} />
+            <LocationIcon color='#868686' width={16} height={16} />
             <Text type="caption" color="white">
               {address}
             </Text>
@@ -103,18 +105,18 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
             <>
               {totalSquare && (
                 <Styled.InfoRow>
-                  <Styled.Icon>📐</Styled.Icon>
+                  <SquareIcon />
                   <Text type="body" color="white">
                     {totalSquare} m²
                   </Text>
                 </Styled.InfoRow>
               )}
 
-              {bedrooms && (
+              {true && (
                 <Styled.InfoRow>
-                  <Styled.Icon>🛏️</Styled.Icon>
+                  <BedIcon />
                   <Text type="body" color="white">
-                    {bedrooms} {bedrooms === 1 ? 'bedroom' : 'bedrooms'}
+                    {bedrooms} {t('ticketDetail.bedrooms')}
                   </Text>
                 </Styled.InfoRow>
               )}
@@ -133,13 +135,13 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
         <Styled.PriceContainer>
           {hasDiscount && (
             <Styled.OldPrice>
-              <Text type="body" customColor="rgba(255, 255, 255, 0.5)">
-                {price.toLocaleString()} {currency}/ Day
+              <Text type="caption" customColor={`${COLORS.white}`}>
+                {price.toLocaleString()} {currency} {t('company.perDay')}
               </Text>
             </Styled.OldPrice>
           )}
-          <Text type="h6" color="accentRed" fontWeight="600">
-            {totalPrice.toLocaleString()} {currency}/ Day
+          <Text type="h6" color={hasDiscount ? "accentRed" : "white"} fontWeight="600">
+            {totalPrice.toLocaleString()} {currency} {t('company.perDay')}
           </Text>
         </Styled.PriceContainer>
 

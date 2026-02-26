@@ -11,6 +11,7 @@ import { LocationIcon, ClockIcon, StarIcon } from '@/components/icons';
 import { COLORS } from '@/consts/colors';
 import { isRentalCategory } from '@/consts/categoryTemplates';
 import { getShareUrl } from '@/utils/url';
+import DefaultCompanyIcon from '../icons/defaultCompany';
 
 type CompanyService = ICompany | IService;
 
@@ -69,9 +70,7 @@ const CompanyServiceCard: React.FC<ICompanyServiceCardProps> = ({
         {imageUrl ? (
           <img src={imageUrl} alt={data.name} />
         ) : (
-          <Text type="body" color="secondarySemiLight">
-            No Image
-          </Text>
+          <DefaultCompanyIcon />
         )}
       </Styled.ImageWrapper>
       <Styled.InfoWrapper>

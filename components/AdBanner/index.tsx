@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { getAdsThunk, adsSelectors } from '@/store';
 import { ArrowIcon } from '@/components/icons/arrow';
@@ -29,6 +30,7 @@ export const AdBanner: React.FC<AdBannerProps> = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const isMobile = useIsMobile();
+  const t = useTranslations();
   // Fetch ads on mount (only if not using mock data)
   useEffect(() => {
     dispatch(getAdsThunk(pageName));
@@ -98,7 +100,7 @@ export const AdBanner: React.FC<AdBannerProps> = ({
     return (
       <Styled.BannerContainer $height={height} $mobileHeight={mobileHeight}>
         <Styled.PlaceholderContent>
-          <Text type={isMobile ? 'h4' : 'h1'} color="white">PLACE YOUR<br />AD HERE</Text>
+          <Text type={isMobile ? 'h4' : 'h1'} color="white">{t('ad.placeYourAd')}</Text>
           <Styled.SkeletonContainer>
             <Styled.SkeletonLine width="100%" />
             <Styled.SkeletonLine width="75%" />

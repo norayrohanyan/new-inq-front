@@ -84,7 +84,7 @@ export default function Footer() {
 
         <div>
           <Text type="small" customColor="rgba(255, 255, 255, 0.5)" align="center">
-            © 2024 InQ. {t('footer.copyright')}
+            {t('footer.copyrightNotice')} {t('footer.copyright')}
           </Text>
         </div>
       </Styled.MainFooter>

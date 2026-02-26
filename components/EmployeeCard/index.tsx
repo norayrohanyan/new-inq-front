@@ -4,6 +4,7 @@ import Text from '@/components/Text';
 import Button from '@/components/Button';
 import { StarIcon } from '@/components/icons';
 import * as Styled from './styled';
+import DefaultEmployeeIcon from '../icons/defaultEmployee';
 
 interface IEmployeeCardProps {
   id: number;
@@ -36,11 +37,7 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({
         {imageUrl ? (
           <img src={imageUrl} alt={name} />
         ) : (
-          <Styled.NoImage>
-            <Text type="caption" color="secondarySemiLight">
-              No Image
-            </Text>
-          </Styled.NoImage>
+          <DefaultEmployeeIcon />
         )}
       </Styled.ImageWrapper>
 

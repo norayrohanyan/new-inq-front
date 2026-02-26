@@ -4,37 +4,28 @@ interface IBedIconProps {
   width?: number;
   height?: number;
   className?: string;
+  color?: string;
 }
 
-export const BedIcon: React.FC<IBedIconProps> = ({ width = 24, height = 24, className }) => {
+export const BedIcon: React.FC<IBedIconProps> = ({
+  width = 16,
+  height = 16,
+  className,
+  color = '#868686',
+}) => {
   return (
     <svg
       width={width}
       height={height}
-      viewBox="0 0 24 24"
+      viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
       <path
-        d="M2 20V9C2 7.89543 2.89543 7 4 7H20C21.1046 7 22 7.89543 22 9V20"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M2 17H22"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M6 11C7.10457 11 8 10.1046 8 9C8 7.89543 7.10457 7 6 7C4.89543 7 4 7.89543 4 9C4 10.1046 4.89543 11 6 11Z"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="M3.2 12H4.4V10.8H11.6V12H12.8V8.68C12.8 8.28 12.69 7.92333 12.47 7.61C12.25 7.29667 11.96 7.06667 11.6 6.92V5.6C11.6 5.16 11.4433 4.78333 11.13 4.47C10.8167 4.15667 10.44 4 10 4H6C5.56 4 5.18333 4.15667 4.87 4.47C4.55667 4.78333 4.4 5.16 4.4 5.6V6.92C4.04 7.06667 3.75 7.29667 3.53 7.61C3.31 7.92333 3.2 8.28 3.2 8.68V12ZM4.4 9.6V8.68C4.4 8.49333 4.46667 8.33333 4.6 8.2C4.73333 8.06667 4.89333 8 5.08 8H10.92C11.1067 8 11.2667 8.06667 11.4 8.2C11.5333 8.33333 11.6 8.49333 11.6 8.68V9.6H4.4ZM5.6 6.8V5.2H10.4V6.8H5.6ZM1.6 16C1.16 16 0.783333 15.8433 0.47 15.53C0.156667 15.2167 0 14.84 0 14.4V1.6C0 1.16 0.156667 0.783333 0.47 0.47C0.783333 0.156667 1.16 0 1.6 0H14.4C14.84 0 15.2167 0.156667 15.53 0.47C15.8433 0.783333 16 1.16 16 1.6V14.4C16 14.84 15.8433 15.2167 15.53 15.53C15.2167 15.8433 14.84 16 14.4 16H1.6ZM1.6 14.4H14.4V1.6H1.6V14.4Z"
+        fill={color}
       />
     </svg>
   );
 };
-

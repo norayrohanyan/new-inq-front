@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import {
   nearMeSelectors,
@@ -27,6 +28,7 @@ const NearMeMap = dynamic(
 );
 
 export default function NearMePage() {
+  const t = useTranslations();
   const dispatch = useAppDispatch();
   
   // Redux state
@@ -93,7 +95,7 @@ export default function NearMePage() {
 
   const handleGetLocation = useCallback(() => {
     if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser');
+      alert(t('nearMe.geolocationNotSupported'));
       return;
     }
 
@@ -114,16 +116,16 @@ export default function NearMePage() {
         dispatch(nearMeActions.setLocationPermission('denied'));
         setIsLoadingLocation(false);
         
-        let message = 'Unable to get your location.';
+        let message = t('nearMe.unableToGetLocation');
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            message = 'Location permission was denied. Please enable it in your browser settings.';
+            message = t('nearMe.permissionDenied');
             break;
           case error.POSITION_UNAVAILABLE:
-            message = 'Location information is unavailable.';
+            message = t('nearMe.positionUnavailable');
             break;
           case error.TIMEOUT:
-            message = 'Location request timed out.';
+            message = t('nearMe.locationTimeout');
             break;
         }
         alert(message);
@@ -165,8 +167,8 @@ export default function NearMePage() {
 
       {companies.length > 0 && (
         <Styled.ResultsInfo>
-          Found <Styled.ResultsCount>{companies.length}</Styled.ResultsCount> places
-          {activeLocation && isFinite(radius) && ` within ${radius / 1000}km`}
+          {t('nearMe.foundPlaces', { count: companies.length })}
+          {activeLocation && isFinite(radius) && ` ${t('nearMe.within', { distance: radius / 1000 })}`}
         </Styled.ResultsInfo>
       )}
 
@@ -177,17 +179,17 @@ export default function NearMePage() {
               <Styled.ErrorIcon>⚠️</Styled.ErrorIcon>
               <Styled.ErrorText>{error}</Styled.ErrorText>
               <Styled.RetryButton onClick={handleRetry}>
-                Try Again
+                {t('common.tryAgain')}
               </Styled.RetryButton>
             </Styled.ErrorContainer>
           ) : !userLocation && locationPermission !== 'granted' ? (
             <Styled.MapOverlay>
               <Styled.MapOverlayIcon>📍</Styled.MapOverlayIcon>
               <Styled.MapOverlayText>
-                Enable location access to find places near you
+                {t('nearMe.enableLocationAccess')}
               </Styled.MapOverlayText>
               <Styled.MapOverlayButton onClick={handleGetLocation}>
-                {isLoadingLocation ? 'Getting location...' : 'Enable Location'}
+                {isLoadingLocation ? t('nearMe.gettingLocation') : t('nearMe.enableLocation')}
               </Styled.MapOverlayButton>
             </Styled.MapOverlay>
           ) : (

@@ -23,7 +23,7 @@ export const ImageWrapper = styled.div`
   width: 100px;
   height: 100px;
   min-width: 80px;
-  background: ${COLORS.darkBg};
+  background: #D2D2D2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,15 +41,6 @@ export const ImageWrapper = styled.div`
     height: 86px;
     min-width: 86px;
   }
-`;
-
-export const NoImage = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  background: ${COLORS.darkBg};
 `;
 
 export const InfoWrapper = styled.div`

@@ -6,6 +6,7 @@ import { ClockIcon } from '@/components/icons/clock';
 import { PhoneIcon } from '@/components/icons/phone';
 import * as Styled from './styled';
 import { IBookingHistory } from '@/types/user';
+import { AmdIcon } from '../icons/amd';
 
 interface ITicketCardProps {
   booking: IBookingHistory;
@@ -81,6 +82,24 @@ const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick, onClick,
     });
   };
 
+  const categoryTranslationMap: Record<string, string> = {
+    beauty_salon: 'joinUs.categories.beautySalon',
+    apartment_rental: 'joinUs.categories.apartmentRental',
+    car_rental: 'joinUs.categories.carRental',
+    car_wash: 'joinUs.categories.carWash',
+    animal_care: 'joinUs.categories.animalCare',
+    medical: 'joinUs.categories.medical',
+    photo_studio: 'joinUs.categories.photoStudio',
+    game_zone: 'joinUs.categories.gameZone',
+    car_maintenance: 'joinUs.categories.carMaintenance',
+    coworking: 'joinUs.categories.coworking',
+  };
+
+  const getCategoryLabel = (category: string) => {
+    const key = categoryTranslationMap[category];
+    return key ? t(key) : category.replace('_', ' ');
+  };
+
   const handleMenuClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent card click when clicking menu
     onMenuClick?.(booking.booking_id);
@@ -115,7 +134,7 @@ const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick, onClick,
             </Text>
           )}
           <Text type="caption" color="secondarySemiLight">
-            Category: {booking.category.replace('_', ' ')}
+            {t('ticketDetail.category')}: {getCategoryLabel(booking.category)}
           </Text>
 
           <Styled.DetailsRow>
@@ -136,8 +155,8 @@ const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick, onClick,
         </Styled.InfoSection>
 
         <Styled.PriceSection>
-          <Styled.PriceIcon>₯</Styled.PriceIcon>
-          <Text type="h4" color="white" fontWeight="600">
+          <AmdIcon />
+          <Text type="h5" color="white">
             {booking.total_price}
           </Text>
         </Styled.PriceSection>

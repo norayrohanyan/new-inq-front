@@ -10,8 +10,8 @@ export const GalleryContainer = styled.div`
 `;
 
 export const MainImage = styled.div`
-  width: 100%;
-  height: 400px;
+  width: 128px;
+  height: 128px;
   background: ${COLORS.darkBg};
   border-radius: 20px;
   overflow: hidden;
