@@ -118,7 +118,6 @@ export default function RentalDetailTemplate({
                         {spec.label ? (
                         <>
                             <Styled.SpecificationLeft>
-                            {spec.icon && spec.icon}
                             <Text type="body" color="white" fontWeight="400">
                                 {spec.label}
                             </Text>
@@ -131,7 +130,6 @@ export default function RentalDetailTemplate({
                         </>
                         ) : (
                         <Styled.SpecificationLeft>
-                            {spec.icon && spec.icon}
                             <Text type="body" color="white" fontWeight="600">
                             {typeof spec.value === 'boolean' 
                                 ? (spec.value ? t('common.yes') : t('common.no'))

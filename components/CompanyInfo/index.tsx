@@ -19,6 +19,7 @@ import { FavoriteButton } from '@/components/FavoriteButton';
 import { ShareButton } from '@/components/ShareButton';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import * as Styled from './styled';
+import DefaultCompanyIcon from '../icons/defaultCompany';
 
 const EXTERNAL_LINK_ICONS: Record<string, React.FC<{ width?: number; height?: number }>> = {
   website: WebsiteIcon,
@@ -39,15 +40,7 @@ interface ICompanyInfoProps {
   address: string;
   description: string;
   phones: string[];
-  workHours: {
-    Sunday: string | string[] | null;
-    Monday: string | string[] | null;
-    Tuesday: string | string[] | null;
-    Wednesday: string | string[] | null;
-    Thursday: string | string[] | null;
-    Friday: string | string[] | null;
-    Saturday: string | string[] | null;
-  };
+  workHours: Record<string, string | string[] | null>;
   externalLinks?: Record<string, string>;
   latitude?: number;
   longitude?: number;
@@ -71,9 +64,6 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
   const isMobile = useIsMobile();
   const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
 
-  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as const;
-  const dayTranslationKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const;
-
   return (
     <Styled.InfoContainer>
       {/* Header with Logo and Name */}
@@ -82,9 +72,7 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
           {logo ? (
             <img src={logo} alt={name} />
           ) : (
-            <Text type="body" color="secondarySemiLight">
-              {t('company.noLogo')}
-            </Text>
+            <DefaultCompanyIcon />
           )}
         </Styled.LogoWrapper>
         <Styled.HeaderContent>
@@ -186,8 +174,7 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
 
           {/* Work Hours */}
           <Styled.WorkHoursSection>
-            {daysOfWeek.map((day, index) => {
-              const hours = workHours[day as keyof typeof workHours];
+            {Object.entries(workHours).map(([day, hours]) => {
               let displayHours = t('company.closed');
 
               if (hours) {
@@ -201,7 +188,7 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
               return (
                 <Styled.WorkHourRow key={day}>
                   <Text type="caption" color="white" fontWeight="600">
-                    {t(`company.days.${dayTranslationKeys[index]}`)}
+                    {day}
                   </Text>
                   <Text type="caption" color="white">
                     {displayHours}

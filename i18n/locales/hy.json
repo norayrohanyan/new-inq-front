@@ -22,7 +22,9 @@
     "close": "Փակել",
     "select": "ԸՆՏՐԵԼ",
     "submitting": "Ուղարկվում է...",
-    "somethingWentWrong": "Ինչ-որ բան սխալ է: Փորձեք կրկին:"
+    "somethingWentWrong": "Ինչ-որ բան սխալ է: Փորձեք կրկին:",
+    "more": "Ավելին",
+    "moreInformation": "Ավելին »"
   },
   "home": {
     "discoverTitle": "Բացահայտեք",
@@ -264,7 +266,7 @@
     "house": "Տուն",
     "totalSquare": "Ընդհանուր մակերես",
     "area": "Տարածք",
-    "rooms": "Սենյակներ",
+    "rooms": "Սենյակ",
     "perDay": "(1 օր)",
     "noLogo": "Լոգո չկա",
     "locationTitle": "{name}-ի գտնվելու վայրը",

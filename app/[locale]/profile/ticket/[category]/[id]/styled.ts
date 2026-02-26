@@ -6,14 +6,14 @@ export const TicketDetailCard = styled.div`
   background: ${COLORS.darkBgSemi};
   border-radius: 20px;
   padding: 24px;
-  max-width: 780px;
+  max-width: 600px;
   margin-bottom: 2rem;
 `;
 
 export const CardHeader = styled.div`
   display: flex;
   gap: 20px;
-  margin-bottom: 2px;
+  margin-bottom: 20px;
 `;
 
 export const ImageContainer = styled.div`

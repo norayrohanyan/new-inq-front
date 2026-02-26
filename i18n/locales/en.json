@@ -22,7 +22,9 @@
     "close": "Close",
     "select": "SELECT",
     "submitting": "Submitting...",
-    "somethingWentWrong": "Something went wrong. Please try again."
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "more": "More",
+    "moreInformation": "More information »"
   },
   "home": {
     "discoverTitle": "Discover",

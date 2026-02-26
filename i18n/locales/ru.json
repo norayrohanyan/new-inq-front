@@ -22,7 +22,9 @@
     "close": "Закрыть",
     "select": "ВЫБРАТЬ",
     "submitting": "Отправка...",
-    "somethingWentWrong": "Что-то пошло не так. Попробуйте снова."
+    "somethingWentWrong": "Что-то пошло не так. Попробуйте снова.",
+    "more": "Ещё",
+    "moreInformation": "Подробнее »"
   },
   "home": {
     "discoverTitle": "Открывайте",

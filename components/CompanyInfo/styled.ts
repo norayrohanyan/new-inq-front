@@ -51,7 +51,7 @@ export const HeaderSection = styled.div`
 export const LogoWrapper = styled.div`
   width: 80px;
   height: 80px;
-  background: ${COLORS.darkBg};
+  background: #D2D2D2;
   border-radius: 16px;
   overflow: hidden;
   display: flex;
