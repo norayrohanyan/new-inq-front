@@ -27,14 +27,13 @@ export const CompanyLogoWrapper = styled.div`
   background: ${COLORS.secondaryDark};
 `;
 
-export const PlaceholderLogo = styled.div`
+export const PlaceholderImage = styled.div`
   width: 100%;
   height: 100%;
+  background: #D2D2D2;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${COLORS.secondarySemiLight};
-  font-size: 1rem;
 `;
 
 export const InfoSection = styled.div`

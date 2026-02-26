@@ -35,10 +35,9 @@ export const Image = styled.img`
 `;
 
 export const PlaceholderImage = styled.div`
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: ${COLORS.secondaryLight};
+  width: 100%;
+  height: 100%;
+  background: #D2D2D2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,7 +67,7 @@ export const TitleRow = styled.div`
 export const RatingBadge = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 `;
 
 export const StatusBadge = styled.div<{ $status: string }>`
@@ -206,8 +205,11 @@ export const EmployeeImage = styled.div`
   width: 55px;
   height: 55px;
   border-radius: 14px;
-  background: ${COLORS.secondaryLight};
+  background: #D2D2D2;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   img {
     width: 100%;

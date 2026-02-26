@@ -7,6 +7,7 @@ import { PhoneIcon } from '@/components/icons/phone';
 import * as Styled from './styled';
 import { IBookingHistory } from '@/types/user';
 import { AmdIcon } from '../icons/amd';
+import DefaultCompanyIcon from '../icons/defaultCompany';
 
 interface ITicketCardProps {
   booking: IBookingHistory;
@@ -120,7 +121,9 @@ const TicketCard: React.FC<ITicketCardProps> = ({ booking, onMenuClick, onClick,
           {booking.company_logo ? (
             <Styled.Image src={booking.company_logo} alt={booking.company_name} />
           ) : (
-            <Styled.PlaceholderImage />
+            <Styled.PlaceholderImage>
+              <DefaultCompanyIcon width={80} height={80}/>
+          </Styled.PlaceholderImage>
           )}
         </Styled.ImageContainer>
 

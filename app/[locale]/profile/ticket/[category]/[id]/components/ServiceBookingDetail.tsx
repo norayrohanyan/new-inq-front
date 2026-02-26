@@ -8,6 +8,8 @@ import { BookingHeader } from './BookingHeader';
 import { GuestInformation } from './GuestInformation';
 import { formatDate } from './DateTimeSection';
 import * as Styled from '../styled';
+import DefaultCompanyIcon from '@/components/icons/defaultCompany';
+import DefaultEmployeeIcon from '@/components/icons/defaultEmployee';
 
 interface IServiceBookingDetailProps {
   booking: IBeautyBookingDetail;
@@ -48,7 +50,9 @@ export const ServiceBookingDetail = ({
           {booking.company?.logo ? (
             <Styled.Image src={booking.company.logo} alt={booking.company.name} />
           ) : (
-            <Styled.PlaceholderImage />
+            <Styled.PlaceholderImage>
+              <DefaultCompanyIcon />
+          </Styled.PlaceholderImage>
           )}
         </Styled.ImageContainer>
         <Styled.HeaderInfo>
@@ -139,9 +143,9 @@ export const ServiceBookingDetail = ({
           </Text>
           <Styled.EmployeeCard>
             <Styled.EmployeeImage>
-              {booking.employee.image_url && (
+              {booking.employee.image_url ? (
                 <img src={booking.employee.image_url} alt={booking.employee.name} />
-              )}
+              ): <DefaultEmployeeIcon />}
             </Styled.EmployeeImage>
             <Styled.EmployeeInfo>
               <Text type="body" color="white" fontWeight="500">

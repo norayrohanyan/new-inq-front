@@ -11,6 +11,7 @@ import Text from '@/components/Text';
 import * as Styled from './styled';
 import { getDetailUrl } from '@/utils/url';
 import { useIsMobile } from '@/hooks';
+import DefaultCompanyIcon from '../icons/defaultCompany';
 
 interface WorkHours {
   [key: string]: string;
@@ -84,7 +85,9 @@ const FavoriteCard: React.FC<IFavoriteCardProps> = ({
             style={{ objectFit: 'cover' }}
           />
         ) : (
-          <Styled.PlaceholderLogo />
+          <Styled.PlaceholderImage>
+            <DefaultCompanyIcon />
+        </Styled.PlaceholderImage>
         )}
       </Styled.CompanyLogoWrapper>
 

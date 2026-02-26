@@ -119,7 +119,10 @@ export const Image = styled.img`
 export const PlaceholderImage = styled.div`
   width: 100%;
   height: 100%;
-  background: ${COLORS.secondary};
+  background: #D2D2D2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const InfoSection = styled.div`

@@ -6,6 +6,7 @@ import { ICompany } from '@/types/user';
 import { isServiceCategory } from '@/consts/categoryTemplates';
 import * as Styled from '../styled';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import DefaultCompanyIcon from '@/components/icons/defaultCompany';
 
 interface IBookingHeaderProps {
   title: string;
@@ -46,7 +47,9 @@ export const BookingHeader = ({
         {imageUrl ? (
           <Styled.Image src={imageUrl} alt={title} />
         ) : (
-          <Styled.PlaceholderImage />
+          <Styled.PlaceholderImage>
+            <DefaultCompanyIcon />
+          </Styled.PlaceholderImage>
         )}
       </Styled.ImageContainer>
       <Styled.HeaderInfo>
@@ -56,7 +59,7 @@ export const BookingHeader = ({
           </Text>
         </Styled.TitleRow>
         <Styled.RatingBadge>
-          <StarIcon width={isMobile ? 12 : 16} height={isMobile ? 12 : 16} />
+          <StarIcon width={isMobile ? 12 : 14} height={isMobile ? 12 : 14} />
           <Text type={isMobile ? 'caption' : 'body'} color="white">
             {rating}
           </Text>
