@@ -72,7 +72,7 @@ const CompanyInfo: React.FC<ICompanyInfoProps> = ({
           {logo ? (
             <img src={logo} alt={name} />
           ) : (
-            <DefaultCompanyIcon />
+            <DefaultCompanyIcon width={54} height={54}/>
           )}
         </Styled.LogoWrapper>
         <Styled.HeaderContent>

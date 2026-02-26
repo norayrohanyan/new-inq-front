@@ -12,6 +12,7 @@ import { useIsMobile, useIsTablet } from '@/hooks/useIsMobile';
 import { TABLET_SIZE_BREAKPOINT } from '@/consts';
 import { COLORS } from '@/consts/colors';
 import { SquareIcon } from '../icons/square';
+import DefaultCompanyIcon from '../icons/defaultCompany';
 
 interface RentalItemCardProps {
   id: number;
@@ -77,7 +78,13 @@ const RentalItemCard: React.FC<RentalItemCardProps> = ({
 
         <Styled.ImageSection>
           <Styled.ImageWrapper>
-            <Styled.Image src={imageUrls[0] || '/placeholder.png'} alt={name} />
+            {imageUrls[0] ? (
+              <Styled.Image src={imageUrls[0]} alt={name} />
+            ) : (
+              <Styled.PlaceholderImage>
+                <DefaultCompanyIcon width={120} height={120} />
+              </Styled.PlaceholderImage>
+            )}
           </Styled.ImageWrapper>
         </Styled.ImageSection>
 

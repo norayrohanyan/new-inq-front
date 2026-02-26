@@ -31,7 +31,7 @@ export const ImageWrapper = styled.div`
   aspect-ratio: 1;
   border-radius: 16px;
   overflow: hidden;
-  background: ${COLORS.darkBg};
+  background: #D2D2D2;
 
   @media (max-width: ${MOBILE_SIZE_BREAKPOINT}px) {
     border-radius: 12px;
@@ -189,3 +189,10 @@ export const ActionButton = styled.button`
   }
 `;
 
+export const PlaceholderImage = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
