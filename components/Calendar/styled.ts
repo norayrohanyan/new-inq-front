@@ -102,17 +102,22 @@ export const DayNumber = styled.div<{ $isToday: boolean }>`
   line-height: 1.1;
 `;
 
-export const DayPrice = styled.div<{ $isDiscounted?: boolean }>`
-  color: ${({ $isDiscounted }) =>
-    $isDiscounted ? COLORS.accentRed : COLORS.brandOrangeMid};
+export const DayPrice = styled.div`
+  color: ${COLORS.brandOrangeMid};
   font-size: 0.5rem;
   font-weight: 500;
-  text-decoration: ${({ $isDiscounted }) =>
-    $isDiscounted ? 'line-through' : 'none'};
   line-height: 1.1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+`;
+
+export const DayDiscount = styled.div`
+  color: ${COLORS.accentRed};
+  font-size: 0.55rem;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
 `;
 
