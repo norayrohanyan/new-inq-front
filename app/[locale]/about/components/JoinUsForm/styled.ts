@@ -40,8 +40,8 @@ export const Form = styled.form`
   gap: 24px;
 `;
 
-export const InputGroup = styled.div`
-  position: relative;
+export const RecaptchaWrapper = styled.div`
+  margin: auto
 `;
 
 export const Input = styled.input<{ $hasError?: boolean }>`
