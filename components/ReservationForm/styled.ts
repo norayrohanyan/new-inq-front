@@ -126,41 +126,55 @@ export const TextArea = styled.textarea`
 export const GuestCounter = styled.div`
   display: flex;
   align-items: center;
-  gap: 1rem;
-  background: ${COLORS.darkBg};
-  border: 1px solid ${COLORS.borderColor};
-  border-radius: 12px;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border-bottom: 1px solid ${COLORS.borderColor};
   padding: 0.5rem 1rem;
 `;
 
-export const CounterButton = styled.button`
-  background: ${COLORS.brandOrangeMid};
-  border: none;
-  border-radius: 8px;
-  width: 32px;
-  height: 32px;
+export const CounterButton = styled.div`
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: ${COLORS.brandGradient};
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: ${COLORS.white};
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 18px;
   transition: all 0.3s ease;
+  z-index: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    border-radius: 3px;
+    background: ${COLORS.darkBgSemi};
+    z-index: -1;
+  }
 
   &:hover {
-    background: ${COLORS.brandOrangeStart};
     transform: scale(1.05);
+
+    &::before {
+      background: ${COLORS.brandGradient};
+    }
   }
 
   &:active {
     transform: scale(0.95);
+
+    &::before {
+      background: ${COLORS.brandGradient};
+    }
   }
 `;
 
 export const CounterValue = styled.span`
   flex: 1;
-  text-align: center;
   color: ${COLORS.white};
   font-size: 1rem;
   font-weight: 600;
@@ -207,9 +221,29 @@ export const CheckboxLabel = styled.label`
 export const TotalSection = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 1.5rem 0 0 0;
   margin-top: 1rem;
+`;
+
+export const TotalPriceBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+`;
+
+export const OldPriceRow = styled.div`
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+`;
+
+export const OldPrice = styled.span`
+  color: ${COLORS.secondarySemiLight};
+  font-size: 0.9rem;
+  font-weight: 400;
+  text-decoration: line-through;
 `;
 
 export const DateInputButton = styled.button`

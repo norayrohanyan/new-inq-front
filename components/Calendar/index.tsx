@@ -46,13 +46,21 @@ const Calendar: React.FC<ICalendarProps> = ({
   const getIntervalData = (dateString: string, intervals: Record<string, any>) => {
     const interval = intervals[dateString];
     if (interval) {
+      const isDiscounted = interval.discounted || false;
+      const basePrice = interval.price;
+      const salePrice = interval.total_price;
+      const discountPercent = isDiscounted && basePrice > 0
+        ? Math.round(((basePrice - salePrice) / basePrice) * 100)
+        : 0;
       return {
-        price: interval.total_price || interval.price,
-        isDiscounted: interval.discounted || false,
+        price: salePrice || basePrice,
+        isDiscounted,
+        discountPercent,
       };
     }
     return {
       isDiscounted: false,
+      discountPercent: 0,
     };
   };
 
@@ -78,12 +86,14 @@ const Calendar: React.FC<ICalendarProps> = ({
       isDisabled: boolean;
       price?: number;
       isDiscounted: boolean;
+      discountPercent: number;
     }> = [];
 
     // Add previous month's days
     for (let i = firstDayOfWeek - 1; i > 0; i--) {
       const date = new Date(year, month, 1 - i);
       const dateString = formatDateToAPI(date);
+      const prevIntervalData = getIntervalData(dateString, intervals);
       days.push({
         date,
         dateString,
@@ -91,8 +101,9 @@ const Calendar: React.FC<ICalendarProps> = ({
         isToday: false,
         isSelected: false,
         isDisabled: true,
-        price: getIntervalData(dateString, intervals).price,
-        isDiscounted: getIntervalData(dateString, intervals).isDiscounted,
+        price: prevIntervalData.price,
+        isDiscounted: prevIntervalData.isDiscounted,
+        discountPercent: prevIntervalData.discountPercent,
       });
     }
 
@@ -102,7 +113,7 @@ const Calendar: React.FC<ICalendarProps> = ({
       const dateString = formatDateToAPI(date);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       const hasIntervals = Object.keys(intervals).length > 0;
       const isDisabled =
         (hasIntervals && !intervals[dateString]?.available) ||
@@ -119,6 +130,7 @@ const Calendar: React.FC<ICalendarProps> = ({
         isDisabled: isDisabled || false,
         price: intervalData.price,
         isDiscounted: intervalData.isDiscounted,
+        discountPercent: intervalData.discountPercent,
       });
     }
 
@@ -127,6 +139,7 @@ const Calendar: React.FC<ICalendarProps> = ({
     for (let day = 1; day <= remainingDays; day++) {
       const date = new Date(year, month + 1, day);
       const dateString = formatDateToAPI(date);
+      const nextIntervalData = getIntervalData(dateString, intervals);
       days.push({
         date,
         dateString,
@@ -134,8 +147,9 @@ const Calendar: React.FC<ICalendarProps> = ({
         isToday: false,
         isSelected: false,
         isDisabled: true,
-        price: getIntervalData(dateString, intervals).price,
-        isDiscounted: getIntervalData(dateString, intervals).isDiscounted,
+        price: nextIntervalData.price,
+        isDiscounted: nextIntervalData.isDiscounted,
+        discountPercent: nextIntervalData.discountPercent,
       });
     }
 
@@ -221,10 +235,10 @@ const Calendar: React.FC<ICalendarProps> = ({
             <Styled.DayNumber $isToday={day.isToday}>
               {day.date.getDate()}
             </Styled.DayNumber>
-            {day.price !== undefined && day.isCurrentMonth && !day.isDisabled && (
-              <Styled.DayPrice $isDiscounted={day.isDiscounted}>
-                {formatPrice(day.price)}
-              </Styled.DayPrice>
+            {day.isCurrentMonth && !day.isDisabled && day.isDiscounted && day.discountPercent > 0 && (
+              <Styled.DayDiscount>
+                -{day.discountPercent}%
+              </Styled.DayDiscount>
             )}
           </Styled.DayCell>
         ))}

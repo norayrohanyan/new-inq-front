@@ -44,6 +44,7 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
   onMonthChange,
   isLoadingIntervals = false,
 }) => {
+
   const t = useTranslations();
   const locale = useLocale();
   const router = useRouter();
@@ -168,23 +169,67 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
     }
   };
 
-  const calculateTotal = () => {
-    if (type === 'apartment' && checkIn && checkOut) {
-      const start = new Date(checkIn);
-      const end = new Date(checkOut);
-      const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-      return days > 0 ? days * price : price;
-    }
-    if (type === 'car' && pickupTime && returnTime) {
-      const start = new Date(pickupTime);
-      const end = new Date(returnTime);
-      const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-      return days > 0 ? days * price : price;
-    }
-    return price;
+  const formatDateToAPI = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
-  const totalPrice = calculateTotal();
+  const calculateTotals = () => {
+    let startDate = '';
+    let endDate = '';
+
+    if (type === 'apartment' && checkIn && checkOut) {
+      startDate = checkIn;
+      endDate = checkOut;
+    } else if (type === 'car' && pickupTime && returnTime) {
+      startDate = pickupTime;
+      endDate = returnTime;
+    }
+
+    if (!startDate || !endDate) {
+      return { originalTotal: price, discountedTotal: price, hasDiscount: false };
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const dayCount = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+    if (dayCount <= 0) {
+      return { originalTotal: price, discountedTotal: price, hasDiscount: false };
+    }
+
+    const hasIntervals = Object.keys(intervals).length > 0;
+    if (!hasIntervals) {
+      const total = dayCount * price;
+      return { originalTotal: total, discountedTotal: total, hasDiscount: false };
+    }
+
+    let originalTotal = 0;
+    let discountedTotal = 0;
+    let anyDiscounted = false;
+
+    for (let i = 0; i < dayCount; i++) {
+      const d = new Date(start);
+      d.setDate(d.getDate() + i);
+      const dateKey = formatDateToAPI(d);
+      const interval = intervals[dateKey];
+
+      if (interval) {
+        originalTotal += interval.price;
+        discountedTotal += interval.total_price;
+        if (interval.discounted) anyDiscounted = true;
+      } else {
+        originalTotal += price;
+        discountedTotal += price;
+      }
+    }
+
+    return { originalTotal, discountedTotal, hasDiscount: anyDiscounted && originalTotal !== discountedTotal };
+  };
+
+  const { originalTotal, discountedTotal, hasDiscount } = calculateTotals();
+  const totalPrice = hasDiscount ? discountedTotal : originalTotal;
   const days =
     type === 'apartment' && checkIn && checkOut
       ? Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24))
@@ -392,6 +437,23 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
         </Styled.DateFieldsRow>
       )}
 
+      {type === 'apartment' && (
+        <Styled.InputGroup>
+          <Text type="body" color="white">
+            {t('company.guests')}
+          </Text>
+          <Styled.GuestCounter>
+            <Styled.CounterValue>{guestsCount}</Styled.CounterValue>
+            <Styled.CounterButton onClick={() => setGuestsCount(Math.max(1, guestsCount - 1))}>
+              −
+            </Styled.CounterButton>
+            <Styled.CounterButton onClick={() => setGuestsCount(guestsCount + 1)}>
+              +
+            </Styled.CounterButton>
+          </Styled.GuestCounter>
+        </Styled.InputGroup>
+      )}
+
       <Styled.InputGroup>
         <Text type="body" color="white">
           {t('company.comments')}
@@ -461,19 +523,32 @@ const ReservationForm: React.FC<IReservationFormProps> = ({
       )}
 
       <Styled.TotalSection>
-        
           <Text type="h4" color="white" fontWeight="500">
             {t('company.total')}
           </Text>
-       
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'baseline' }}>
-            <Text type="h4" customColor={COLORS.white} fontWeight="400">
-            {currency} {totalPrice.toLocaleString()}
-            </Text>
-            <Text type="h6" color="secondarySemiLight">
-                {t('company.forDays', { count: days })}
-            </Text>
-        </div>
+
+          <Styled.TotalPriceBlock>
+            {hasDiscount && (
+              <Styled.OldPriceRow>
+                <Styled.OldPrice>
+                  {currency} {originalTotal.toLocaleString()}
+                </Styled.OldPrice>
+                <Text type="h6" color="secondarySemiLight">
+                  {t('company.forDays', { count: days })}
+                </Text>
+              </Styled.OldPriceRow>
+            )}
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'baseline' }}>
+              <Text type="h4" customColor={hasDiscount ? COLORS.accentRed : COLORS.white} fontWeight="400">
+                {currency} {totalPrice.toLocaleString()}
+              </Text>
+              {!hasDiscount && (
+                <Text type="h6" color="secondarySemiLight">
+                  {t('company.forDays', { count: days })}
+                </Text>
+              )}
+            </div>
+          </Styled.TotalPriceBlock>
       </Styled.TotalSection>
 
       <Button
