@@ -120,6 +120,27 @@ export default function ServiceDetailTemplate({
 
   const [selectedTab, setSelectedTab] = React.useState('services');
 
+  // Client-side pagination state for services, employees, portfolio
+  const [servicesPage, setServicesPage] = React.useState(1);
+  const [employeesPage, setEmployeesPage] = React.useState(1);
+  const [portfolioPage, setPortfolioPage] = React.useState(1);
+  const itemsPerPage = 10;
+  const portfolioItemsPerPage = 9;
+
+  // Reset page to 1 when switching tabs
+  React.useEffect(() => {
+    setServicesPage(1);
+    setEmployeesPage(1);
+    setPortfolioPage(1);
+  }, [selectedTab]);
+
+  const getCurrentPageData = <T,>(items: T[], currentPage: number, perPage: number = itemsPerPage): T[] => {
+    const startIndex = (currentPage - 1) * perPage;
+    return items.slice(startIndex, startIndex + perPage);
+  };
+
+  const getTotalPages = (total: number, perPage: number = itemsPerPage) => Math.ceil(total / perPage);
+
   if (isLoading) {
     return (
       <Styled.PageContainer>
@@ -168,43 +189,73 @@ export default function ServiceDetailTemplate({
           <Styled.LeftColumn>
             <CompanyTabs tabs={tabs} activeTab={selectedTab} onTabChange={setSelectedTab}>
               {selectedTab === 'services' && data.services && (
-                <ResponsiveMasonry columnsCountBreakPoints={{ 0: 1, 768: 2 }}>
-                  <Masonry gutter="0.5rem">
-                    {data.services.map((service) => (
-                      <ServiceCard
-                        key={service.id}
-                        id={service.id}
-                        name={service.name}
-                        description={service.description}
-                        price={service.price}
-                        duration={service.duration}
-                        onBook={handleServiceBook}
-                      />
-                    ))}
-                  </Masonry>
-                </ResponsiveMasonry>
+                <>
+                  <ResponsiveMasonry columnsCountBreakPoints={{ 0: 1, 768: 2 }}>
+                    <Masonry gutter="0.5rem">
+                      {getCurrentPageData(data.services, servicesPage).map((service) => (
+                        <ServiceCard
+                          key={service.id}
+                          id={service.id}
+                          name={service.name}
+                          description={service.description}
+                          price={service.price}
+                          duration={service.duration}
+                          onBook={handleServiceBook}
+                        />
+                      ))}
+                    </Masonry>
+                  </ResponsiveMasonry>
+                  {getTotalPages(data.services.length) > 1 && (
+                    <Pagination
+                      currentPage={servicesPage}
+                      totalPages={getTotalPages(data.services.length)}
+                      onPageChange={setServicesPage}
+                    />
+                  )}
+                </>
               )}
 
               {selectedTab === 'employees' && data.employees && (
-                <Styled.EmployeesGrid>
-                  {data.employees.map((employee) => (
-                    <EmployeeCard
-                      key={employee.id}
-                      id={employee.id}
-                      name={employee.name}
-                      profession={employee.profession || employee.position || ''}
-                      rating={employee.rating || '0.0'}
-                      imageUrl={employee.imageUrl || employee.avatar}
-                      onBook={handleEmployeeBook}
+                <>
+                  <Styled.EmployeesGrid>
+                    {getCurrentPageData(data.employees, employeesPage).map((employee) => (
+                      <EmployeeCard
+                        key={employee.id}
+                        id={employee.id}
+                        name={employee.name}
+                        profession={employee.profession || employee.position || ''}
+                        rating={employee.rating || '0.0'}
+                        imageUrl={employee.imageUrl || employee.avatar}
+                        onBook={handleEmployeeBook}
+                      />
+                    ))}
+                  </Styled.EmployeesGrid>
+                  {getTotalPages(data.employees.length) > 1 && (
+                    <Pagination
+                      currentPage={employeesPage}
+                      totalPages={getTotalPages(data.employees.length)}
+                      onPageChange={setEmployeesPage}
                     />
-                  ))}
-                </Styled.EmployeesGrid>
+                  )}
+                </>
               )}
 
               {selectedTab === 'portfolio' && data.portfolio && (
-                <Styled.PortfolioSection>
-                  <ImageGallery images={data.portfolio} alt={data.name} />
-                </Styled.PortfolioSection>
+                <>
+                  <Styled.PortfolioSection>
+                    <ImageGallery
+                      images={getCurrentPageData(data.portfolio, portfolioPage, portfolioItemsPerPage)}
+                      alt={data.name}
+                    />
+                  </Styled.PortfolioSection>
+                  {getTotalPages(data.portfolio.length, portfolioItemsPerPage) > 1 && (
+                    <Pagination
+                      currentPage={portfolioPage}
+                      totalPages={getTotalPages(data.portfolio.length, portfolioItemsPerPage)}
+                      onPageChange={setPortfolioPage}
+                    />
+                  )}
+                </>
               )}
 
               {selectedTab === 'reviews' && (
