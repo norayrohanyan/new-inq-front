@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect, forwardRef } from 'react';
+import { useState, useEffect, forwardRef, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import CustomDropdown from '@/components/CustomDropdown';
 import { CheckedIcon } from '@/components/icons/CheckedIcon';
 import * as Styled from './styled';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface FormData {
   name: string;
@@ -19,6 +20,7 @@ interface FieldErrors {
   phone?: string;
   category?: string;
   general?: string;
+  recaptcha?: string;
 }
 
 interface JoinUsFormProps {
@@ -46,6 +48,7 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [isSuccess, setIsSuccess] = useState(false);
+  const recaptchaRef = useRef<any>(null);
 
   const categories = [
     { value: 'beauty_salon', label: t('joinUs.categories.beautySalon') },
@@ -125,6 +128,12 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
     const categoryError = validateField('category', formData.category);
     if (categoryError) newErrors.category = categoryError;
 
+    const recaptchaToken = recaptchaRef.current ? recaptchaRef.current.getValue() : null;
+
+    if (process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !recaptchaToken) {
+      newErrors.recaptcha = t('joinUs.validation.recaptchaRequired');
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       setIsSubmitting(false);
@@ -144,6 +153,7 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(recaptchaToken ? { 'X-CAPTCHA-T-TOKEN': recaptchaToken } : {}),
         },
         body: JSON.stringify(submissionData),
       });
@@ -151,6 +161,14 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
       const data = await response.json();
 
       if (!response.ok) {
+        if (response.status === 409) {
+          throw new Error(data.error || t('common.somethingWentWrong'));
+        }
+
+        if (response.status === 416) {
+          throw new Error(data.error || t('common.somethingWentWrong'));
+        }
+
         throw new Error(data.error || t('common.somethingWentWrong'));
       }
 
@@ -164,12 +182,20 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
         tariff: '',
       });
 
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
+
       // Hide success message after 5 seconds
       setTimeout(() => {
         setIsSuccess(false);
       }, 5000);
     } catch (error) {
       console.error('Form submission error:', error);
+
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
 
       if (error instanceof Error) {
         setErrors({ general: error.message });
@@ -212,8 +238,7 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
       </Styled.FormDescription>
 
       <Styled.Form onSubmit={handleSubmit}>
-        {/* Company Name */}
-        <Styled.InputGroup>
+        {/* Company Name */}    
           <Styled.Input
             type="text"
             id="name"
@@ -226,10 +251,9 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
             $hasError={!!errors.name}
           />
           {errors.name && <Styled.ErrorText>{errors.name}</Styled.ErrorText>}
-        </Styled.InputGroup>
+        
 
         {/* Category */}
-        <Styled.InputGroup>
           <CustomDropdown
             options={categories}
             value={formData.category}
@@ -246,11 +270,9 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
             required
             error={!!errors.category}
           />
-          {errors.category && <Styled.ErrorText>{errors.category}</Styled.ErrorText>}
-        </Styled.InputGroup>
+          {errors.category && <Styled.ErrorText>{errors.category}</Styled.ErrorText>}     
 
-        {/* Phone */}
-        <Styled.InputGroup>
+        {/* Phone */}    
           <Styled.PhoneInputWrapper $hasError={!!errors.phone}>
             <Styled.PhonePrefix>+374</Styled.PhonePrefix>
             <Styled.PhoneInput
@@ -266,10 +288,10 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
             />
           </Styled.PhoneInputWrapper>
           {errors.phone && <Styled.ErrorText>{errors.phone}</Styled.ErrorText>}
-        </Styled.InputGroup>
+        
 
         {/* Tariff (Optional) */}
-        <Styled.InputGroup>
+      
           <Styled.Input
             type="text"
             id="tariff"
@@ -278,10 +300,10 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
             value={formData.tariff}
             onChange={handleInputChange}
           />
-        </Styled.InputGroup>
+        
 
         {/* Referral Code (Optional) */}
-        <Styled.InputGroup>
+      
           <Styled.Input
             type="text"
             id="referral_code"
@@ -290,7 +312,7 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
             value={formData.referral_code}
             onChange={handleInputChange}
           />
-        </Styled.InputGroup>
+        
 
         {/* General Error */}
         {errors.general && (
@@ -332,6 +354,19 @@ const JoinUsForm = forwardRef<HTMLDivElement, JoinUsFormProps>(({ selectedTariff
             )}
           </Styled.ButtonTooltipWrapper>
         </Styled.ButtonWrapper>
+
+            {/* reCAPTCHA */}
+            {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && (
+            <Styled.RecaptchaWrapper>
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                size="normal"
+              />
+              {errors.recaptcha && <Styled.ErrorText>{errors.recaptcha}</Styled.ErrorText>}
+            </Styled.RecaptchaWrapper>
+        )}
+
       </Styled.Form>
     </Styled.FormContainer>
   );
