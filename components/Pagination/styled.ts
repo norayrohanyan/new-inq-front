@@ -40,3 +40,12 @@ export const ArrowButton = styled(PageButton)`
   height: 32px;
   font-size: 0.8rem;
 `;
+
+export const Dots = styled.span`
+  ${flexCenterMixin()}
+  width: 40px;
+  height: 40px;
+  color: ${COLORS.white};
+  font-size: 1rem;
+  user-select: none;
+`;
